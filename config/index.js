@@ -1,67 +1,31 @@
-const {
-  seedUserLogin,
-  seedRecoveryPassword,
-  seedSurveyStudents,
-  tokenExpirationUserLogin,
-  tokenExpirationRecoveryPassword,
-  tokenExpirationSurveyStudents,
-  subjectEmailRecoveryPassword,
-  subjectEmailSurveyStudents,
-  nameTransporterRecoveryPassword,
-  nameTransporterSurveyStudents,
-  ftpHost,
-  ftpPort,
-  ftpUser,
-  ftpPassword,
-  ftpSecure,
-  databaseUrl,
-  port,
-} = require("../constants");
+function setDefaultEnv(key, defaultValue) {
+  process.env[key] = process.env[key] ?? defaultValue;
+}
 
-process.env.SEED_USER_LOGIN = process.env.SEED_USER_LOGIN || seedUserLogin;
-
-process.env.SEED_RECOVERY_PASSWORD =
-  process.env.SEED_RECOVERY_PASSWORD || seedRecoveryPassword;
-
-process.env.SEED_SURVEY_STUDENTS =
-  process.env.SEED_SURVEY_STUDENTS || seedSurveyStudents;
-
-process.env.TOKEN_EXPIRATION_USER_LOGIN =
-  process.env.TOKEN_EXPIRATION_USER_LOGIN || tokenExpirationUserLogin;
-
-process.env.TOKEN_EXPIRATION_RECOVERY_PASSWORD =
-  process.env.TOKEN_EXPIRATION_RECOVERY_PASSWORD ||
-  tokenExpirationRecoveryPassword;
-
-process.env.TOKEN_EXPIRATION_SURVEY_STUDENTS =
-  process.env.TOKEN_EXPIRATION_SURVEY_STUDENTS || tokenExpirationSurveyStudents;
-
-process.env.SUBJECT_EMAIL_RECOVERY_PASSWORD =
-  process.env.SUBJECT_EMAIL_RECOVERY_PASSWORD || subjectEmailRecoveryPassword;
-
-process.env.SUBJECT_EMAIL_SURVEY_STUDENTS =
-  process.env.SUBJECT_EMAIL_SURVEY_STUDENTS || subjectEmailSurveyStudents;
-
-process.env.NAME_TRANSPORTER_RECOVERY_PASSWORD =
-  process.env.NAME_TRANSPORTER_RECOVERY_PASSWORD ||
-  nameTransporterRecoveryPassword;
-
-process.env.NAME_TRANSPORTER_SURVEY_STUDENTS =
-  process.env.NAME_TRANSPORTER_SURVEY_STUDENTS || nameTransporterSurveyStudents;
-
-process.env.HOST_TRANSPORTER = process.env.HOST_TRANSPORTER || "";
-process.env.PORT_TRANSPORTER = process.env.PORT_TRANSPORTER || "";
-process.env.SECURE_TRANSPORTER = process.env.SECURE_TRANSPORTER || "";
-process.env.SERVICE_TRANSPORTER = process.env.SERVICE_TRANSPORTER || "";
-process.env.USERNAME_TRANSPORTER = process.env.USERNAME_TRANSPORTER || "";
-process.env.PASSWORD_TRANSPORTER = process.env.PASSWORD_TRANSPORTER || "";
-process.env.RECOVERY_PASSWORD_URL = process.env.RECOVERY_PASSWORD_URL || "";
-process.env.SURVEY_STUDENTS_URL = process.env.SURVEY_STUDENTS_URL || "";
-process.env.AUTO_LOGIN_URL = process.env.AUTO_LOGIN_URL || "";
-process.env.FTP_HOST = process.env.FTP_HOST || ftpHost;
-process.env.FTP_PORT = process.env.FTP_PORT || ftpPort;
-process.env.FTP_USER = process.env.FTP_USER || ftpUser;
-process.env.FTP_PASSWORD = process.env.FTP_PASSWORD || ftpPassword;
-process.env.FTP_SECURE = process.env.FTP_SECURE || ftpSecure;
-process.env.DATABASE_URL = process.env.DATABASE_URL || databaseUrl;
-process.env.PORT = process.env.PORT || port;
+setDefaultEnv('SEED_USER_LOGIN', 'seed-user-login');
+setDefaultEnv('SEED_RECOVERY_PASSWORD', 'seed-recovery-password');
+setDefaultEnv('SEED_SURVEY_STUDENTS', 'seed-survey-students');
+setDefaultEnv('DATABASE_URL', 'mongodb://127.0.0.1:27017/civi-conecta-db');
+setDefaultEnv('FTP_HOST', '127.0.0.1');
+setDefaultEnv('FTP_PORT', 21);
+setDefaultEnv('FTP_USER', 'anonymous');
+setDefaultEnv('FTP_PASSWORD', 'guest');
+setDefaultEnv('FTP_SECURE', false);
+setDefaultEnv('TOKEN_EXPIRATION_USER_LOGIN', '7d');
+setDefaultEnv('TOKEN_EXPIRATION_RECOVERY_PASSWORD', '7d');
+setDefaultEnv('TOKEN_EXPIRATION_SURVEY_STUDENTS', '7d');
+setDefaultEnv('SUBJECT_EMAIL_RECOVERY_PASSWORD', 'Recovery Password');
+setDefaultEnv('SUBJECT_EMAIL_SURVEY_STUDENTS', 'Survey Students');
+setDefaultEnv('NAME_TRANSPORTER_RECOVERY_PASSWORD', 'CiviConecta Support Team');
+setDefaultEnv('NAME_TRANSPORTER_SURVEY_STUDENTS', 'CiviConecta Team');
+setDefaultEnv('PORT', 3001);
+setDefaultEnv('HOST_TRANSPORTER', '');
+setDefaultEnv('PORT_TRANSPORTER', '');
+setDefaultEnv('SECURE_TRANSPORTER', '');
+setDefaultEnv('SERVICE_TRANSPORTER', '');
+setDefaultEnv('USERNAME_TRANSPORTER', '');
+setDefaultEnv('PASSWORD_TRANSPORTER', '');
+setDefaultEnv('RECOVERY_PASSWORD_URL', '');
+setDefaultEnv('SURVEY_STUDENTS_URL', '');
+setDefaultEnv('AUTO_LOGIN_URL', '');
+setDefaultEnv('PINO_LOG_LEVEL', 'info');

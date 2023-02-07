@@ -17,23 +17,6 @@ const uniqueStringData = { ...requiredStringData, unique: true };
 const uniqueNumberData = { ...requiredNumberData, unique: true };
 const uniqueNumberDataZeroFour = { ...requiredNumberDataZeroFour, required };
 const uniqueDateData = { ...requiredDateData, unique: true };
-const seedUserLogin = "seed-user-login";
-const seedRecoveryPassword = "seed-recovery-password";
-const seedSurveyStudents = "seed-survey-students";
-const tokenExpirationUserLogin = "7d";
-const tokenExpirationRecoveryPassword = "7d";
-const tokenExpirationSurveyStudents = "7d";
-const subjectEmailRecoveryPassword = "Recovery Password";
-const subjectEmailSurveyStudents = "Survey Students";
-const nameTransporterRecoveryPassword = "CiviConecta Support Team";
-const nameTransporterSurveyStudents = "CiviConecta Team";
-const ftpHost = "localhost";
-const ftpPort = 21;
-const ftpUser = "anonymous";
-const ftpPassword = "guest";
-const ftpSecure = false;
-const databaseUrl = "mongodb://127.0.0.1:27017/civi-conecta";
-const port = 3001;
 
 const validateEmail = {
   validator: (value) =>
@@ -104,23 +87,6 @@ module.exports = {
   uniqueNumberData,
   uniqueNumberDataZeroFour,
   uniqueDateData,
-  seedUserLogin,
-  seedRecoveryPassword,
-  seedSurveyStudents,
-  tokenExpirationUserLogin,
-  tokenExpirationRecoveryPassword,
-  tokenExpirationSurveyStudents,
-  subjectEmailRecoveryPassword,
-  subjectEmailSurveyStudents,
-  nameTransporterRecoveryPassword,
-  nameTransporterSurveyStudents,
-  ftpHost,
-  ftpPort,
-  ftpUser,
-  ftpPassword,
-  ftpSecure,
-  databaseUrl,
-  port,
   validateEmail,
   validateLetterAToD,
   validateLetterAToZ,

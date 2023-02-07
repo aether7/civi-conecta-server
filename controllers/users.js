@@ -2,14 +2,16 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Establishments = require("../models/establishments");
 const Users = require("../models/users");
+const repositories = require('../repositories');
 
 const {
-  errorResponse,
   nullCatch,
   getBaseUrl,
   getExpirationTokenText,
   getRandomPassword,
 } = require("../helpers");
+
+const { errorResponse } = require('../helpers/http');
 
 const getSurveysFromGradeAndCharacter = (
   workplaces,
@@ -48,19 +50,7 @@ const getWorkplaces = async (
   minimalEstablishments = [],
   minimalWorkplaces = []
 ) => {
-  const establishments = await Establishments.find({
-    _id: { $in: workplaces.map(({ establishment }) => establishment) },
-  })
-    .populate([
-      { path: "courses.grade" },
-      {
-        path: "courses.letters.students.surveys.survey",
-        select: "-_id -__v",
-        populate: { path: "topic", select: "-_id -__v" },
-      },
-    ])
-    .exec()
-    .catch(nullCatch);
+  const establishments = await repositories.establishment.populateEstablishments(workplaces);
 
   establishments.forEach((e) =>
     e.courses.forEach((c) =>
@@ -245,17 +235,21 @@ const signUp = (req, resp) => {
   });
 };
 
-const signIn = (req, resp) => {
+const signIn = async (req, res) => {
   const { email, password } = req.body;
 
-  Users.findOne({ email, active: true }, async (error, user) => {
-    if (error) return errorResponse(resp, error);
-    const validUser = !!user && isValidPassword(user, password);
-    if (!validUser) return errorResponse(resp, 400, "Incorrect credentials");
-    const pathSur = "workplaces.courses.letters.surveys.survey";
-    const selectSur = "-_id -__v";
-    const popTop = { path: "topic" };
-    const popSurvey = { path: pathSur, select: selectSur, populate: popTop };
+  try {
+    const user = await repositories.user.findOneByEmail(email);
+    const isValidUser = user && isValidPassword(user, password);
+
+    if (!isValidUser) {
+      return errorResponse(res, 400, 'Incorrect credentials');
+    }
+
+    const pathSurvey = 'workplaces.courses.letters.surveys.survey';
+    const selectSurvey = '-_id -__v';
+    const popTop = { path: 'topic' };
+    const popSurvey = { path: pathSurvey, select: selectSurvey, populate: popTop };
     const popUser = await user.populate(popSurvey);
     const workplaces = await getWorkplaces(popUser._doc.workplaces);
     const newUser = getUserWithWorkplaces(popUser, workplaces);
@@ -263,9 +257,11 @@ const signIn = (req, resp) => {
     const userToken = { user: getMinimalUserData(newUser) };
     const token = jwt.sign(userToken, process.env.SEED_USER_LOGIN, expiration);
     newUser.token = token;
-    resp.cookie("token", token);
-    resp.json({ ok: true, user: newUser });
-  });
+    res.cookie('token', token);
+    res.json({ ok: true, user: newUser });
+  } catch(err) {
+    return errorResponse(res, err);
+  }
 };
 
 const signOut = (req, resp) => {
