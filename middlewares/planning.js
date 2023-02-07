@@ -1,7 +1,13 @@
-const { errorResponse } = require("../helpers");
+const { errorResponse } = require('../helpers/http');
 
-const isValidPlanning = (planning) =>
-  !!planning && typeof planning === "object" && !!Object.keys(planning).length;
+const isValidPlanning = planning => {
+  if (Object.prototype.toString.call(planning) !== '[object Object]') {
+    return false;
+  }
+
+  return Object.keys(planning).length > 0;
+};
+
 
 const getInitialPlanning = ({
   topic,
@@ -9,51 +15,41 @@ const getInitialPlanning = ({
   startActivity,
   mainActivity,
   endActivity,
-}) =>
-  (!!topic &&
-    typeof topic === "string" &&
-    !!topic.trim().length &&
-    !!materials &&
-    typeof materials === "object" &&
-    !!Object.keys(materials).length &&
-    !!materials.teacher &&
-    Array.isArray(materials.teacher) &&
-    !!materials.teacher.length &&
-    materials.teacher.some(
-      (t) => !!t && typeof t === "string" && !!t.trim().length
-    ) &&
-    !!materials.student &&
-    Array.isArray(materials.student) &&
-    !!materials.student.length &&
-    materials.student.some(
-      (s) => !!s && typeof s === "string" && !!s.trim().length
-    ) &&
-    !!startActivity &&
-    typeof startActivity === "string" &&
-    !!startActivity.trim().length &&
-    !!mainActivity &&
-    typeof mainActivity === "string" &&
-    !!mainActivity.trim().length &&
-    !!endActivity &&
-    typeof endActivity === "string" &&
-    !!endActivity.trim().length && {
-      topic,
-      materials,
-      startActivity,
-      mainActivity,
-      endActivity,
-    }) ||
-  null;
+}) => {
+  const tryCatch = (fn) => {
+    try {
+      return fn();
+    } catch (err) {
+      return false;
+    }
+  };
 
-const setPlanningData = async (req, resp, next) => {
+  const conditions = [
+    () => topic.trim().length > 0,
+    () => materials.teacher.length > 0,
+    () => materials.student.length > 0,
+    () => startActivity.trim().length > 0,
+    () => mainActivity.trim().length > 0,
+    () => endActivity.trim().length > 0,
+  ];
+
+  return conditions.filter(fn => tryCatch(fn)).length == conditions.length;
+};
+
+const setPlanningData = (req, res, next) => {
   const { planning } = req.body;
   const validPlanning = isValidPlanning(planning);
-  const initialPlanning = getInitialPlanning(planning);
-  const hasPlanning = validPlanning && !!initialPlanning;
-  const noPlanningMessage = "No planning available";
-  if (!hasPlanning) return errorResponse(resp, 400, noPlanningMessage);
-  req.body.planning = initialPlanning;
+  const hasPlanning = validPlanning && getInitialPlanning(planning);
+
+  if (!hasPlanning) {
+    return errorResponse(res, 400, 'No planning available');
+  }
+
   next();
 };
 
-module.exports = { setPlanningData };
+module.exports = {
+  setPlanningData,
+  isValidPlanning,
+  getInitialPlanning
+};
