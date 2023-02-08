@@ -21,6 +21,6 @@ app.use((req, _, next) => {
 app.use(require('./routes'));
 require('./database')(logger);
 
-app.listen(process.env.PORT, () => {
-  logger.info(`server running at http://127.0.0.1:${process.env.PORT}`);
+app.listen(process.env.PORT, '0.0.0.0', (...args) => {
+  logger.info(`server running at http://0.0.0.0:${process.env.PORT}`);
 });
