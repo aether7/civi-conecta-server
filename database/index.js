@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-// const initDB = require('./relational');
-
 mongoose.set('strictQuery', false);
 
 module.exports = function(logger) {
@@ -12,6 +10,4 @@ module.exports = function(logger) {
 
     logger.info('DB Status: OnLine');
   });
-
-  // initDB();
 };
