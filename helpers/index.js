@@ -9,11 +9,7 @@ const enumStringData = (stringOptions, enumOptions) => ({
   enum: enumOptions,
 });
 
-const objectIdData = (
-  { Types: { ObjectId: type } },
-  ref,
-  required = false
-) => ({
+const objectIdData = ({ Types: { ObjectId: type } }, ref, required = false) => ({
   type,
   ref,
   required,
