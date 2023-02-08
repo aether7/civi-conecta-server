@@ -102,9 +102,6 @@ const getClassesByUnitAndGrade = async (req, resp) => {
     .populate(popUnit)
     .exec(async (error, classes) => {
       if (error) return errorResponse(resp, 500, error);
-
-      debugger;
-
       await addFilesToClasses(req, classes);
       resp.json({ ok: true, total: classes.length, classes });
     });
