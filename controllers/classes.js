@@ -1,10 +1,14 @@
+const EventEmitter = require('node:events');
+
 const ftp = require("basic-ftp");
 const Grades = require("../models/grades");
 const Units = require("../models/units");
 const Classes = require("../models/classes");
 
+const repositories = require('../repositories');
+const { errorResponse, getBaseURL } = require('../helpers/http');
+
 const {
-  errorResponse,
   getFileUrl,
   getFtpConnectionOptions,
   nullCatch,
@@ -98,57 +102,12 @@ const getClassesByUnitAndGrade = async (req, resp) => {
     .populate(popUnit)
     .exec(async (error, classes) => {
       if (error) return errorResponse(resp, 500, error);
+
+      debugger;
+
       await addFilesToClasses(req, classes);
       resp.json({ ok: true, total: classes.length, classes });
     });
-};
-
-const createClass = async (req, resp) => {
-  const {
-    number,
-    title,
-    description,
-    objetives,
-    planning,
-    unit: unitToFind,
-    grade: gradeToFind,
-  } = req.body;
-
-  const queryGrade = { level: gradeToFind };
-  const grade = await Grades.findOne(queryGrade).exec().catch(nullCatch);
-  if (!grade) return errorResponse(resp, 400, "No grade available");
-  const queryUnit = { number: unitToFind, grade: grade._id };
-  const unit = await Units.findOne(queryUnit).exec().catch(nullCatch);
-  if (!unit) return errorResponse(resp, 400, "No unit available");
-  const queryClass = { number, unit: unit._id };
-  const select = "-_id -__v";
-  const popGrade = { path: "grade", select };
-  const popTopic = { path: "topic", select };
-  const populate = [popGrade, popTopic];
-  const popUnit = { path: "unit", select, populate };
-
-  const prevClass = await Classes.findOne(queryClass)
-    .populate(popUnit)
-    .exec()
-    .catch(nullCatch);
-
-  if (prevClass) return errorResponse(resp, 400, "Class already exists");
-
-  const body = {
-    number,
-    title,
-    description,
-    objetives,
-    planning,
-    unit: unit._id,
-  };
-
-  new Classes(body).save(async (error, newClass) => {
-    if (error) return errorResponse(resp, 500, error);
-    const createdClass = await newClass.populate(popUnit);
-    await addFilesToClass(req, createdClass);
-    resp.json({ ok: true, class: createdClass });
-  });
 };
 
 const updateClass = async (req, resp) => {
@@ -204,9 +163,70 @@ const deleteClass = async (req, resp) => {
     });
 };
 
+
+class ClassController extends EventEmitter {
+  constructor() {
+    super();
+    this.createClass = this.createClass.bind(this);
+  }
+
+  async createClass(req, res) {
+    const {
+      number,
+      title,
+      description,
+      objetives,
+      planning,
+      unit: unitToFind,
+      grade: gradeToFind
+    } = req.body;
+
+    const grade = await repositories.grade.findOneByGrade(gradeToFind);
+
+    if (!grade) {
+      return errorResponse(res, 400, 'No grade available');
+    }
+
+    const unit = await repositories.unit.findOneByUnitAndGradeId(unitToFind, grade._id);
+
+    if (!unit) {
+      return errorResponse(res, 400, 'No unit available');
+    }
+
+    const previousClass = await repositories.class.findOneAndPopulate(number, unit._id);
+
+    if (previousClass) {
+      return errorResponse(res, 400, 'Class already exists');
+    }
+
+    req.logger.info('creating class: "%s"', title);
+
+    const createdClass = await repositories.class.create({
+      number,
+      title,
+      description,
+      objetives,
+      planning,
+      unitId: unit._id
+    });
+    const populatedClass = await repositories.class.populate(createdClass);
+
+    this.emit('class::created', populatedClass, getBaseURL(req));
+    res.json({ ok: true, class: populatedClass });
+  }
+}
+
+const controller = new ClassController();
+
+controller.on('class::created', (createdClass, baseURL) => {
+  console.log('base url to be sent later', baseURL);
+  // TODO: re add
+  // addFilesToClass(req, createdClass)
+});
+
 module.exports = {
   getClassesByUnitAndGrade,
-  createClass,
+  createClass: controller.createClass,
   updateClass,
   deleteClass,
 };

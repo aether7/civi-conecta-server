@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "PINO_LOG_LEVEL=debug nodemon index.js | pino-pretty",
+    "debug": "PINO_LOG_LEVEL=debug nodemon --inspect index.js | pino-pretty",
     "test": "tap"
   },
   "author": "",
@@ -13,6 +14,7 @@
     "adm-zip": "^0.5.10",
     "basic-ftp": "^5.0.2",
     "bcrypt": "^5.1.0",
+    "better-sqlite3": "^8.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

@@ -110,6 +110,8 @@ const createUnit = async (req, resp) => {
     topic: topicToFind,
   } = req.body;
 
+  console.log('req.body', req.body);
+
   const grade = await Grades.findOne({ level: gradeToFind })
     .exec()
     .catch(nullCatch);
