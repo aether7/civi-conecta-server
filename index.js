@@ -18,6 +18,10 @@ app.use((req, _, next) => {
   req.logger = logger;
   next();
 });
+app.use((req, _, next) => {
+  logger.info('Request to %s', req.originalUrl);
+  next();
+});
 app.use(require('./routes'));
 require('./database')(config.database.mongo.url, logger);
 

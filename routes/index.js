@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+app.use('/auth', require('./auth'));
+
 app.use(require('./users'));
 app.use(require('./events'));
 app.use(require('./grades'));
