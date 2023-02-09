@@ -23,8 +23,10 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.4",
     "mongoose-unique-validator": "^3.1.0",
+    "nanoid": "^4.0.1",
     "node-mailer": "^0.1.1",
-    "pino": "^8.9.0"
+    "pino": "^8.9.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
