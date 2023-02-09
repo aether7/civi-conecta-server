@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
@@ -8,7 +8,7 @@ const {
   verifyActiveState,
   verifyAdminRole,
   verifyUserRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
 const {
   setUserRoleData,
@@ -25,7 +25,7 @@ const {
   checkIfStudentIsInsideEstablishment,
   setSurveysTeacher,
   setSurveysStudent,
-} = require("../middlewares/users");
+} = require('../middlewares/users');
 
 const {
   signUp,
@@ -46,14 +46,14 @@ const {
   checkAutoLoginUrl,
   generateRandomPassword,
   getActiveTeachersByEstablishment,
-} = require("../controllers/users");
+} = require('../controllers/users');
 
 const router = express.Router();
 
-router.post("/signUpAdminRole", setUserAdminData, signUp);
+router.post('/signUpAdminRole', setUserAdminData, signUp);
 
 router.post(
-  "/signUpUserRole",
+  '/signUpUserRole',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -61,11 +61,11 @@ router.post(
   signUp
 );
 
-router.post("/signIn", signIn);
-router.post("/signOut", verifyLoginToken, signOut);
+router.post('/signIn', signIn);
+router.post('/signOut', verifyLoginToken, signOut);
 
 router.get(
-  "/getUsers",
+  '/getUsers',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -73,14 +73,14 @@ router.get(
 );
 
 router.put(
-  "/updateNameUser",
+  '/updateNameUser',
   verifyLoginToken,
   verifyActiveState,
   updateNameUser
 );
 
 router.put(
-  "/updateActiveUser",
+  '/updateActiveUser',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -88,21 +88,21 @@ router.put(
 );
 
 router.put(
-  "/updatePasswordUserLogin",
+  '/updatePasswordUserLogin',
   verifyLoginToken,
   verifyActiveState,
   updatePasswordUser
 );
 
 router.put(
-  "/updatePasswordUserRecovery",
+  '/updatePasswordUserRecovery',
   verifyRecoveryPasswordToken,
   verifyActiveState,
   updatePasswordUser
 );
 
 router.put(
-  "/updateWorkplacesUser",
+  '/updateWorkplacesUser',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -111,7 +111,7 @@ router.put(
 );
 
 router.get(
-  "/getRecoveryPasswordUrl",
+  '/getRecoveryPasswordUrl',
   setEmailNameLinkUserForRecoveryPassword,
   setSubjectAndTransporterForRecoveryPassword,
   sendEmailAdministratorForRecoveryPassword,
@@ -120,14 +120,14 @@ router.get(
 );
 
 router.get(
-  "/checkRecoveryPasswordUrl",
+  '/checkRecoveryPasswordUrl',
   verifyRecoveryPasswordToken,
   verifyActiveState,
   checkRecoveryPasswordUrl
 );
 
 router.get(
-  "/getSurveyStudentsUrl",
+  '/getSurveyStudentsUrl',
   verifyLoginToken,
   verifyActiveState,
   verifyUserRole,
@@ -139,7 +139,7 @@ router.get(
 );
 
 router.post(
-  "/checkSurveyStudentsUrl",
+  '/checkSurveyStudentsUrl',
   verifySurveyStudentsToken,
   verifyActiveState,
   checkIfStudentIsInsideEstablishment,
@@ -147,7 +147,7 @@ router.post(
 );
 
 router.put(
-  "/saveSurveyStudentAnswers",
+  '/saveSurveyStudentAnswers',
   verifySurveyStudentsToken,
   verifyActiveState,
   checkIfStudentIsInsideEstablishment,
@@ -156,7 +156,7 @@ router.put(
 );
 
 router.put(
-  "/saveSurveyTeacherAnswers",
+  '/saveSurveyTeacherAnswers',
   verifyLoginToken,
   verifyActiveState,
   verifyUserRole,
@@ -166,7 +166,7 @@ router.put(
 );
 
 router.get(
-  "/getAutoLoginUrl",
+  '/getAutoLoginUrl',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -174,16 +174,16 @@ router.get(
 );
 
 router.get(
-  "/checkAutoLoginUrl",
+  '/checkAutoLoginUrl',
   verifyAutoLoginToken,
   verifyActiveState,
   checkAutoLoginUrl
 );
 
-router.get("/generateRandomPassword", generateRandomPassword);
+router.get('/generateRandomPassword', generateRandomPassword);
 
 router.get(
-  "/getActiveTeachersByEstablishment",
+  '/getActiveTeachersByEstablishment',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

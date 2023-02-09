@@ -1,31 +1,31 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
-const { setPlanningData } = require("../middlewares/planning");
+const { setPlanningData } = require('../middlewares/planning');
 
 const {
   getExceptionsByGrade,
   createException,
   updateException,
   deleteException,
-} = require("../controllers/exceptions");
+} = require('../controllers/exceptions');
 
 const router = express.Router();
 
 router.get(
-  "/getExceptionsByGrade",
+  '/getExceptionsByGrade',
   verifyLoginToken,
   verifyActiveState,
   getExceptionsByGrade
 );
 
 router.post(
-  "/createException",
+  '/createException',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  "/updateException",
+  '/updateException',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -43,7 +43,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteException",
+  '/deleteException',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

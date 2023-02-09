@@ -1,3 +1,4 @@
+const config = require('../config');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Establishments = require("../models/establishments");
@@ -253,9 +254,9 @@ const signIn = async (req, res) => {
     const popUser = await user.populate(popSurvey);
     const workplaces = await getWorkplaces(popUser._doc.workplaces);
     const newUser = getUserWithWorkplaces(popUser, workplaces);
-    const expiration = { expiresIn: process.env.TOKEN_EXPIRATION_USER_LOGIN };
+    const expiration = { expiresIn: config.token.expiration.userLogin };
     const userToken = { user: getMinimalUserData(newUser) };
-    const token = jwt.sign(userToken, process.env.SEED_USER_LOGIN, expiration);
+    const token = jwt.sign(userToken, config.seed.userLogin, expiration);
     newUser.token = token;
     res.cookie('token', token);
     res.json({ ok: true, user: newUser });
@@ -464,12 +465,12 @@ const getAutoLoginUrl = (req, resp) => {
       const popUser = await user.populate(popSurvey);
       const workplaces = await getWorkplaces(popUser._doc.workplaces);
       const newUser = getUserWithWorkplaces(popUser, workplaces);
-      const tokenExpiration = process.env.TOKEN_EXPIRATION_USER_LOGIN;
+      const tokenExpiration = config.token.expiration.userLogin;
       const expiration = { expiresIn: tokenExpiration };
       const userToke = { user: getMinimalUserData(newUser) };
-      const token = jwt.sign(userToke, process.env.SEED_USER_LOGIN, expiration);
+      const token = jwt.sign(userToke, config.seed.userLogin, expiration);
       const defaultLink = `${getBaseUrl(req)}/checkAutoLoginUrl`;
-      const linkWithoutToken = process.env.AUTO_LOGIN_URL || defaultLink;
+      const linkWithoutToken = config.urls.autoLogin || defaultLink;
       const link = `${linkWithoutToken}?token=${token}`;
       const linkExpiration = getExpirationTokenText(tokenExpiration);
       resp.json({ ok: true, link, linkExpiration });

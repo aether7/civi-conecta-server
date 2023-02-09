@@ -1,13 +1,13 @@
 require('dotenv').config();
-require('./config');
 
+const config = require('./config');
 const pino = require('pino');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
-const logger = pino({level: process.env.PINO_LOG_LEVEL});
+const logger = pino({ level: config.env.logLevel });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,8 +19,8 @@ app.use((req, _, next) => {
   next();
 });
 app.use(require('./routes'));
-require('./database')(logger);
+require('./database')(config.database.mongo.url, logger);
 
-app.listen(process.env.PORT, '0.0.0.0', (...args) => {
-  logger.info(`server running at http://0.0.0.0:${process.env.PORT}`);
+app.listen(config.env.port, config.env.host, (...args) => {
+  logger.info(`server running at http://${config.env.host}:${config.env.port}`);
 });

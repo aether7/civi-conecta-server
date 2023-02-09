@@ -1,23 +1,29 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
 const {
   getUnitsByGrade,
   createUnit,
   updateUnit,
   deleteUnit,
-} = require("../controllers/units");
+} = require('../controllers/units');
 
 const router = express.Router();
-router.get("/getUnitsByGrade", verifyLoginToken, verifyActiveState, getUnitsByGrade);
+
+router.get(
+  '/getUnitsByGrade',
+  verifyLoginToken,
+  verifyActiveState,
+  getUnitsByGrade
+);
 
 router.post(
-  "/createUnit",
+  '/createUnit',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -25,7 +31,7 @@ router.post(
 );
 
 router.put(
-  "/updateUnit",
+  '/updateUnit',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -33,7 +39,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteUnit",
+  '/deleteUnit',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

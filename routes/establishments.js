@@ -1,12 +1,12 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
-const { setEstablishmentData } = require("../middlewares/establishments");
+const { setEstablishmentData } = require('../middlewares/establishments');
 
 const {
   getEstablishments,
@@ -14,19 +14,19 @@ const {
   updateNameEstablishment,
   updateActiveEstablishment,
   updateCoursesEstablishment,
-} = require("../controllers/establishments");
+} = require('../controllers/establishments');
 
 const router = express.Router();
 
 router.get(
-  "/getEstablishments",
+  '/getEstablishments',
   verifyLoginToken,
   verifyActiveState,
   getEstablishments
 );
 
 router.post(
-  "/createEstablishment",
+  '/createEstablishment',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  "/updateNameEstablishment",
+  '/updateNameEstablishment',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -42,7 +42,7 @@ router.put(
 );
 
 router.put(
-  "/updateActiveEstablishment",
+  '/updateActiveEstablishment',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -50,7 +50,7 @@ router.put(
 );
 
 router.put(
-  "/updateCoursesEstablishment",
+  '/updateCoursesEstablishment',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

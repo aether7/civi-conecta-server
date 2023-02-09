@@ -1,17 +1,17 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyLoginTokenByQuery,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
 const {
   checkIfClassExists,
   checkIfExceptionExists,
   checkIfEventExists,
-} = require("../middlewares/files");
+} = require('../middlewares/files');
 
 const {
   getFile,
@@ -21,12 +21,12 @@ const {
   getUploadsInZipFile,
   uploadAndUncompressUploadsZip,
   deleteUploadsZip,
-} = require("../controllers/files");
+} = require('../controllers/files');
 
 const router = express.Router();
 
 router.get(
-  "/getFileByClassUnitAndGrade",
+  '/getFileByClassUnitAndGrade',
   verifyLoginTokenByQuery,
   verifyActiveState,
   checkIfClassExists,
@@ -34,7 +34,7 @@ router.get(
 );
 
 router.get(
-  "/getFileByExceptionAndGrade",
+  '/getFileByExceptionAndGrade',
   verifyLoginTokenByQuery,
   verifyActiveState,
   checkIfExceptionExists,
@@ -42,7 +42,7 @@ router.get(
 );
 
 router.get(
-  "/getFileByEventAndGrade",
+  '/getFileByEventAndGrade',
   verifyLoginTokenByQuery,
   verifyActiveState,
   checkIfEventExists,
@@ -50,7 +50,7 @@ router.get(
 );
 
 router.post(
-  "/uploadFileByClassUnitAndGrade",
+  '/uploadFileByClassUnitAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -59,7 +59,7 @@ router.post(
 );
 
 router.post(
-  "/uploadFileByExceptionAndGrade",
+  '/uploadFileByExceptionAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -68,7 +68,7 @@ router.post(
 );
 
 router.post(
-  "/uploadFileByEventAndGrade",
+  '/uploadFileByEventAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -77,7 +77,7 @@ router.post(
 );
 
 router.put(
-  "/updateFileByClassUnitAndGrade",
+  '/updateFileByClassUnitAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -86,7 +86,7 @@ router.put(
 );
 
 router.put(
-  "/updateFileByExceptionAndGrade",
+  '/updateFileByExceptionAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -95,7 +95,7 @@ router.put(
 );
 
 router.put(
-  "/updateFileByEventAndGrade",
+  '/updateFileByEventAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -104,7 +104,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteFileByClassUnitAndGrade",
+  '/deleteFileByClassUnitAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -113,7 +113,7 @@ router.delete(
 );
 
 router.delete(
-  "/deleteFileByExceptionAndGrade",
+  '/deleteFileByExceptionAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -122,7 +122,7 @@ router.delete(
 );
 
 router.delete(
-  "/deleteFileByEventAndGrade",
+  '/deleteFileByEventAndGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -131,7 +131,7 @@ router.delete(
 );
 
 router.get(
-  "/getUploadsInZipFile",
+  '/getUploadsInZipFile',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -139,7 +139,7 @@ router.get(
 );
 
 router.post(
-  "/uploadAndUncompressUploadsZip",
+  '/uploadAndUncompressUploadsZip',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -147,7 +147,7 @@ router.post(
 );
 
 router.delete(
-  "/deleteUploadsZip",
+  '/deleteUploadsZip',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

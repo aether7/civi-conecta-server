@@ -1,31 +1,31 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
-const { setPlanningData } = require("../middlewares/planning");
+const { setPlanningData } = require('../middlewares/planning');
 
 const {
   getEventsByGrade,
   createEvent,
   updateEvent,
   deleteEvent,
-} = require("../controllers/events");
+} = require('../controllers/events');
 
 const router = express.Router();
 
 router.get(
-  "/getEventsByGrade",
+  '/getEventsByGrade',
   verifyLoginToken,
   verifyActiveState,
   getEventsByGrade
 );
 
 router.post(
-  "/createEvent",
+  '/createEvent',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  "/updateEvent",
+  '/updateEvent',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -43,7 +43,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteEvent",
+  '/deleteEvent',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

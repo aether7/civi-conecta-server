@@ -1,31 +1,31 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
-const { setPlanningData } = require("../middlewares/planning");
+const { setPlanningData } = require('../middlewares/planning');
 
 const {
   getClassesByUnitAndGrade,
   createClass,
   updateClass,
   deleteClass,
-} = require("../controllers/classes");
+} = require('../controllers/classes');
 
 const router = express.Router();
 
 router.get(
-  "/getClassesByUnitAndGrade",
+  '/getClassesByUnitAndGrade',
   verifyLoginToken,
   verifyActiveState,
   getClassesByUnitAndGrade
 );
 
 router.post(
-  "/createClass",
+  '/createClass',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  "/updateClass",
+  '/updateClass',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -43,7 +43,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteClass",
+  '/deleteClass',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

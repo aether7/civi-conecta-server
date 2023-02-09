@@ -1,31 +1,31 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
-const { verifyAlternatives } = require("../middlewares/surveys");
+const { verifyAlternatives } = require('../middlewares/surveys');
 
 const {
   getSurveysByType,
   createSurvey,
   updateSurvey,
   deleteSurvey,
-} = require("../controllers/surveys");
+} = require('../controllers/surveys');
 
 const router = express.Router();
 
 router.get(
-  "/getSurveysByType",
+  '/getSurveysByType',
   verifyLoginToken,
   verifyActiveState,
   getSurveysByType
 );
 
 router.post(
-  "/createSurvey",
+  '/createSurvey',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  "/updateSurvey",
+  '/updateSurvey',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -43,7 +43,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteSurvey",
+  '/deleteSurvey',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

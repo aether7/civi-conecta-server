@@ -1,5 +1,20 @@
-const jwt = require("jsonwebtoken");
+const config = require('../config');
+const jwt = require('jsonwebtoken');
 const { errorResponse } = require("../helpers");
+
+const _verifyToken = (isByCookiesOrHeaders) => (seed) => (req, res, next) => {
+  const loginToken = req.cookies.token || req.headers.token;
+  const token = isByCookiesOrHeaders ? loginToken : req.query.token;
+
+  jwt.verify(token, seed, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ ok: false, error: err });
+    }
+
+    req.user = decoded.user;
+    next();
+  });
+};
 
 const verifyToken = (req, resp, next, byCookiesOrHeaders, seed) => {
   const { cookies, headers, query } = req;
@@ -13,20 +28,24 @@ const verifyToken = (req, resp, next, byCookiesOrHeaders, seed) => {
   });
 };
 
+const verifyByHeaders = _verifyToken(true);
+const verifyByQuery = _verifyToken(false);
+
+
 const verifyLoginToken = (req, resp, next) =>
-  verifyToken(req, resp, next, true, process.env.SEED_USER_LOGIN);
+  verifyToken(req, resp, next, true, config.seed.userLogin);
 
 const verifyLoginTokenByQuery = (req, resp, next) =>
-  verifyToken(req, resp, next, false, process.env.SEED_USER_LOGIN);
+  verifyToken(req, resp, next, false, config.seed.userLogin);
 
 const verifyRecoveryPasswordToken = (req, resp, next) =>
-  verifyToken(req, resp, next, false, process.env.SEED_RECOVERY_PASSWORD);
+  verifyToken(req, resp, next, false, config.seed.recoverPassword);
 
 const verifySurveyStudentsToken = (req, resp, next) =>
-  verifyToken(req, resp, next, false, process.env.SEED_SURVEY_STUDENTS);
+  verifyToken(req, resp, next, false, config.seed.surveyStudents);
 
 const verifyAutoLoginToken = (req, resp, next) =>
-  verifyToken(req, resp, next, false, process.env.SEED_USER_LOGIN);
+  verifyToken(req, resp, next, false, config.seed.userLogin);
 
 const verifyActiveState = (req, resp, next) => {
   const condition = !req.user.active;

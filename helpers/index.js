@@ -1,3 +1,5 @@
+const config = require('../config');
+
 const normalStringData = (stringOptions, validate) => ({
   ...stringOptions,
   validate,
@@ -55,14 +57,13 @@ const getAssociatedEntitiesMessage = (firstEntity, secondEntity) =>
   `This ${firstEntity} has associated ${secondEntity}`;
 
 const getFtpConnectionOptions = () => {
-  const { FTP_HOST, FTP_PORT, FTP_SECURE } = process.env;
-  const { FTP_USER, FTP_PASSWORD } = process.env;
-  const host = FTP_HOST;
-  const port = FTP_PORT;
-  const user = FTP_USER;
-  const password = FTP_PASSWORD;
-  const secure = FTP_SECURE;
-  return { host, port, user, password, secure };
+  return {
+    host: config.ftp.host,
+    port: config.ftp.port,
+    user: config.ftp.user,
+    password: config.ftp.password,
+    secure: config.ftp.secure
+  };
 };
 
 const getDateString = (date, dayFirst = true) => {

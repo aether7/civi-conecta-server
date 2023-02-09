@@ -1,23 +1,23 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
 const {
   getGrades,
   createGrade,
   updateGrade,
   deleteGrade,
-} = require("../controllers/grades");
+} = require('../controllers/grades');
 
 const router = express.Router();
-router.get("/getGrades", verifyLoginToken, verifyActiveState, getGrades);
+router.get('/getGrades', verifyLoginToken, verifyActiveState, getGrades);
 
 router.post(
-  "/createGrade",
+  '/createGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -25,7 +25,7 @@ router.post(
 );
 
 router.put(
-  "/updateGrade",
+  '/updateGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -33,7 +33,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteGrade",
+  '/deleteGrade',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,

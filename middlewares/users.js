@@ -1,3 +1,4 @@
+const config = require('../config');
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const Establishments = require("../models/establishments");
@@ -178,12 +179,12 @@ const setEmailNameLinkUserForRecoveryPassword = (req, resp, next) => {
     if (!user) return errorResponse(resp, 400, "User not found");
     const { email: emailUser, name, active } = user;
     const newUser = { email: emailUser, name, active };
-    const tokenExpiration = process.env.TOKEN_EXPIRATION_RECOVERY_PASSWORD;
-    const seed = process.env.SEED_RECOVERY_PASSWORD;
+    const tokenExpiration = config.token.expiration.recoveryPassword;
+    const seed = config.seed.recoverPassword;
     const expiration = { expiresIn: tokenExpiration };
     const token = jwt.sign({ user: newUser }, seed, expiration);
     const defaultLink = `${getBaseUrl(req)}/checkRecoveryPasswordUrl`;
-    const linkWithoutToken = process.env.RECOVERY_PASSWORD_URL || defaultLink;
+    const linkWithoutToken = config.urls.recoveryPassword || defaultLink;
     const link = `${linkWithoutToken}?token=${token}`;
     req.user = {};
     req.user.email = emailUser;
@@ -198,23 +199,20 @@ const setSubjectAndTransporterForRecoveryPassword = async (req, resp, next) => {
   const { user, pass } = testAccount;
 
   const createTransportObj = {
-    host: process.env.HOST_TRANSPORTER.trim() || undefined,
-    port: process.env.PORT_TRANSPORTER.trim() || undefined,
-    secure: process.env.SECURE_TRANSPORTER.trim() || undefined,
-    service: process.env.SERVICE_TRANSPORTER.trim() || user,
+    host: config.email.transport.host || undefined,
+    port: config.email.transport.port || undefined,
+    secure: config.email.transport.secure || undefined,
+    service: config.email.transport.service || user,
     auth: {
-      user: process.env.USERNAME_TRANSPORTER.trim() || user,
-      pass: process.env.PASSWORD_TRANSPORTER.trim() || pass,
+      user: config.email.transport.username || user,
+      pass: config.email.transport.password || pass,
     },
   };
 
   req.administrator = {};
 
-  req.administrator.subjectEmail =
-    process.env.SUBJECT_EMAIL_RECOVERY_PASSWORD.trim();
-
-  req.administrator.nameTransporter =
-    process.env.NAME_TRANSPORTER_RECOVERY_PASSWORD.trim();
+  req.administrator.subjectEmail = config.email.template.subject.recoveryPassword;
+  req.administrator.nameTransporter = config.email.transport.name.recoveryPassword
 
   req.administrator.userTransporter = createTransportObj.auth.user;
   req.transporter = nodemailer.createTransport(createTransportObj);
@@ -251,7 +249,7 @@ const sendEmailUserForRecoveryPassword = (req, resp, next) => {
   const { administrator, transporter, user } = req;
   const { nameTransporter, userTransporter, subjectEmail } = administrator;
   const { email, name, link } = user;
-  const tokenExpiration = process.env.TOKEN_EXPIRATION_RECOVERY_PASSWORD;
+  const tokenExpiration = config.token.expiration.recoveryPassword;
 
   const userMailHtml = `
     <p>Hola <strong>${name}</strong>,</p>
@@ -284,12 +282,12 @@ const setEmailNameLinkUserForSurveyStudents = (req, resp, next) => {
       if (!user) return errorResponse(resp, 400, "User not found");
       const { email, name, active } = user;
       const newUser = { email, name, active };
-      const tokenExpiration = process.env.TOKEN_EXPIRATION_SURVEY_STUDENTS;
-      const seed = process.env.SEED_SURVEY_STUDENTS;
+      const tokenExpiration = config.token.expiration.surveyStudents;
+      const seed = config.seed.surveyStudents;
       const expiration = { expiresIn: tokenExpiration };
       const token = jwt.sign({ user: newUser }, seed, expiration);
       const defaultLink = `${getBaseUrl(req)}/checkSurveyStudentsUrl`;
-      const linkWithoutToken = process.env.SURVEY_STUDENTS_URL || defaultLink;
+      const linkWithoutToken = config.urls.surveyStudents || defaultLink;
       const link = `${linkWithoutToken}?token=${token}`;
       req.user = {};
       req.user.email = email;
@@ -306,23 +304,19 @@ const setSubjectAndTransporterForSurveyStudents = async (req, resp, next) => {
   const { user, pass } = testAccount;
 
   const createTransportObj = {
-    host: process.env.HOST_TRANSPORTER.trim() || undefined,
-    port: process.env.PORT_TRANSPORTER.trim() || undefined,
-    secure: process.env.SECURE_TRANSPORTER.trim() || undefined,
-    service: process.env.SERVICE_TRANSPORTER.trim() || user,
+    host: config.email.transport.host || undefined,
+    port: config.email.transport.port || undefined,
+    secure: config.email.transport.secure || undefined,
+    service: config.email.transport.service || user,
     auth: {
-      user: process.env.USERNAME_TRANSPORTER.trim() || user,
-      pass: process.env.PASSWORD_TRANSPORTER.trim() || pass,
+      user: config.email.transport.username || user,
+      pass: config.email.transport.password || pass
     },
   };
 
   req.administrator = {};
-
-  req.administrator.subjectEmail =
-    process.env.SUBJECT_EMAIL_SURVEY_STUDENTS.trim();
-
-  req.administrator.nameTransporter =
-    process.env.NAME_TRANSPORTER_SURVEY_STUDENTS.trim();
+  req.administrator.subjectEmail = config.email.template.subject.surveyStudents;
+  req.administrator.nameTransporter = config.email.transport.name.surveyStudents;
 
   req.administrator.userTransporter = createTransportObj.auth.user;
   req.transporter = nodemailer.createTransport(createTransportObj);

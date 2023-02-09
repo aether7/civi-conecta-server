@@ -1,23 +1,29 @@
-const express = require("express");
+const express = require('express');
 
 const {
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
-} = require("../middlewares/authentication");
+} = require('../middlewares/authentication');
 
 const {
   getTopics,
   createTopic,
   updateTopic,
   deleteTopic,
-} = require("../controllers/topics");
+} = require('../controllers/topics');
 
 const router = express.Router();
-router.get("/getTopics", verifyLoginToken, verifyActiveState, getTopics);
+
+router.get(
+  '/getTopics',
+  verifyLoginToken,
+  verifyActiveState,
+  getTopics
+);
 
 router.post(
-  "/createTopic",
+  '/createTopic',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -25,7 +31,7 @@ router.post(
 );
 
 router.put(
-  "/updateTopic",
+  '/updateTopic',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
@@ -33,7 +39,7 @@ router.put(
 );
 
 router.delete(
-  "/deleteTopic",
+  '/deleteTopic',
   verifyLoginToken,
   verifyActiveState,
   verifyAdminRole,
