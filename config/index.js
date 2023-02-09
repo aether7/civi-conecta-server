@@ -1,31 +1,60 @@
-function setDefaultEnv(key, defaultValue) {
-  process.env[key] = process.env[key] ?? defaultValue;
-}
+const getEnv = (key, defaultValue) => process.env[key] ?? defaultValue;
 
-setDefaultEnv('SEED_USER_LOGIN', 'seed-user-login');
-setDefaultEnv('SEED_RECOVERY_PASSWORD', 'seed-recovery-password');
-setDefaultEnv('SEED_SURVEY_STUDENTS', 'seed-survey-students');
-setDefaultEnv('DATABASE_URL', 'mongodb://127.0.0.1:27017/civi-conecta-db');
-setDefaultEnv('FTP_HOST', '127.0.0.1');
-setDefaultEnv('FTP_PORT', 21);
-setDefaultEnv('FTP_USER', 'anonymous');
-setDefaultEnv('FTP_PASSWORD', 'guest');
-setDefaultEnv('FTP_SECURE', false);
-setDefaultEnv('TOKEN_EXPIRATION_USER_LOGIN', '7d');
-setDefaultEnv('TOKEN_EXPIRATION_RECOVERY_PASSWORD', '7d');
-setDefaultEnv('TOKEN_EXPIRATION_SURVEY_STUDENTS', '7d');
-setDefaultEnv('SUBJECT_EMAIL_RECOVERY_PASSWORD', 'Recovery Password');
-setDefaultEnv('SUBJECT_EMAIL_SURVEY_STUDENTS', 'Survey Students');
-setDefaultEnv('NAME_TRANSPORTER_RECOVERY_PASSWORD', 'CiviConecta Support Team');
-setDefaultEnv('NAME_TRANSPORTER_SURVEY_STUDENTS', 'CiviConecta Team');
-setDefaultEnv('PORT', 3001);
-setDefaultEnv('HOST_TRANSPORTER', '');
-setDefaultEnv('PORT_TRANSPORTER', '');
-setDefaultEnv('SECURE_TRANSPORTER', '');
-setDefaultEnv('SERVICE_TRANSPORTER', '');
-setDefaultEnv('USERNAME_TRANSPORTER', '');
-setDefaultEnv('PASSWORD_TRANSPORTER', '');
-setDefaultEnv('RECOVERY_PASSWORD_URL', '');
-setDefaultEnv('SURVEY_STUDENTS_URL', '');
-setDefaultEnv('AUTO_LOGIN_URL', '');
-setDefaultEnv('PINO_LOG_LEVEL', 'info');
+const config = {
+  env: {
+    port: getEnv('PORT', 3001),
+    logLevel: getEnv('PINO_LOG_LEVEL', 'info'),
+    host: getEnv('HOST', '0.0.0.0')
+  },
+  seed: {
+    userLogin: getEnv('SEED_USER_LOGIN', 'seed-user-login'),
+    recoverPassword: getEnv('SEED_RECOVERY_PASSWORD', 'seed-recovery-password'),
+    surveyStudents: getEnv('SEED_SURVEY_STUDENTS', 'seed-survey-students')
+  },
+  database: {
+    mongo: {
+      url: getEnv('DATABASE_URL', 'mongodb://127.0.0.1:27017/civi-conecta-db')
+    }
+  },
+  ftp: {
+    host: getEnv('FTP_HOST', '127.0.0.1'),
+    port: getEnv('FTP_PORT', 21),
+    user: getEnv('FTP_USER', 'anonymous'),
+    password: getEnv('FTP_PASSWORD', 'guest'),
+    secure: getEnv('FTP_SECURE', false)
+  },
+  token: {
+    expiration: {
+      userLogin: getEnv('TOKEN_EXPIRATION_USER_LOGIN', '7d'),
+      recoveryPassword: getEnv('TOKEN_EXPIRATION_RECOVERY_PASSWORD', '7d'),
+      surveyStudents: getEnv('TOKEN_EXPIRATION_SURVEY_STUDENTS', '7d')
+    }
+  },
+  email: {
+    template: {
+      subject: {
+        recoveryPassword: getEnv('SUBJECT_EMAIL_RECOVERY_PASSWORD', 'Recovery Password'),
+        surveyStudents: getEnv('SUBJECT_EMAIL_SURVEY_STUDENTS', 'Survey Students')
+      }
+    },
+    transport: {
+      name: {
+        recoveryPassword: getEnv('NAME_TRANSPORTER_RECOVERY_PASSWORD', 'CiviConecta Support Team'),
+        surveyStudents: getEnv('NAME_TRANSPORTER_SURVEY_STUDENTS', 'CiviConecta Team')
+      },
+      host: getEnv('HOST_TRANSPORTER', ''),
+      port: getEnv('PORT_TRANSPORTER', ''),
+      secure: getEnv('SECURE_TRANSPORTER', ''),
+      service: getEnv('SERVICE_TRANSPORTER', ''),
+      username: getEnv('USERNAME_TRANSPORTER', ''),
+      password: getEnv('PASSWORD_TRANSPORTER', '')
+    }
+  },
+  urls: {
+    recoveryPassword: getEnv('RECOVERY_PASSWORD_URL', ''),
+    surveyStudents: getEnv('SURVEY_STUDENTS_URL', ''),
+    autoLogin: getEnv('AUTO_LOGIN_URL', '')
+  }
+};
+
+module.exports = config;
