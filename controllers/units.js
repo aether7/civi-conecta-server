@@ -110,19 +110,21 @@ const createUnit = async (req, resp) => {
     topic: topicToFind,
   } = req.body;
 
-  console.log('req.body', req.body);
-
   const grade = await Grades.findOne({ level: gradeToFind })
     .exec()
     .catch(nullCatch);
 
-  if (!grade) return errorResponse(resp, 400, "No grade available");
+  if (!grade) {
+    return errorResponse(resp, 400, "No grade available");
+  }
 
   const topic = await Topics.findOne({ number: topicToFind })
     .exec()
     .catch(nullCatch);
 
-  if (!topic) return errorResponse(resp, 400, "No topic available");
+  if (!topic) {
+    resp.status(400).json({ ok: false, error: 'No hay encuesta disponible' });
+  }
 
   const prevUnit = await Units.findOne({ number, grade: grade._id })
     .exec()

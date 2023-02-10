@@ -1,9 +1,21 @@
 const Classes = require('../models/classes');
+const { EntityNotFoundError } = require('./exceptions');
 
 class ClassRepository {
   findOneByNumberAndUnitId(number, unitId) {
     const queryClass = { number, unit: unitId };
     return Classes.findOne(queryClass);
+  }
+
+  async findOneByUnitId(unitId) {
+    const query = { unit: unitId };
+    const entity = await Classes.findOne(query);
+
+    if (!entity) {
+      throw new EntityNotFoundError(`no existe la unidad ${unitId}`);
+    }
+
+    return entity;
   }
 
   findOneAndPopulate(number, unitId) {

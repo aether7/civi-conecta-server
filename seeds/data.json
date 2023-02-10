@@ -1,8 +1,16 @@
 {
   "grades": [
-    { "level": "5º" },
-    { "level": "6º" },
-    { "level": "7º" },
-    { "level": "8º" }
+    { "level": "1º basico" },
+    { "level": "2º basico" },
+    { "level": "3º basico" },
+    { "level": "4º basico" },
+    { "level": "5º basico" },
+    { "level": "6º basico" },
+    { "level": "7º basico" },
+    { "level": "8º basico" },
+    { "level": "1º medio" },
+    { "level": "2º medio" },
+    { "level": "3º medio" },
+    { "level": "4º medio" }
   ]
 }

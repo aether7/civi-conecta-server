@@ -1,18 +1,28 @@
-const express = require('express');
-const app = express();
+const { Router } = require('express');
+const middlewares = require('../middlewares/authentication');
+const router = Router();
+const routesWithAuthToken = Router();
 
-app.use('/auth', require('./auth'));
+router.use('/auth', require('./auth'));
 
-app.use(require('./users'));
-app.use(require('./events'));
-app.use(require('./grades'));
-app.use(require('./units'));
-app.use(require('./exceptions'));
-app.use(require('./classes'));
-app.use(require('./files'));
-app.use(require('./establishments'));
-app.use(require('./surveys'));
-app.use(require('./topics'));
-app.use(require('./404'));
+router.use(require('./users'));
+router.use(require('./events'));
+router.use(require('./grades'));
+router.use(require('./exceptions'));
+router.use(require('./classes'));
+router.use(require('./files'));
+router.use(require('./establishments'));
+router.use(require('./surveys'));
+router.use(require('./topics'));
 
-module.exports = app;
+routesWithAuthToken.use(middlewares.verifyLoginToken);
+routesWithAuthToken.use(middlewares.verifyActiveState);
+
+// router.use(require('./units'));
+routesWithAuthToken.use('/units', require('./units.v2'));
+
+router.use(routesWithAuthToken);
+
+router.use(require('./404'));
+
+module.exports = router;
