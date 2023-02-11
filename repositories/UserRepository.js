@@ -1,16 +1,15 @@
 const Users = require('../models/users');
+const { EntityNotFoundError } = require('./exceptions');
 
 class UserRepository {
-  findOneByEmail(email) {
-    return new Promise((resolve, reject) => {
-      Users.findOne({ email, active: true }, (error, user) => {
-        if (error) {
-          return reject(error);
-        }
+  async findOneByEmail(email) {
+    const entity = await Users.findOne({ email, active: true });
 
-        resolve(user);
-      });
-    });
+    if (!entity) {
+      throw new EntityNotFoundError(`No existe el usuario activo con el correo ${email}`);
+    }
+
+    return entity;
   }
 }
 

@@ -1,18 +1,10 @@
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
+const { uniqueMessage, schemaOptions } = require('../constants');
 
-const {
-  uniqueMessage,
-  uniqueStringData,
-  schemaOptions,
-  validLevels,
-} = require("../constants");
-
-const { enumStringData } = require("../helpers");
-
-const level = enumStringData(uniqueStringData, validLevels);
-const attributes = { level };
-const gradeSchema = new mongoose.Schema(attributes, schemaOptions);
+const gradeSchema = new mongoose.Schema({
+  level: { type: String }
+}, schemaOptions);
 
 gradeSchema.methods.toJSON = function () {
   const grade = this.toObject();
@@ -23,4 +15,4 @@ gradeSchema.methods.toJSON = function () {
 
 gradeSchema.plugin(uniqueValidator, uniqueMessage);
 
-module.exports = mongoose.model("grade", gradeSchema);
+module.exports = mongoose.model('grade', gradeSchema);
