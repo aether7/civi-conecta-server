@@ -12,5 +12,25 @@
     { "level": "2º medio" },
     { "level": "3º medio" },
     { "level": "4º medio" }
+  ],
+  "users": [
+    {
+      "email": "catalina@civiconecta.cl",
+      "name": "Catalina",
+      "password": "$2b$10$oeMn5u9xJa61e3JZX9FBv.uheqWZFdCQZBrihHVdsu9ZE.Oa463F.",
+      "role": "Administrator",
+      "active": true,
+      "encryptedPassword": true,
+      "workplaces": []
+    },
+    {
+      "email": "eduardo@civiconecta.cl",
+      "name": "Eduardo",
+      "password": "$2b$10$BQ6ioRSyScRwcDPmAa8xzuJZqwXz1pikVN2g1dYPRR.DaShSwh7Mm",
+      "role": "Administrator",
+      "active": true,
+      "encryptedPassword": true,
+      "workplaces": []
+    }
   ]
 }
