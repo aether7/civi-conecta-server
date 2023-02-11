@@ -33,21 +33,21 @@ const config = {
   email: {
     template: {
       subject: {
-        recoveryPassword: getEnv('SUBJECT_EMAIL_RECOVERY_PASSWORD', 'Recovery Password'),
-        surveyStudents: getEnv('SUBJECT_EMAIL_SURVEY_STUDENTS', 'Survey Students')
+        recoveryPassword: getEnv('EMAIL_SUBJECT_RECOVERY_PASSWORD', 'Recovery Password'),
+        surveyStudents: getEnv('EMAIL_SUBJECT_SURVEY_STUDENTS', 'Survey Students')
+      },
+      name: {
+        recoveryPassword: getEnv('EMAIL_NAME_RECOVERY_PASSWORD', 'CiviConecta Support Team'),
+        surveyStudents: getEnv('EMAIL_NAME_SURVEY_STUDENTS', 'CiviConecta Team')
       }
     },
     transport: {
-      name: {
-        recoveryPassword: getEnv('NAME_TRANSPORTER_RECOVERY_PASSWORD', 'CiviConecta Support Team'),
-        surveyStudents: getEnv('NAME_TRANSPORTER_SURVEY_STUDENTS', 'CiviConecta Team')
-      },
-      host: getEnv('HOST_TRANSPORTER', ''),
-      port: getEnv('PORT_TRANSPORTER', ''),
-      secure: getEnv('SECURE_TRANSPORTER', ''),
-      service: getEnv('SERVICE_TRANSPORTER', ''),
-      username: getEnv('USERNAME_TRANSPORTER', ''),
-      password: getEnv('PASSWORD_TRANSPORTER', '')
+      host: getEnv('EMAIL_TRANSPORTER_HOST', ''),
+      port: getEnv('EMAIL_TRANSPORTER_PORT', ''),
+      secure: getEnv('EMAIL_TRANSPORTER_SECURE', ''),
+      service: getEnv('EMAIL_TRANSPORTER_SERVICE', ''),
+      username: getEnv('EMAIL_TRANSPORTER_USERNAME', ''),
+      password: getEnv('EMAIL_TRANSPORTER_PASSWORD', '')
     }
   },
   urls: {
@@ -56,5 +56,8 @@ const config = {
     autoLogin: getEnv('AUTO_LOGIN_URL', '')
   }
 };
+
+config.email.transport.secure = Boolean(config.email.transport.secure);
+config.email.transport.port = Number.parseInt(config.email.transport.port);
 
 module.exports = config;
