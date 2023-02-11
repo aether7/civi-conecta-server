@@ -9,16 +9,15 @@ class EmailService {
   }
 
   async getTransportObject() {
-    const { user, pass } = await nodemailer.createTestAccount();
+    const testAccount = await nodemailer.createTestAccount();
 
     return {
-      host: config.email.transport.host || undefined,
-      port: config.email.transport.port || undefined,
-      secure: config.email.transport.secure || undefined,
-      service: config.email.transport.service || user,
+      host: config.email.transport.host ?? testAccount.smtp.host,
+      port: config.email.transport.port ?? testAccount.smtp.port,
+      secure: config.email.transport.secure ?? testAccount.smtp.secure,
       auth: {
-        user: config.email.transport.username || user,
-        pass: config.email.transport.password || pass,
+        user: config.email.transport.username ?? testAccount.user,
+        pass: config.email.transport.password ?? testAccount.pass
       }
     };
   }

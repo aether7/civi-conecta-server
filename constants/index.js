@@ -54,11 +54,6 @@ const validateRun = {
   message: (props) => `${props.path} must have correct format`,
 };
 
-const validLevels = {
-  values: ["5º", "6º", "7º", "8º"],
-  message: `${enumMessage} level`,
-};
-
 const validRoles = {
   values: ["Administrator", "User"],
   message: `${enumMessage} role`,
@@ -93,7 +88,6 @@ module.exports = {
   validatePassword,
   validateText,
   validateRun,
-  validLevels,
   validRoles,
   validTypes,
 };

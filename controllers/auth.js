@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const messages = require('../config/messages');
 const repositories = require('../repositories');
-const WorkplaceService = require('../services/WorkplaceService');
+const services = require('../services');
+const templates = require('../constants/EmailTemplates');
 
 
 const isValidPassword = (user, password) =>
@@ -17,8 +19,6 @@ const getMinimalUserData = ({ email, name, role, active }) => ({
   active,
 });
 
-const workplaceService = new WorkplaceService();
-
 const signIn = async (req, res) => {
   const { email, password } = req.body;
   const user = await repositories.user.findOneByEmail(email);
@@ -27,7 +27,7 @@ const signIn = async (req, res) => {
   if (!isValidUser) {
     return res.status(400).json({
       ok: false,
-      error: 'El correo y/o clave son incorrectas'
+      error: messages.auth.notValid
     });
   }
 
@@ -36,8 +36,8 @@ const signIn = async (req, res) => {
   const popTop = { path: 'topic' };
   const popSurvey = { path: pathSurvey, select: selectSurvey, populate: popTop };
   const popUser = await user.populate(popSurvey);
-  const workplaces = await workplaceService.getWorkPlaces(popUser._doc.workplaces);
-  const newUser = workplaceService.getUserWithWorkplaces(popUser, workplaces);
+  const workplaces = await services.workplace.getWorkPlaces(popUser._doc.workplaces);
+  const newUser = services.workplace.getUserWithWorkplaces(popUser, workplaces);
 
   const expiration = { expiresIn: config.token.expiration.userLogin };
   const userToken = { user: getMinimalUserData(newUser) };
@@ -50,7 +50,23 @@ const signIn = async (req, res) => {
 
 const signOut = (_, res) => {
   res.clearCookie('token');
-  res.json({ ok: true, message: 'Sign out successful' });
+  res.json({ ok: true, message: messages.auth.logout });
 };
 
-module.exports = { signIn, signOut };
+const sendRecoverPassword = async (req, res) => {
+  try {
+    const user = await repositories.user.findOneByEmail(req.body.email);
+    const { nanoid } = await import('nanoid');
+
+    const from = config.email.template.name.recoveryPassword;
+    const to = req.body.email;
+    const subject = config.email.template.subject.recoveryPassword;
+    const html = templates.recoverPassword(user.name, nanoid(15));
+    await services.email.send({ from, to, subject, html });
+    res.json({ ok: true, message: messages.auth.recoverPassword });
+  } catch(err) {
+    res.status(404).json({ ok: false, error: err.message });
+  }
+};
+
+module.exports = { signIn, signOut, sendRecoverPassword };
