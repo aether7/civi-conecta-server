@@ -2,20 +2,31 @@ const Classes = require('../models/classes');
 const { EntityNotFoundError } = require('./exceptions');
 
 class ClassRepository {
+  constructor(connection) {
+    this.connection = connection;
+  }
+
   findOneByNumberAndUnitId(number, unitId) {
     const queryClass = { number, unit: unitId };
     return Classes.findOne(queryClass);
   }
 
+  async findByUnitId(unitId) {
+    return this.connection
+      .select()
+      .from('class')
+      .where('unit_id', unitId);
+  }
+
   async findOneByUnitId(unitId) {
-    const query = { unit: unitId };
-    const entity = await Classes.findOne(query);
+    // const query = { unit: unitId };
+    // const entity = await Classes.findOne(query);
 
-    if (!entity) {
-      throw new EntityNotFoundError(`no existe la unidad ${unitId}`);
-    }
+    // if (!entity) {
+    //   throw new EntityNotFoundError(`no existe la unidad ${unitId}`);
+    // }
 
-    return entity;
+    // return entity;
   }
 
   findOneAndPopulate(number, unitId) {

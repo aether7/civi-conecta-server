@@ -26,11 +26,11 @@ const establishmentSchema = new Schema({
       },
       letters: {
         type: [{
-          character: normalStringData(types.string, validations.validateLetterAToZ),
+          character: { type: String },
           students: {
             type: [{
-              name: normalStringData(requiredTypes.string, validations.validateText),
-              run: normalStringData(requiredTypes.string,  validations.validateRun),
+              name: { type: String },
+              run: normalStringData(requiredTypes.string, validations.validateRun),
               surveys: {
                 type: [{
                   survey: {

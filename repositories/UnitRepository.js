@@ -1,15 +1,25 @@
 const Units = require('../models/units');
-const { EntityNotFoundError } = require('./exceptions');
 
 class UnitRepository {
-  async findOneByUnitAndGradeId(unit, gradeId) {
-    const entity = await Units.findOne({ number: unit, grade: gradeId });
+  constructor(connection) {
+    this.connection = connection;
+  }
 
-    if (!entity) {
-      throw new EntityNotFoundError(`No existe la unidad ${unit} del nivel ${gradeId} `);
-    }
+  findByGradeId(gradeId) {
+    return this.connection
+      .select()
+      .from('unit')
+      .where('grade_id', gradeId)
+      .orderBy('id');
+  }
 
-    return entity;
+  findOneByNumberAndGradeId(number, gradeId) {
+    return this.connection
+      .select()
+      .from('unit')
+      .where('grade_id', gradeId)
+      .where('number', number)
+      .first();
   }
 
   findSortedUnitsByGradeId(gradeId) {
@@ -19,13 +29,20 @@ class UnitRepository {
       .populate({ path: 'topic', select: '-_id -__v' });
   }
 
-  async create(payload) {
-    const unit = await Units.create(payload);
-    const popGra = { path: "grade", select: "-_id -__v" };
-    const popTop = { path: "topic", select: "-_id -__v" };
-    const newUnit = await unit.populate([popGra, popTop]);
+  async create({ number, title, description, gradeId, topicId }) {
+    const fields = {
+      number,
+      title,
+      description,
+      grade_id: gradeId,
+      topic_id: topicId
+    };
 
-    return newUnit;
+    const [result] = await this.connection
+      .insert(fields, ['*'])
+      .into('unit');
+
+    return result;
   }
 
   update(number, gradeId, fieldsToUpdate) {
@@ -34,9 +51,10 @@ class UnitRepository {
     return Units.findOneAndUpdate(query, fieldsToUpdate, options);
   }
 
-  delete(number, gradeId) {
-    const query = { number, grade: gradeId };
-    return Units.findOneAndDelete(query);
+  remove(unitId) {
+    return this.connection('unit')
+      .where('id', unitId)
+      .del();
   }
 }
 

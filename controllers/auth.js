@@ -20,6 +20,7 @@ const getMinimalUserData = ({ email, name, role, active }) => ({
 });
 
 const signIn = async (req, res) => {
+  console.log('estamos pasando por aqui ???')
   const { email, password } = req.body;
   const user = await repositories.user.findOneByEmail(email);
   const isValidUser = user && isValidPassword(user, password);

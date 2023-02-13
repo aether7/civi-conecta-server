@@ -1,0 +1,77 @@
+{
+  "grades": [
+    { "level": "1º basico" },
+    { "level": "2º basico" },
+    { "level": "3º basico" },
+    { "level": "4º basico" },
+    { "level": "5º basico" },
+    { "level": "6º basico" },
+    { "level": "7º basico" },
+    { "level": "8º basico" },
+    { "level": "1º medio" },
+    { "level": "2º medio" },
+    { "level": "3º medio" },
+    { "level": "4º medio" }
+  ],
+  "letters": [
+    { "character": "A" },
+    { "character": "B" },
+    { "character": "C" },
+    { "character": "D" },
+    { "character": "E" },
+    { "character": "F" },
+    { "character": "G" }
+  ],
+  "users": [
+    {
+      "email": "catalina@civiconecta.cl",
+      "name": "Catalina",
+      "password": "57ff5d854602536c67c1c516fb98c0539ff26554440b7e3480cd2a10008c1d52",
+      "role": "Administrator",
+      "active": true,
+      "encrypted_password": true
+    },
+    {
+      "email": "eduardo@civiconecta.cl",
+      "name": "Eduardo",
+      "password": "57ff5d854602536c67c1c516fb98c0539ff26554440b7e3480cd2a10008c1d52",
+      "role": "Administrator",
+      "active": true,
+      "encrypted_password": true
+    }
+  ],
+  "mongo": {
+    "grades": [
+      { "level": "1º basico", "number": 1 },
+      { "level": "2º basico", "number": 2 },
+      { "level": "3º basico", "number": 3 },
+      { "level": "4º basico", "number": 4 },
+      { "level": "5º basico", "number": 5 },
+      { "level": "6º basico", "number": 6 },
+      { "level": "7º basico", "number": 7 },
+      { "level": "8º basico", "number": 8 },
+      { "level": "1º medio", "number": 9 },
+      { "level": "2º medio", "number": 10 },
+      { "level": "3º medio", "number": 11 },
+      { "level": "4º medio", "number": 12 }
+    ],
+    "users": [
+      {
+        "email": "catalina@civiconecta.cl",
+        "name": "Catalina",
+        "password": "$2b$10$oeMn5u9xJa61e3JZX9FBv.uheqWZFdCQZBrihHVdsu9ZE.Oa463F.",
+        "role": "Administrator",
+        "active": true,
+        "encryptedPassword": true
+      },
+      {
+        "email": "eduardo@civiconecta.cl",
+        "name": "Eduardo",
+        "password": "$2b$10$BQ6ioRSyScRwcDPmAa8xzuJZqwXz1pikVN2g1dYPRR.DaShSwh7Mm",
+        "role": "Administrator",
+        "active": true,
+        "encryptedPassword": true
+      }
+    ]
+  }
+}
