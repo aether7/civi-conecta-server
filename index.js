@@ -23,7 +23,6 @@ app.use((req, _, next) => {
   next();
 });
 app.use(require('./routes'));
-require('./database')(config.database.mongo.url, logger);
 
 app.listen(config.env.port, config.env.host, (...args) => {
   logger.info(`server running at http://${config.env.host}:${config.env.port}`);

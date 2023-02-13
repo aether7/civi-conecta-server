@@ -1,4 +1,3 @@
-const Classes = require('../models/classes');
 const { EntityNotFoundError } = require('./exceptions');
 
 class ClassRepository {

@@ -1,4 +1,3 @@
-const Topics = require('../models/topics');
 const { EntityNotFoundError } = require('./exceptions');
 
 class TopicRepository {

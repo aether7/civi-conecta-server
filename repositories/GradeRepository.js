@@ -1,4 +1,3 @@
-const Grades = require('../models/grades');
 const { EntityNotFoundError } = require('./exceptions');
 
 class GradeRepository {

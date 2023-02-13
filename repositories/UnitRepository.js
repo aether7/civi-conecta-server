@@ -1,5 +1,3 @@
-const Units = require('../models/units');
-
 class UnitRepository {
   constructor(connection) {
     this.connection = connection;
