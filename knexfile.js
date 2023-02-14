@@ -19,7 +19,8 @@ module.exports = {
       port: config.database.postgres.port,
       user: config.database.postgres.user,
       password: config.database.postgres.password,
-      database: config.database.postgres.database
+      database: config.database.postgres.database,
+      ssl: { rejectUnauthorized: false }
     },
     pool: {
       min: 2,
