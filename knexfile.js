@@ -1,4 +1,5 @@
 // Update with your config settings.
+const config = require('./config');
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -13,7 +14,13 @@ module.exports = {
   },
   staging: {
     client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING,
+    connection: {
+      host: config.database.postgres.host,
+      port: config.database.postgres.port,
+      user: config.database.postgres.user,
+      password: config.database.postgres.password,
+      database: config.database.postgres.database
+    },
     pool: {
       min: 2,
       max: 10

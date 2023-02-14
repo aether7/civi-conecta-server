@@ -13,6 +13,13 @@ const config = {
     surveyStudents: getEnv('SEED_SURVEY_STUDENTS', 'seed-survey-students')
   },
   database: {
+    postgres: {
+      host: getEnv('DB_HOST', '127.0.0.1'),
+      port: getEnv('DB_PORT', 5432),
+      user: getEnv('DB_USER', 'root'),
+      password: getEnv('DB_PASSWORD', 'root'),
+      database: getEnv('DB_DATABASE', 'civiconectadb')
+    },
     mongo: {
       url: getEnv('DATABASE_URL', 'mongodb://127.0.0.1:27017/civi-conecta-db')
     }

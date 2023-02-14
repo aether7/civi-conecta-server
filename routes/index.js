@@ -3,13 +3,6 @@ const middlewares = require('../middlewares/authentication');
 const router = Router();
 const routesWithAuthToken = Router();
 
-routesWithAuthToken.use(middlewares.verifyLoginToken);
-routesWithAuthToken.use(middlewares.verifyActiveState);
-routesWithAuthToken.use('/units', require('./units.v2'));
-routesWithAuthToken.use('/establishments', require('./establishments.v2'));
-routesWithAuthToken.use('/grades', require('./grades.v2'));
-routesWithAuthToken.use('/topics', require('./topics.v2'));
-
 // router.use(require('./units'));
 // previousRoutes.use(require('./users'));
 // previousRoutes.use(require('./events'));
@@ -22,6 +15,14 @@ routesWithAuthToken.use('/topics', require('./topics.v2'));
 // previousRoutes.use(require('./topics'));
 
 router.use('/auth', require('./auth'));
+
+routesWithAuthToken.use(middlewares.verifyLoginToken);
+routesWithAuthToken.use(middlewares.verifyActiveState);
+routesWithAuthToken.use('/units', require('./units.v2'));
+routesWithAuthToken.use('/establishments', require('./establishments.v2'));
+routesWithAuthToken.use('/grades', require('./grades.v2'));
+routesWithAuthToken.use('/topics', require('./topics.v2'));
+
 router.use(routesWithAuthToken);
 
 router.use((req, res, next) => {
