@@ -46,77 +46,24 @@ class EstablishmentRepository {
       const courseGrade = course.grade;
 
       for (const letter of course.letters) {
-
-        console.log('repositories', this.courseRepository);
-
-        const courseId = await this.courseRepository.findOrCreate(
+        const course = await this.courseRepository.findOrCreate(
           number,
           grades.get(courseGrade),
           letters.get(letter.character)
         );
 
-        await this.courseStudentRepository.deleteByCourseId(courseId);
+        await this.courseStudentRepository.deleteByCourseId(course.id);
 
         for (const student of letter.students) {
-          const studentId = await this.studentRepository.findOrCreate(student);
-          await this.saveStudentInCourse(studentId, courseId);
+          const _student = await this.studentRepository.findOrCreate(student);
+
+          await this.courseStudentRepository.create({
+            courseId: course.id,
+            studentId: _student.id
+          });
         }
       }
     }
-  }
-
-  async findOrStoreCourse(establishmentId, gradeId, letterId) {
-    let result = await this.connection
-      .select()
-      .from('course')
-      .where('establishment_id', establishmentId)
-      .where('grade_id', gradeId)
-      .where('letter_id', letterId)
-      .first();
-
-    if (result) {
-      return result;
-    }
-
-    [result] = await this.connection
-      .insert({
-        establishment_id: establishmentId,
-        grade_id: gradeId,
-        letter_id: letterId
-      }, ['*'])
-      .into('course');
-
-    return result;
-  }
-
-  async findOrStoreStudent(student) {
-    let result = await this.connection
-      .select()
-      .from('student')
-      .where('rut', student.run)
-      .first();
-
-    if (result) {
-      return result;
-    }
-
-    [result] = await this.connection
-      .insert({
-        name: student.name,
-        rut: student.run
-      }, ['*'])
-      .into('student');
-
-    return result.id;
-  }
-
-  saveStudentInCourse(studentId, courseId) {
-    return this.connection
-      .insert({
-        course_id: courseId,
-        student_id: studentId
-      })
-      .into('course_student');
   }
 }
 
