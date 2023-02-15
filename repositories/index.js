@@ -12,7 +12,10 @@ const TopicRepository = require('./TopicRepository');
 const StudentRepository = require('./StudentRepository');
 const CourseRepository = require('./CourseRepository');
 const CourseStudentRepository = require('./CourseStudentRepository');
+const EventRepository = require('./EventRepository');
+const PlanningRepository = require('./PlanningRepository');
 
+const eventRepository = new EventRepository(connection);
 const courseRepository = new CourseRepository(connection);
 const studentRepository = new StudentRepository(connection);
 const courseStudentRepository = new CourseStudentRepository(connection);
@@ -21,6 +24,7 @@ const gradeRepository = new GradeRepository(connection);
 const classRepository = new ClassRepository(connection);
 const unitRepository = new UnitRepository(connection);
 const topicRepository = new TopicRepository(connection);
+const planningRepository = new PlanningRepository(connection);
 const establishmentRepository = new EstablishmentRepository(connection, {
   courseRepository,
   studentRepository,
@@ -36,5 +40,7 @@ module.exports = {
   student: studentRepository,
   course: courseRepository,
   courseStudent: courseStudentRepository,
-  establishment: establishmentRepository
+  establishment: establishmentRepository,
+  event: eventRepository,
+  planning: planningRepository
 };

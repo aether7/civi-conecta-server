@@ -22,6 +22,7 @@ routesWithAuthToken.use('/units', require('./units.v2'));
 routesWithAuthToken.use('/establishments', require('./establishments.v2'));
 routesWithAuthToken.use('/grades', require('./grades.v2'));
 routesWithAuthToken.use('/topics', require('./topics.v2'));
+routesWithAuthToken.use('/events', require('./events.v2'));
 
 router.use(routesWithAuthToken);
 
