@@ -1,4 +1,10 @@
 const { EntityNotFoundError } = require('./exceptions');
+const passwordService = require('../services').password;
+
+const RoleTypes = {
+  ADMIN: 'Administrator',
+  USER: 'User'
+};
 
 class UserRepository {
   constructor(connection) {
@@ -17,6 +23,34 @@ class UserRepository {
     }
 
     return entity;
+  }
+
+  async createAdmin({ email, name, password }) {
+    const fields = {
+      email,
+      name,
+      password: passwordService.encrypt(password),
+      encrypted_password: true,
+      active: true,
+      role: RoleTypes.ADMIN
+    };
+
+    const [user] = await this.connection.insert(fields, ['*']).into('user');
+    return user;
+  }
+
+  async createUser({ email, name, password }) {
+    const fields = {
+      email,
+      name,
+      password,
+      encrypted_password: false,
+      active: true,
+      role: RoleTypes.USER
+    };
+
+    const [user] = await this.connection.insert(fields, ['*']).into('user');
+    return user;
   }
 }
 

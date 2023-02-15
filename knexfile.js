@@ -31,11 +31,14 @@ module.exports = {
     }
   },
   production: {
-    client: 'postgresql',
+    client: 'pg',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      host: config.database.postgres.host,
+      port: config.database.postgres.port,
+      user: config.database.postgres.user,
+      password: config.database.postgres.password,
+      database: config.database.postgres.database,
+      ssl: { rejectUnauthorized: false }
     },
     pool: {
       min: 2,
