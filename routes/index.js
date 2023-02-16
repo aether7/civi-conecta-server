@@ -3,17 +3,6 @@ const middlewares = require('../middlewares/authentication');
 const router = Router();
 const routesWithAuthToken = Router();
 
-// router.use(require('./units'));
-// previousRoutes.use(require('./users'));
-// previousRoutes.use(require('./events'));
-// previousRoutes.use(require('./grades'));
-// previousRoutes.use(require('./exceptions'));
-// previousRoutes.use(require('./classes'));
-// previousRoutes.use(require('./files'));
-// previousRoutes.use(require('./establishments'));
-// previousRoutes.use(require('./surveys'));
-// previousRoutes.use(require('./topics'));
-
 router.use('/auth', require('./auth'));
 
 routesWithAuthToken.use(middlewares.verifyLoginToken);
