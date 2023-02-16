@@ -5,11 +5,27 @@ class EventRepository {
 
   findByGradeId(gradeId, isException) {
     return this.connection
-      .select()
+      .column({
+        id: 'event.id',
+        number: 'event.number',
+        title: 'event.title',
+        description: 'event.description',
+        date: 'event.date',
+        grade: 'grade.level',
+        objectives: 'event.objective',
+        topic: 'planning.topic',
+        start_activity: 'planning.start_activity',
+        main_activity: 'planning.main_activity',
+        end_activity: 'planning.end_activity',
+        teacher_material: 'planning.teacher_material',
+        student_material: 'planning.student_material',
+        keywords: 'planning.keywords'
+      })
       .from('event')
-      .where('grade_id', gradeId)
-      .where('is_exception', isException)
-      .debug();
+      .innerJoin('planning', 'event.planning_id', 'planning.id')
+      .innerJoin('grade', 'event.grade_id', 'grade.id')
+      .where('event.grade_id', gradeId)
+      .where('event.is_exception', isException);
   }
 
   async create(payload) {
