@@ -8,6 +8,11 @@ class PasswordService {
       .digest('hex');
   }
 
+  async createRandomPassword() {
+    const { nanoid } = await import('nanoid');
+    return nanoid(10);
+  }
+
   compare(encryptedPassword, rawPassword) {
     const processedPassword = this.encrypt(rawPassword);
     return encryptedPassword === processedPassword;

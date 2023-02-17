@@ -11,6 +11,17 @@ class UserRepository {
     this.connection = connection;
   }
 
+  async findOrCreateUser({ name, email }) {
+    try {
+      const entity = await this.findOneByEmail(email);
+      return entity;
+    } catch (err) {
+      const password = await passwordService.createRandomPassword();
+      const entity = await this.createUser({ name, email, password });
+      return entity;
+    }
+  }
+
   async findOneByEmail(email) {
     const entity = await this.connection.select()
       .from('user')

@@ -28,7 +28,8 @@ const planningRepository = new PlanningRepository(connection);
 const establishmentRepository = new EstablishmentRepository(connection, {
   courseRepository,
   studentRepository,
-  courseStudentRepository
+  courseStudentRepository,
+  userRepository
 });
 
 module.exports = {

@@ -1,9 +1,10 @@
 class EstablishmentRepository {
-  constructor(connection, { courseRepository, courseStudentRepository, studentRepository }) {
+  constructor(connection, { courseRepository, courseStudentRepository, studentRepository, userRepository }) {
     this.connection = connection;
     this.courseRepository = courseRepository;
     this.courseStudentRepository = courseStudentRepository;
     this.studentRepository = studentRepository;
+    this.userRepository = userRepository;
   }
 
   async findAll() {
@@ -15,7 +16,7 @@ class EstablishmentRepository {
         level: 'grade.level',
         character: 'letter.character',
         studentName: 'student.name',
-        studentRut: 'student.rut'
+        studentRun: 'student.run'
       })
       .from('establishment')
       .leftJoin('course', 'course.establishment_id', 'establishment.id')

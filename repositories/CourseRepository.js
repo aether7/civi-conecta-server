@@ -19,12 +19,24 @@ class CourseRepository {
 
   findOneByEstablishmentAndGradeAndLetter(establishmentId, gradeId, letterId) {
     return this.connection
-    .select()
-    .from('course')
-    .where('establishment_id', establishmentId)
-    .where('grade_id', gradeId)
-    .where('letter_id', letterId)
-    .first();
+      .select()
+      .from('course')
+      .where('establishment_id', establishmentId)
+      .where('grade_id', gradeId)
+      .where('letter_id', letterId)
+      .first();
+  }
+
+  findByGradeLetterEstablishment(grade, letter, establishmentId) {
+    return this.connection
+      .select('course.*')
+      .from('course')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('letter', 'course.letter_id', 'letter.id')
+      .where('course.establishment_id', establishmentId)
+      .where('grade.level', grade)
+      .where('letter.character', letter)
+      .first();
   }
 
   async create(establishmentId, gradeId, letterId) {
@@ -37,6 +49,13 @@ class CourseRepository {
       .into('course');
 
     return result;
+  }
+
+  updateTeacher(teacherId, courseId) {
+    return this.connection('course')
+      .where('id', courseId)
+      .update('teacher_id', teacherId)
+      .debug();
   }
 }
 

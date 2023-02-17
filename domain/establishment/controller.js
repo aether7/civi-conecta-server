@@ -19,8 +19,30 @@ const updateCoursesEstablishment = async (req, res) => {
   res.json({ ok: true, establishment });
 };
 
+const updateTeacherToCourse = async (req, res) => {
+  const user = await repositories.user.findOrCreateUser({
+    name: req.body.name,
+    email: req.body.email
+  });
+
+  const gradeToSearch = req.body.grade;
+  const letterToSearch = req.body.letter;
+  const establishmentId = req.body.institution;
+
+  const course = await repositories.course
+    .findByGradeLetterEstablishment(gradeToSearch, letterToSearch, establishmentId);
+
+  await repositories.course.updateTeacher(user.id, course.id);
+
+  res.json({ok : true, message: {
+    course: course.id,
+    teacher: user.id
+  } });
+};
+
 module.exports = {
   getEstablishments,
   createEstablishment,
-  updateCoursesEstablishment
+  updateCoursesEstablishment,
+  updateTeacherToCourse
 };

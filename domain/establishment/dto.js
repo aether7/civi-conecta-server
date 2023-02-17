@@ -33,7 +33,7 @@ function addStudent(obj, row) {
     return obj;
   }
 
-  obj.students.push({ name: row.studentName, run: row.studentRut });
+  obj.students.push({ name: row.studentName, run: row.studentRun });
 }
 
 const mapEstablishments = (establishments) => {

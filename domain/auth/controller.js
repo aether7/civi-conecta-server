@@ -50,7 +50,7 @@ const sendRecoverPassword = async (req, res) => {
     const from = config.email.template.name.recoveryPassword;
     const to = req.body.email;
     const subject = config.email.template.subject.recoveryPassword;
-    const html = templates.recoverPassword(user.name, nanoid(15));
+    const html = templates.recoverPassword(user.name, nanoid(10));
     await services.email.send({ from, to, subject, html });
     res.json({ ok: true, message: messages.auth.recoverPassword });
   } catch(err) {
