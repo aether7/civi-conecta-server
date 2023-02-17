@@ -7,6 +7,7 @@ const mapEvent = (data) => {
     date: data.date,
     objective: data.objective,
     grade: data.grade,
+    eventType: data.eventType,
     planning: {
       topic: data.topic,
       keywords: data.keywords ? data.keywords.split(',') : [],

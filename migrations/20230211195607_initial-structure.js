@@ -38,10 +38,10 @@ exports.up = function(knex) {
     .createTable('student', (t) => {
       t.increments('id', { primaryKey: true });
       t.string('name');
-      t.string('rut');
+      t.string('run');
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
-      t.unique(['rut'], { indexName: 'student_idx1' });
+      t.unique(['run'], { indexName: 'student_idx1' });
     })
     .createTable('topic', (t) => {
       t.increments('id', { primaryKey: true });
@@ -98,19 +98,6 @@ exports.up = function(knex) {
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
     })
-    .createTable('class', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.integer('number');
-      t.string('title');
-      t.text('description');
-      t.text('objectives');
-      t.integer('unit_id').unsigned();
-      t.integer('planning_id').unsigned();
-      t.timestamp('created_at').defaultTo(knex.fn.now());
-      t.timestamp('updated_at').defaultTo(knex.fn.now());
-      t.foreign('unit_id').references('unit.id');
-      t.foreign('planning_id').references('planning.id');
-    })
     .createTable('survey', (t) => {
       t.increments('id', { primaryKey: true });
       t.integer('number');
@@ -139,17 +126,25 @@ exports.up = function(knex) {
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('question_id').references('question.id');
     })
+    .createTable('event_type', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('name');
+    })
     .createTable('event', (t) => {
       t.increments('id', { primaryKey: true });
       t.integer('number');
       t.string('title');
+      t.string('objective');
       t.text('description');
       t.timestamp('date').defaultTo(knex.fn.now());
-      t.boolean('is_exception').defaultTo(false);
+      t.integer('event_type_id').unsigned();
+      t.integer('unit_id').unsigned();
       t.integer('grade_id').unsigned();
       t.integer('planning_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('event_type_id').references('event_type.id');
+      t.foreign('unit_id').references('unit.id');
       t.foreign('grade_id').references('grade.id');
       t.foreign('planning_id').references('planning.id');
     })

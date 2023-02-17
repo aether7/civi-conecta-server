@@ -9,7 +9,6 @@ const getEstablishments = async (_, res) => {
 const createEstablishment = async (req, res) => {
   const { number, name } = req.body;
   const establishment = await repositories.establishment.create({ number, name });
-  console.log('establishment', establishment);
   res.json({ ok: true, establishment });
 };
 

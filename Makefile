@@ -12,7 +12,3 @@ migrate:
 restore:
 	rm dev.sqlite3
 	./node_modules/.bin/knex migrate:latest
-
-repopulate:
-	$(MAKE) restore
-	bash bin/generate-planning-survey.sh

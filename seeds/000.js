@@ -8,4 +8,5 @@ exports.seed = async function(knex) {
   await knex('grade').insert(data.grades);
   await knex('letter').insert(data.letters);
   await knex('user').insert(data.users);
+  await knex('event_type').insert(data.eventTypes);
 };

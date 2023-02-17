@@ -17,7 +17,7 @@ class StudentRepository {
     return this.connection
       .select()
       .from('student')
-      .where('rut', run)
+      .where('run', run)
       .first();
   }
 
@@ -25,7 +25,7 @@ class StudentRepository {
     const [result] = await this.connection
       .insert({
         name: student.name,
-        rut: student.run
+        run: student.run
       }, ['*'])
       .into('student');
 

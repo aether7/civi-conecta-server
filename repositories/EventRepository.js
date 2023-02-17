@@ -1,9 +1,44 @@
+const {EntityNotFoundError} = require('./exceptions');
+
 class EventRepository {
   constructor(connection) {
     this.connection = connection;
   }
 
-  findByGradeId(gradeId, isException) {
+  async findById(eventId) {
+    const entity = await this.connection
+      .column({
+        id: 'event.id',
+        number: 'event.number',
+        title: 'event.title',
+        description: 'event.description',
+        date: 'event.date',
+        grade: 'grade.level',
+        objective: 'event.objective',
+        topic: 'planning.topic',
+        start_activity: 'planning.start_activity',
+        main_activity: 'planning.main_activity',
+        end_activity: 'planning.end_activity',
+        teacher_material: 'planning.teacher_material',
+        student_material: 'planning.student_material',
+        keywords: 'planning.keywords',
+        eventType: 'event_type.name'
+      })
+      .from('event')
+      .innerJoin('planning', 'event.planning_id', 'planning.id')
+      .innerJoin('grade', 'event.grade_id', 'grade.id')
+      .innerJoin('event_type', 'event.event_type_id', 'event_type.id')
+      .where('event.id', eventId)
+      .first();
+
+    if (!entity) {
+      throw new EntityNotFoundError(`no existe el evento con el id ${eventId}`);
+    }
+
+    return entity;
+  }
+
+  findByGradeId(gradeId, eventTypeId) {
     return this.connection
       .column({
         id: 'event.id',
@@ -12,20 +47,22 @@ class EventRepository {
         description: 'event.description',
         date: 'event.date',
         grade: 'grade.level',
-        objectives: 'event.objective',
+        objective: 'event.objective',
         topic: 'planning.topic',
         start_activity: 'planning.start_activity',
         main_activity: 'planning.main_activity',
         end_activity: 'planning.end_activity',
         teacher_material: 'planning.teacher_material',
         student_material: 'planning.student_material',
-        keywords: 'planning.keywords'
+        keywords: 'planning.keywords',
+        eventType: 'event_type.name'
       })
       .from('event')
       .innerJoin('planning', 'event.planning_id', 'planning.id')
       .innerJoin('grade', 'event.grade_id', 'grade.id')
+      .innerJoin('event_type', 'event.event_type_id', 'event_type.id')
       .where('event.grade_id', gradeId)
-      .where('event.is_exception', isException);
+      .where('event.event_type_id', eventTypeId);
   }
 
   async create(payload) {
@@ -40,7 +77,7 @@ class EventRepository {
       title: payload.title,
       description: payload.description,
       objective: payload.objective,
-      is_exception: payload.isException,
+      event_type_id: payload.eventTypeId,
       grade_id: payload.gradeId,
       planning_id: payload.planningId,
       date
