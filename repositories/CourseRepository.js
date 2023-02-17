@@ -54,8 +54,14 @@ class CourseRepository {
   updateTeacher(teacherId, courseId) {
     return this.connection('course')
       .where('id', courseId)
-      .update('teacher_id', teacherId)
-      .debug();
+      .update('teacher_id', teacherId);
+  }
+
+  findByTeacher(teacherId) {
+    return this.connection
+      .select()
+      .from('course')
+      .where('teacher_id', teacherId);
   }
 }
 

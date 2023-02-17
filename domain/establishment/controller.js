@@ -1,4 +1,5 @@
 const repositories = require('../../repositories');
+const messages = require('../../config/messages');
 const dto = require('./dto.js');
 
 const getEstablishments = async (_, res) => {
@@ -20,24 +21,31 @@ const updateCoursesEstablishment = async (req, res) => {
 };
 
 const updateTeacherToCourse = async (req, res) => {
-  const user = await repositories.user.findOrCreateUser({
-    name: req.body.name,
-    email: req.body.email
-  });
+  try {
+    const user = await repositories.user.findOrCreateUser({
+      name: req.body.name,
+      email: req.body.email
+    });
 
-  const gradeToSearch = req.body.grade;
-  const letterToSearch = req.body.letter;
-  const establishmentId = req.body.institution;
+    const coursesTakenByTeacher = await repositories.course.findByTeacher(user.id);
 
-  const course = await repositories.course
-    .findByGradeLetterEstablishment(gradeToSearch, letterToSearch, establishmentId);
+    if (coursesTakenByTeacher.length) {
+      throw new Error(messages.establishment.teacherAlreadyAsigned);
+    }
 
-  await repositories.course.updateTeacher(user.id, course.id);
+    const gradeToSearch = req.body.grade;
+    const letterToSearch = req.body.letter;
+    const establishmentId = req.body.institution;
 
-  res.json({ok : true, message: {
-    course: course.id,
-    teacher: user.id
-  } });
+    const course = await repositories.course
+      .findByGradeLetterEstablishment(gradeToSearch, letterToSearch, establishmentId);
+
+    await repositories.course.updateTeacher(user.id, course.id);
+
+    res.json({ ok : true, message: messages.establishment.teacherAlreadyAssigned });
+  } catch(err) {
+    res.status(400).json({ ok: false, error: err.message });
+  }
 };
 
 module.exports = {

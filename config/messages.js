@@ -8,6 +8,10 @@ const messages = {
     alreadyExists: 'La unidad ya existe',
     hasAssociatedClass: 'La unidad ya tiene al menos una clase asociada',
     unitRemoved: 'La unidad ha sido removida exitosamente'
+  },
+  establishment: {
+    teacherAlreadyAssigned: 'Este profesor ya tiene un curso asignado, intenta con otro profesor',
+    teacherAssigned: 'El profesor fue asignado exitosamente'
   }
 };
 
