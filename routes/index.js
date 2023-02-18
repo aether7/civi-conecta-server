@@ -7,11 +7,11 @@ router.use('/auth', require('./auth'));
 
 routesWithAuthToken.use(middlewares.verifyLoginToken);
 routesWithAuthToken.use(middlewares.verifyActiveState);
-routesWithAuthToken.use('/units', require('./units.v2'));
-routesWithAuthToken.use('/establishments', require('./establishments.v2'));
-routesWithAuthToken.use('/grades', require('./grades.v2'));
-routesWithAuthToken.use('/topics', require('./topics.v2'));
-routesWithAuthToken.use('/events', require('./events.v2'));
+routesWithAuthToken.use('/units', require('./units.route'));
+routesWithAuthToken.use('/establishments', require('./establishments.route'));
+routesWithAuthToken.use('/grades', require('./grades.route'));
+routesWithAuthToken.use('/topics', require('./topics.route'));
+routesWithAuthToken.use('/events', require('./events.route'));
 
 router.use(routesWithAuthToken);
 
