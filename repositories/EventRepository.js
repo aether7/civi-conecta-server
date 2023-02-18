@@ -89,6 +89,14 @@ class EventRepository {
 
     return entity;
   }
+
+  findByEventTypeId(eventTypeId) {
+    return this.connection
+      .select()
+      .from('event')
+      .where('event_type_id', eventTypeId)
+      .sortBy('date', 'desc');
+  }
 }
 
 module.exports = EventRepository;

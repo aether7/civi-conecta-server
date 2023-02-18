@@ -3,7 +3,7 @@ const middlewares = require('../middlewares/authentication');
 const router = Router();
 const routesWithAuthToken = Router();
 
-router.use('/auth', require('./auth'));
+router.use('/auth', require('./auth.route'));
 
 routesWithAuthToken.use(middlewares.verifyLoginToken);
 routesWithAuthToken.use(middlewares.verifyActiveState);

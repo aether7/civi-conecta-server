@@ -1,4 +1,5 @@
 const repositories = require('../../repositories');
+const dateHelper = require('../../helpers/date');
 const dto = require('./dto');
 
 const EventTypes = {
@@ -8,12 +9,20 @@ const EventTypes = {
 };
 
 const getEventsByGrade = async (req, res) => {
-  const gradeToSearch = req.query.grade;
-  const eventType = req.query.eventType;
+  let eventType = req.query.eventType ?? EventTypes.CLASS;
+  eventType = Number.parseInt(eventType);
 
   try {
-    const grade = await repositories.grade.findOneByGrade(gradeToSearch);
-    const results = await repositories.event.findByGradeId(grade.id, eventType);
+    let results;
+
+    if (eventType === EventTypes.CLASS) {
+      const gradeToSearch = req.query.grade;
+      const grade = await repositories.grade.findOneByGrade(gradeToSearch);
+      results = await repositories.event.findByGradeId(grade.id, eventType);
+    } else {
+      results = await repositories.event.findByEventTypeId(eventType);
+    }
+
     res.json({ ok: true, events: results.map(dto.mapEvent) });
   } catch (err) {
     res.status(400).json({ ok: false, error: err.message });
@@ -21,18 +30,23 @@ const getEventsByGrade = async (req, res) => {
 };
 
 const createEvent = async (req, res) => {
-  const gradeToSearch = req.body.grade;
-  const eventTypeId = req.query.eventType ?? EventTypes.CLASS;
+  let date;
+  let eventTypeId = req.query.eventType ?? EventTypes.CLASS;
+  eventTypeId = Number.parseInt(eventTypeId);
+
+  if (eventTypeId === EventTypes.EPHEMERIS) {
+    date = dateHelper.dateToMonthDay(req.body.date);
+  }
 
   const eventPayload = {
     number: req.body.number,
     title: req.body.title,
     description: req.body.description,
     objective: req.body.objective,
-    date: req.body.date,
-    eventTypeId,
     gradeId: null,
-    planningId: null
+    planningId: null,
+    eventTypeId,
+    date
   };
 
   const planningPayload = {
@@ -48,12 +62,19 @@ const createEvent = async (req, res) => {
   };
 
   try {
-    const grade = await repositories.grade.findOneByGrade(gradeToSearch);
+    let gradeId = null;
+
+    if (eventTypeId === EventTypes.CLASS) {
+      const gradeToSearch = req.body.grade;
+      const grade = await repositories.grade.findOneByGrade(gradeToSearch);
+      gradeId = grade.id;
+    }
+
     const planning = await repositories.planning.create(planningPayload);
     const newEvent = await repositories.event.create({
       ...eventPayload,
-      gradeId: grade.id,
-      planningId: planning.id
+      planningId: planning.id,
+      gradeId
     });
     const event = await repositories.event.findById(newEvent.id);
     res.json({ ok: true, event: dto.mapEvent(event) });
