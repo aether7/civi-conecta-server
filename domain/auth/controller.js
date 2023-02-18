@@ -46,11 +46,13 @@ const sendRecoverPassword = async (req, res) => {
   try {
     const user = await repositories.user.findOneByEmail(req.body.email);
     const { nanoid } = await import('nanoid');
+    const newPassword = nanoid(10);
+    await repositories.user.updatePassword(user.id, newPassword);
 
     const from = config.email.template.name.recoveryPassword;
     const to = req.body.email;
     const subject = config.email.template.subject.recoveryPassword;
-    const html = templates.recoverPassword(user.name, nanoid(10));
+    const html = templates.recoverPassword(user.name, newPassword);
     await services.email.send({ from, to, subject, html });
     res.json({ ok: true, message: messages.auth.recoverPassword });
   } catch(err) {

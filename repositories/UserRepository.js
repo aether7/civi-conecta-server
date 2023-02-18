@@ -63,6 +63,17 @@ class UserRepository {
     const [user] = await this.connection.insert(fields, ['*']).into('user');
     return user;
   }
+
+  async updatePassword(userId, password) {
+    const fields = {
+      encrypted_password: true,
+      password: passwordService.encrypt(password)
+    };
+
+    return this.connection('user')
+      .where('id', userId)
+      .update(fields);
+  }
 }
 
 module.exports = UserRepository;

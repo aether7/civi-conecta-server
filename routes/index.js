@@ -8,10 +8,10 @@ router.use('/auth', require('./auth'));
 routesWithAuthToken.use(middlewares.verifyLoginToken);
 routesWithAuthToken.use(middlewares.verifyActiveState);
 routesWithAuthToken.use('/units', require('./units.route'));
-routesWithAuthToken.use('/establishments', require('./establishments.route'));
 routesWithAuthToken.use('/grades', require('./grades.route'));
 routesWithAuthToken.use('/topics', require('./topics.route'));
 routesWithAuthToken.use('/events', require('./events.route'));
+routesWithAuthToken.use('/establishments', require('./establishments.route'));
 
 router.use(routesWithAuthToken);
 

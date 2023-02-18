@@ -30,7 +30,7 @@ const updateTeacherToCourse = async (req, res) => {
     const coursesTakenByTeacher = await repositories.course.findByTeacher(user.id);
 
     if (coursesTakenByTeacher.length) {
-      throw new Error(messages.establishment.teacherAlreadyAsigned);
+      throw new Error(messages.establishment.teacherAlreadyAssigned);
     }
 
     const gradeToSearch = req.body.grade;
@@ -42,7 +42,7 @@ const updateTeacherToCourse = async (req, res) => {
 
     await repositories.course.updateTeacher(user.id, course.id);
 
-    res.json({ ok : true, message: messages.establishment.teacherAlreadyAssigned });
+    res.json({ ok : true, message: messages.establishment.teacherAssigned });
   } catch(err) {
     res.status(400).json({ ok: false, error: err.message });
   }
