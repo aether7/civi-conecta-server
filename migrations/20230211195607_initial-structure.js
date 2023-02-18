@@ -136,7 +136,7 @@ exports.up = function(knex) {
       t.string('title');
       t.string('objective');
       t.text('description');
-      t.timestamp('date').defaultTo(knex.fn.now());
+      t.string('date');
       t.integer('event_type_id').unsigned();
       t.integer('unit_id').unsigned();
       t.integer('grade_id').unsigned();
