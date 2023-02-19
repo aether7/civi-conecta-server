@@ -3,6 +3,7 @@ const messages = require('../../config/messages');
 const repositories = require('../../repositories');
 const services = require('../../services');
 const templates = require('../../constants/EmailTemplates');
+const { tryCatch } = require('../../helpers/controller');
 const dto = require('./dto');
 
 const isValidPassword = (user, password) => {
@@ -14,27 +15,23 @@ const isValidPassword = (user, password) => {
 };
 
 const signIn = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await repositories.user.findOneByEmail(email);
-    const isValidUser = user && isValidPassword(user, password);
+  const { email, password } = req.body;
+  const user = await repositories.user.findOneByEmail(email);
+  const isValidUser = user && isValidPassword(user, password);
 
-    if (!isValidUser) {
-      return res.status(400).json({
-        ok: false,
-        error: messages.auth.notValid
-      });
-    }
-
-    const loggedUser = dto.mapUser(user);
-    const token = services.token.createToken(loggedUser);
-    loggedUser.token = token;
-
-    res.cookie('token', token);
-    res.json({ ok: true, user: loggedUser });
-  } catch (err) {
-    res.status(404).json({ ok: false, error: err.message });
+  if (!isValidUser) {
+    return res.status(400).json({
+      ok: false,
+      error: messages.auth.notValid
+    });
   }
+
+  const loggedUser = dto.mapUser(user);
+  const token = services.token.createToken(loggedUser);
+  loggedUser.token = token;
+
+  res.cookie('token', token);
+  res.json({ ok: true, user: loggedUser });
 };
 
 const signOut = (_, res) => {
@@ -43,21 +40,17 @@ const signOut = (_, res) => {
 };
 
 const sendRecoverPassword = async (req, res) => {
-  try {
-    const user = await repositories.user.findOneByEmail(req.body.email);
-    const { nanoid } = await import('nanoid');
-    const newPassword = nanoid(10);
-    await repositories.user.updatePassword(user.id, newPassword);
+  const user = await repositories.user.findOneByEmail(req.body.email);
+  const { nanoid } = await import('nanoid');
+  const newPassword = nanoid(10);
+  await repositories.user.updatePassword(user.id, newPassword);
 
-    const from = config.email.template.name.recoveryPassword;
-    const to = req.body.email;
-    const subject = config.email.template.subject.recoveryPassword;
-    const html = templates.recoverPassword(user.name, newPassword);
-    await services.email.send({ from, to, subject, html });
-    res.json({ ok: true, message: messages.auth.recoverPassword });
-  } catch(err) {
-    res.status(404).json({ ok: false, error: err.message });
-  }
+  const from = config.email.template.name.recoveryPassword;
+  const to = req.body.email;
+  const subject = config.email.template.subject.recoveryPassword;
+  const html = templates.recoverPassword(user.name, newPassword);
+  await services.email.send({ from, to, subject, html });
+  res.json({ ok: true, message: messages.auth.recoverPassword });
 };
 
 const signUpAdmin = async (req, res) => {
@@ -65,12 +58,8 @@ const signUpAdmin = async (req, res) => {
   const name = req.body.name;
   const password = req.body.password;
 
-  try {
-    const newUser = await repositories.user.createAdmin({ email, name, password });
-    res.json({ ok: true, user: dto.mapUser(newUser) });
-  } catch(err) {
-    res.status(400).json({ ok: false, error: err.message });
-  }
+  const newUser = await repositories.user.createAdmin({ email, name, password });
+  res.json({ ok: true, user: dto.mapUser(newUser) });
 };
 
 const signUpUser = async (req, res) => {
@@ -78,18 +67,14 @@ const signUpUser = async (req, res) => {
   const name = req.body.name;
   const password = req.body.password;
 
-  try {
-    const newUser = await repositories.user.createUser({ email, name, password });
-    res.json({ ok: true, user: dto.mapUser(newUser) });
-  } catch(err) {
-    res.status(400).json({ ok: false, error: err.message });
-  }
+  const newUser = await repositories.user.createUser({ email, name, password });
+  res.json({ ok: true, user: dto.mapUser(newUser) });
 };
 
 module.exports = {
-  signIn,
+  signIn: tryCatch(signIn),
   signOut,
-  sendRecoverPassword,
-  signUpAdmin,
-  signUpUser
+  sendRecoverPassword: tryCatch(sendRecoverPassword),
+  signUpAdmin: tryCatch(signUpAdmin),
+  signUpUser: tryCatch(signUpUser)
 };

@@ -1,5 +1,7 @@
 const repositories = require('../../repositories');
 const messages = require('../../config/messages');
+const exceptions = require('../../repositories/exceptions');
+const { tryCatch } = require('../../helpers/controller');
 const dto = require('./dto.js');
 
 const getEstablishments = async (_, res) => {
@@ -21,36 +23,32 @@ const updateCoursesEstablishment = async (req, res) => {
 };
 
 const updateTeacherToCourse = async (req, res) => {
-  try {
-    const user = await repositories.user.findOrCreateUser({
-      name: req.body.name,
-      email: req.body.email
-    });
+  const user = await repositories.user.findOrCreateUser({
+    name: req.body.name,
+    email: req.body.email
+  });
 
-    const coursesTakenByTeacher = await repositories.course.findByTeacher(user.id);
+  const coursesTakenByTeacher = await repositories.course.findByTeacher(user.id);
 
-    if (coursesTakenByTeacher.length) {
-      throw new Error(messages.establishment.teacherAlreadyAssigned);
-    }
-
-    const gradeToSearch = req.body.grade;
-    const letterToSearch = req.body.letter;
-    const establishmentId = req.body.institution;
-
-    const course = await repositories.course
-      .findByGradeLetterEstablishment(gradeToSearch, letterToSearch, establishmentId);
-
-    await repositories.course.updateTeacher(user.id, course.id);
-
-    res.json({ ok : true, message: messages.establishment.teacherAssigned });
-  } catch(err) {
-    res.status(400).json({ ok: false, error: err.message });
+  if (coursesTakenByTeacher.length) {
+    throw new exceptions.TeacherAlreadyAssignedError(messages.establishment.teacherAlreadyAssigned);
   }
+
+  const gradeToSearch = req.body.grade;
+  const letterToSearch = req.body.letter;
+  const establishmentId = req.body.institution;
+
+  const course = await repositories.course
+    .findByGradeLetterEstablishment(gradeToSearch, letterToSearch, establishmentId);
+
+  await repositories.course.updateTeacher(user.id, course.id);
+
+  res.json({ ok : true, message: messages.establishment.teacherAssigned });
 };
 
 module.exports = {
   getEstablishments,
   createEstablishment,
   updateCoursesEstablishment,
-  updateTeacherToCourse
+  updateTeacherToCourse: tryCatch(updateTeacherToCourse)
 };
