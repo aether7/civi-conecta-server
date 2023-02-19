@@ -12,6 +12,10 @@ const messages = {
   establishment: {
     teacherAlreadyAssigned: 'Este profesor ya tiene un curso asignado, intenta con otro profesor',
     teacherAssigned: 'El profesor fue asignado exitosamente'
+  },
+  survey: {
+    typeNotFound: 'Se debe elegir un tipo de encuesta tipo estudiante o profesor',
+    created: 'La encuesta se ha creado exitosamente'
   }
 };
 

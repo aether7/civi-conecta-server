@@ -1,0 +1,66 @@
+[
+  {
+    "questionId" : "1",
+    "id" : "1",
+    "alternative" : "de que me estas hablando ?",
+    "value" : "2",
+    "question" : "que le pasa a lupita",
+    "letter" : "A"
+  },
+  {
+    "questionId" : "1",
+    "id" : "1",
+    "alternative" : "no se",
+    "value" : "0",
+    "question" : "que le pasa a lupita",
+    "letter" : "B"
+  },
+  {
+    "questionId" : "1",
+    "id" : "1",
+    "alternative" : "i dont know",
+    "value" : "1",
+    "question" : "que le pasa a lupita",
+    "letter" : "C"
+  },
+  {
+    "questionId" : "1",
+    "id" : "1",
+    "alternative" : "creo que era no se",
+    "value" : "1",
+    "question" : "que le pasa a lupita",
+    "letter" : "D"
+  },
+  {
+    "questionId" : "2",
+    "id" : "1",
+    "alternative" : "One piece obvio",
+    "value" : "0",
+    "question" : "cual es el mejor anime de estos",
+    "letter" : "A"
+  },
+  {
+    "questionId" : "2",
+    "id" : "1",
+    "alternative" : "Dragon Ball",
+    "value" : "1",
+    "question" : "cual es el mejor anime de estos",
+    "letter" : "B"
+  },
+  {
+    "questionId" : "2",
+    "id" : "1",
+    "alternative" : "Naruto",
+    "value" : "1",
+    "question" : "cual es el mejor anime de estos",
+    "letter" : "C"
+  },
+  {
+    "questionId" : "2",
+    "id" : "1",
+    "alternative" : "ninguno",
+    "value" : "2",
+    "question" : "cual es el mejor anime de estos",
+    "letter" : "D"
+  }
+]
