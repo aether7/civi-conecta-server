@@ -12,6 +12,7 @@ routesWithAuthToken.use('/grades', require('./grades.route'));
 routesWithAuthToken.use('/topics', require('./topics.route'));
 routesWithAuthToken.use('/events', require('./events.route'));
 routesWithAuthToken.use('/establishments', require('./establishments.route'));
+routesWithAuthToken.use('/surveys', require('./surveys.route'));
 
 router.use(routesWithAuthToken);
 
