@@ -103,7 +103,7 @@ exports.up = function(knex) {
       t.integer('number');
       t.enu('type', ['student', 'teacher']);
       t.integer('choices_quantity').defaultTo(4);
-      t.string('topic_id').unsigned();
+      t.integer('topic_id').unsigned();
       t.integer('grade_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
