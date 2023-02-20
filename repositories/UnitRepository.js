@@ -43,10 +43,19 @@ class UnitRepository {
     return result;
   }
 
-  update(number, gradeId, fieldsToUpdate) {
-    const query = { number, grade: gradeId };
-    const options = { new: true, runValidators: true, context: 'query' };
-    return Units.findOneAndUpdate(query, fieldsToUpdate, options);
+  async update(number, gradeId, fieldsToUpdate) {
+    const fields = {
+      title: fieldsToUpdate.title,
+      description: fieldsToUpdate.description,
+      topic_id: fieldsToUpdate.topicId
+    };
+
+    const [entity] = await this.connection('unit')
+      .where('grade_id', gradeId)
+      .where('number', number)
+      .update(fields, ['*']);
+
+    return entity;
   }
 
   remove(unitId) {

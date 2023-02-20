@@ -60,7 +60,7 @@ const updateUnit = async (req, res) => {
 
 const deleteUnit = async (req, res) => {
   const gradeToSearch = req.query.grade;
-    const number = req.query.number;
+  const number = req.query.number;
 
   const grade = await repositories.grade.findOneByGrade(gradeToSearch);
   const unit = await repositories.unit.findOneByNumberAndGradeId(number, grade.id);
