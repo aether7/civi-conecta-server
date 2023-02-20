@@ -15,8 +15,24 @@ class SurveyRepository {
       })
       .from('survey')
       .innerJoin('question', 'question.survey_id', 'survey.id')
+      .innerJoin('alternative', 'alternative.question_id', 'question.id');
+  }
+
+  async findOne(id) {
+    return this.connection
+      .column({
+        id: 'survey.id',
+        questionId: 'question.id',
+        question: 'question.description',
+        letter: 'alternative.letter',
+        alternative: 'alternative.description',
+        value: 'alternative.value'
+      })
+      .from('survey')
+      .innerJoin('question', 'question.survey_id', 'survey.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
-      .debug();
+      .where('survey.id', id)
+      .first();
   }
 
   async findOrCreate(type, topicId) {

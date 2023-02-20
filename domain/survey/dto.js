@@ -45,4 +45,8 @@ const mapSurveys = (surveys) => {
   return toArray(result);
 };
 
-module.exports = { mapSurveys };
+const mapSurvey = (data) => {
+  return mapSurveys([data])[0];
+};
+
+module.exports = { mapSurveys, mapSurvey };

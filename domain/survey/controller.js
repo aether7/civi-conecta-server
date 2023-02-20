@@ -42,7 +42,15 @@ const createSurvey = async (req, res) => {
   res.json({ ok: true, message: messages.survey.created });
 };
 
+const findById = async (req, res) => {
+  const surveyId = req.params.surveyId;
+  const survey = await repositories.survey.findOne(surveyId);
+
+  res.json({ ok: true, survey: dto.mapSurvey(survey) });
+};
+
 module.exports = {
   getAll: tryCatch(getAll),
-  createSurvey: tryCatch(createSurvey)
+  createSurvey: tryCatch(createSurvey),
+  findById: tryCatch(findById)
 };
