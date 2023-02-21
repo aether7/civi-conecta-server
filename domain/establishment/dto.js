@@ -57,4 +57,13 @@ const mapEstablishments = (establishments) => {
   }, []);
 };
 
-module.exports = { mapEstablishments };
+const mapTeacher = (user) => {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    active: user.active
+  };
+};
+
+module.exports = { mapEstablishments, mapTeacher };

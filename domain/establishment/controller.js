@@ -43,7 +43,7 @@ const updateTeacherToCourse = async (req, res) => {
 
   await repositories.course.updateTeacher(user.id, course.id);
 
-  res.json({ ok : true, message: messages.establishment.teacherAssigned });
+  res.json({ ok : true, user: dto.mapTeacher(user) });
 };
 
 module.exports = {

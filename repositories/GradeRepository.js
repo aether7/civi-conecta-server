@@ -19,6 +19,20 @@ class GradeRepository {
       .orderBy('id');
   }
 
+  async findById(gradeId) {
+    const entity = await this.connection
+      .select()
+      .from('grade')
+      .where('id', gradeId)
+      .first();
+
+    if (!entity) {
+      throw new EntityNotFoundError(`No se encontro el nivel ${gradeId}`);
+    }
+
+    return entity;
+  }
+
   async findOneByGrade(grade) {
     const entity = await this.connection
       .select()
