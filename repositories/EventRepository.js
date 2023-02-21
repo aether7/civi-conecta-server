@@ -97,6 +97,14 @@ class EventRepository {
       .where('event_type_id', eventTypeId)
       .sortBy('date', 'desc');
   }
+
+  findClassesByUnitId(unitId) {
+    return this.connection
+      .select()
+      .from('event')
+      .where('event_type_id', 1)
+      .where('unit_id', unitId);
+  }
 }
 
 module.exports = EventRepository;

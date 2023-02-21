@@ -3,6 +3,14 @@ class UnitRepository {
     this.connection = connection;
   }
 
+  findById(id) {
+    return this.connection
+      .select()
+      .from('unit')
+      .where('id', id)
+      .first();
+  }
+
   findByGradeId(gradeId) {
     return this.connection
       .select()
@@ -20,20 +28,12 @@ class UnitRepository {
       .first();
   }
 
-  findSortedUnitsByGradeId(gradeId) {
-    return Units.find({ grade: gradeId })
-      .sort({ number: 1 })
-      .populate({ path: 'grade', select: '-_id -__v' })
-      .populate({ path: 'topic', select: '-_id -__v' });
-  }
-
-  async create({ number, title, description, gradeId, topicId }) {
+  async create({ number, title, description, gradeId }) {
     const fields = {
       number,
       title,
       description,
-      grade_id: gradeId,
-      topic_id: topicId
+      grade_id: gradeId
     };
 
     const [result] = await this.connection
