@@ -1,4 +1,4 @@
-environment ?= "staging"
+environment ?= "development"
 
 node_modules:
 	npm ci --no-optional

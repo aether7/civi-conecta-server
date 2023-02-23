@@ -54,6 +54,22 @@ class SurveyRepository {
       .first();
   }
 
+  findByType(type) {
+    return this.connection
+      .column({
+        id: 'survey.id',
+        questionId: 'question.id',
+        question: 'question.description',
+        letter: 'alternative.letter',
+        alternative: 'alternative.description',
+        value: 'alternative.value'
+      })
+      .from('survey')
+      .innerJoin('question', 'question.survey_id', 'survey.id')
+      .innerJoin('alternative', 'alternative.question_id', 'question.id')
+      .where('survey.type', type);
+  }
+
   async create(type, topicId) {
     const fields = {
       type,

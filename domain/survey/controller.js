@@ -13,44 +13,61 @@ const getAll = async (_, res) => {
   res.json({ ok : true, surveys: dto.mapSurveys(surveys) });
 };
 
-const createSurvey = async (req, res) => {
-  const topicToSearch = Number.parseInt(req.body.number);
-  const surveyType = req.body.type.toLowerCase();
-  const description = req.body.question;
+const saveSurvey = async (req, res) => {
+  const topicId = req.params.topicId;
+  const surveyType = req.params.surveyType.toLowerCase();
+  const title = req.body.title;
   const alternatives = req.body.alternatives;
 
-  if (surveyType !== SurveyTypes.STUDENT && surveyType !== SurveyTypes.TEACHER) {
+  if (![SurveyTypes.STUDENT, SurveyTypes.TEACHER].includes(surveyType)) {
+    req.logger.error('tried to create survey type %s', surveyType);
     return res.status(400).json({ ok: false, error: messages.survey.typeNotFound });
   }
 
-  const topic = await repositories.topic.findOneByNumber(topicToSearch);
+  req.logger.info('saving survey %s', title);
+
+  const topic = await repositories.topic.findById(topicId);
   const survey = await repositories.survey.findOrCreate(surveyType, topic.id);
+
   const question = await repositories.question.create({
-    description,
+    description: title,
     surveyId: survey.id
   });
 
   for (const alternative of alternatives) {
     await repositories.alternative.create({
-      letter: alternative.letter,
+      letter: alternative.label,
       description: alternative.description,
       value: alternative.value,
       questionId: question.id
     });
   }
 
-  res.json({ ok: true, message: messages.survey.created });
+  res.json({ ok: true, question: dto.mapQuestion(question) });
 };
 
 const findById = async (req, res) => {
   const surveyId = req.params.surveyId;
   const survey = await repositories.survey.findOne(surveyId);
-
   res.json({ ok: true, survey: dto.mapSurvey(survey) });
+};
+
+const findByStudentType = async (req, res) => {
+  const surveys = await repositories.survey.findByType('student');
+  res.json({ ok: true, surveys: dto.mapSurveys(surveys) });
+};
+
+const deleteQuestion = async (req, res) => {
+  const questionId = req.params.questionId;
+  await repositories.alternative.deleteByQuestionId(questionId);
+  await repositories.question.deleteById(questionId);
+  res.json({ ok: true });
 };
 
 module.exports = {
   getAll: tryCatch(getAll),
-  createSurvey: tryCatch(createSurvey),
-  findById: tryCatch(findById)
+  saveSurvey: tryCatch(saveSurvey),
+  findById: tryCatch(findById),
+  findByStudentType: tryCatch(findByStudentType),
+  deleteQuestion: tryCatch(deleteQuestion)
 };

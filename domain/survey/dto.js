@@ -49,4 +49,11 @@ const mapSurvey = (data) => {
   return mapSurveys([data])[0];
 };
 
-module.exports = { mapSurveys, mapSurvey };
+const mapQuestion = (data) => {
+  return {
+    id: data.id,
+    description: data.description
+  };
+};
+
+module.exports = { mapSurveys, mapSurvey, mapQuestion };

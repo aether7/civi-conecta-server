@@ -6,6 +6,11 @@ const getTopics = async (_, res) => {
   res.json({ ok: true, topics: topics.map(dto.mapTopic) });
 };
 
+const getTopicById = async (req, res) => {
+  const result = await repositories.topic.findByIdWithData(req.params.topicId);
+  res.json({ ok: true, topic: dto.mapTopicWithData(result) });
+};
+
 const createTopic = async (req, res) => {
   const title = req.body.title;
   const number = req.body.number;
@@ -15,5 +20,6 @@ const createTopic = async (req, res) => {
 
 module.exports = {
   getTopics,
-  createTopic
+  createTopic,
+  getTopicById
 };

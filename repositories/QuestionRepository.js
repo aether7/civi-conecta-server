@@ -15,6 +15,12 @@ class QuestionRepository {
 
     return entity;
   }
+
+  deleteById(id) {
+    return this.connection('question')
+      .where('id', id)
+      .del();
+  }
 }
 
 module.exports = QuestionRepository;
