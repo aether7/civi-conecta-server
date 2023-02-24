@@ -2,7 +2,8 @@ const mapTopic = (topic) => {
   return {
     id: topic.id,
     title: topic.title,
-    alternatives: 4
+    alternatives: 4,
+    questions: []
   };
 };
 

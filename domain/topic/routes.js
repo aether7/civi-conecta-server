@@ -4,7 +4,7 @@ const middlewares = require('../../middlewares/authentication');
 const router = Router();
 
 router.get('/', handlers.getTopics);
-router.get('/:topicId', handlers.getTopicById);
+router.get('/:topicId/:surveyType', handlers.getTopicById);
 router.post('/', middlewares.verifyAdminRole, handlers.createTopic);
 router.delete('/:topicId', handlers.deleteTopic);
 

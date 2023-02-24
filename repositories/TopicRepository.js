@@ -20,7 +20,7 @@ class TopicRepository {
       .first();
   }
 
-  findByIdWithData(topicId) {
+  findByIdWithData(topicId, surveyType) {
     return this.connection
       .column({
         topic_id: 'topic.id',
@@ -37,7 +37,8 @@ class TopicRepository {
       .leftJoin('survey', 'survey.topic_id', 'topic.id')
       .leftJoin('question', 'question.survey_id', 'survey.id')
       .leftJoin('alternative', 'alternative.question_id', 'question.id')
-      .where('topic.id', topicId);
+      .where('topic.id', topicId)
+      .where('survey.type', surveyType);
   }
 
   async findOneByNumber(number) {

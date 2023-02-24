@@ -10,8 +10,19 @@ const getTopics = async (_, res) => {
 };
 
 const getTopicById = async (req, res) => {
-  const result = await repositories.topic.findByIdWithData(req.params.topicId);
-  res.json({ ok: true, topic: dto.mapTopicWithData(result) });
+  const topicId = req.params.topicId;
+  const surveyType = req.params.surveyType;
+  const result = await repositories.topic.findByIdWithData(topicId, surveyType);
+  let topic;
+
+  if (!result.length) {
+    const t = await repositories.topic.findById(topicId);
+    topic = dto.mapTopic(t);
+  } else {
+    topic = dto.mapTopicWithData(result)
+  }
+
+  res.json({ ok: true, topic });
 };
 
 const createTopic = async (req, res) => {
