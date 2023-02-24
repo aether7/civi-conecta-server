@@ -82,6 +82,12 @@ class SurveyRepository {
 
     return entity;
   }
+
+  deleteByTopicId(topicId) {
+    return this.connection('survey')
+      .where('topic_id', topicId)
+      .del();
+  }
 }
 
 module.exports = SurveyRepository;

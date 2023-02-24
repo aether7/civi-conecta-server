@@ -6,5 +6,6 @@ const router = Router();
 router.get('/', handlers.getTopics);
 router.get('/:topicId', handlers.getTopicById);
 router.post('/', middlewares.verifyAdminRole, handlers.createTopic);
+router.delete('/:topicId', handlers.deleteTopic);
 
 module.exports = router;

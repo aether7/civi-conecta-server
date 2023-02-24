@@ -30,9 +30,18 @@ class TeacherAlreadyAssignedError extends Error {
   }
 }
 
+class TopicWithAssociatedQuestionsError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'TopicWithAssociatedQuestionsError';
+    this.isCustomException = true;
+  }
+}
+
 module.exports = {
   EntityNotFoundError,
   EntityAlreadyExistsError,
   EntityWithDependenciesError,
-  TeacherAlreadyAssignedError
+  TeacherAlreadyAssignedError,
+  TopicWithAssociatedQuestionsError
 };

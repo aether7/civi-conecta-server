@@ -16,6 +16,11 @@ const messages = {
   survey: {
     typeNotFound: 'Se debe elegir un tipo de encuesta tipo estudiante o profesor',
     created: 'La encuesta se ha creado exitosamente'
+  },
+  topic: {
+    canNotDeleteTopic: 'El tema no se puede borrar porque tiene {}',
+    studentQuestions: '{} preguntas de estudiante',
+    techerQuestions: '{} preguntas de profesor'
   }
 };
 
