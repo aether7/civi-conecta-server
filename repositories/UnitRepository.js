@@ -28,12 +28,13 @@ class UnitRepository {
       .first();
   }
 
-  async create({ number, title, description, gradeId }) {
+  async create({ number, title, description, gradeId, topicId }) {
     const fields = {
       number,
       title,
       description,
-      grade_id: gradeId
+      grade_id: gradeId,
+      topic_id: topicId
     };
 
     const [result] = await this.connection

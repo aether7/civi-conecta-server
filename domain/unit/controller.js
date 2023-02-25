@@ -11,13 +11,21 @@ const getUnitsByGrade = async (req, res) => {
   res.json({ ok: true, units });
 };
 
+const getUnitById = async (req, res) => {
+  const unitId = req.params.unitId;
+  const unit = await repositories.unit.findById(unitId);
+
+  res.json({ ok: true, unit: dto.mapUnit(unit) });
+};
+
 const createUnit = async (req, res) => {
   const number = req.body.number;
   const title = req.body.title;
   const description = req.body.description;
-  const gradeToFind = req.body.grade;
+  const gradeId = req.body.grade;
+  const topicId = req.body.topicId;
 
-  const previousUnit = await repositories.unit.findOneByNumberAndGradeId(number, gradeToFind);
+  const previousUnit = await repositories.unit.findOneByNumberAndGradeId(number, gradeId);
 
   if (previousUnit) {
     throw new exceptions.EntityAlreadyExistsError(messages.unit.alreadyExists);
@@ -27,7 +35,8 @@ const createUnit = async (req, res) => {
     number,
     title,
     description,
-    gradeId: gradeToFind
+    gradeId,
+    topicId
   };
 
   const unit = await repositories.unit.create(body);
@@ -65,6 +74,7 @@ const deleteUnit = async (req, res) => {
 
 module.exports = {
   getUnitsByGrade: tryCatch(getUnitsByGrade),
+  getUnitById: tryCatch(getUnitById),
   createUnit: tryCatch(createUnit),
   updateUnit: tryCatch(updateUnit),
   deleteUnit: tryCatch(deleteUnit)

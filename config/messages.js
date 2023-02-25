@@ -20,7 +20,7 @@ const messages = {
   topic: {
     canNotDeleteTopic: 'El tema no se puede borrar porque tiene {}',
     studentQuestions: '{} preguntas de estudiante',
-    techerQuestions: '{} preguntas de profesor'
+    teacherQuestions: '{} preguntas de profesor'
   }
 };
 

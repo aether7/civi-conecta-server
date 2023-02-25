@@ -19,6 +19,7 @@ exports.up = function(knex) {
     .createTable('grade', (t) => {
       t.increments('id', { primaryKey: true });
       t.string('level');
+      t.integer('units_quantity').defaultTo(4);
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
     })
