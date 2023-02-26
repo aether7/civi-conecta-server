@@ -11,6 +11,34 @@ class UnitRepository {
       .first();
   }
 
+  findByIdWithData(id) {
+    return this.connection
+      .column({
+        id: 'unit.id',
+        number: 'unit.number',
+        title: 'unit.title',
+        description: 'unit.description',
+        event_id: 'event.id',
+        event_number: 'event.number',
+        event_title: 'event.title',
+        event_objective: 'event.objective',
+        event_description: 'event.description',
+        event_date: 'event.date',
+        planning_id: 'planning.id',
+        planning_topic: 'planning.topic',
+        planning_keywords: 'planning.keywords',
+        planning_start_activity: 'planning.start_activity',
+        planning_main_activity: 'planning.main_activity',
+        planning_end_activity: 'planning.end_activity',
+        planning_teacher_material: 'planning.teacher_material',
+        planning_student_material: 'planning.student_material'
+      })
+      .from('unit')
+      .leftJoin('event', 'event.unit_id', 'unit.id')
+      .leftJoin('planning', 'planning.event_id', 'event.id')
+      .where('unit.id', id);
+  }
+
   findByGradeId(gradeId) {
     return this.connection
       .select()

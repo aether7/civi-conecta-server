@@ -1,4 +1,5 @@
-const {EntityNotFoundError} = require('./exceptions');
+const { EventTypes } = require('../constants/entities');
+const { EntityNotFoundError } = require('./exceptions');
 
 class EventRepository {
   constructor(connection) {
@@ -25,8 +26,8 @@ class EventRepository {
         eventType: 'event_type.name'
       })
       .from('event')
-      .innerJoin('planning', 'event.planning_id', 'planning.id')
-      .innerJoin('grade', 'event.grade_id', 'grade.id')
+      .innerJoin('planning', 'planning.event_id', 'event.id')
+      .leftJoin('grade', 'event.grade_id', 'grade.id')
       .innerJoin('event_type', 'event.event_type_id', 'event_type.id')
       .where('event.id', eventId)
       .first();
@@ -58,7 +59,7 @@ class EventRepository {
         eventType: 'event_type.name'
       })
       .from('event')
-      .innerJoin('planning', 'event.planning_id', 'planning.id')
+      .innerJoin('planning', 'planning.event_id', 'event.id')
       .innerJoin('grade', 'event.grade_id', 'grade.id')
       .innerJoin('event_type', 'event.event_type_id', 'event_type.id')
       .where('event.grade_id', gradeId)
@@ -66,11 +67,15 @@ class EventRepository {
   }
 
   async create(payload) {
-    const match = /(?<year>\d{4})-(?<month>\d{1,2})-(?<day>\d{1,2})/.exec(payload.date);
-    const date = new Date();
-    date.setFullYear(Number.parseInt(match.groups.year));
-    date.setMonth(Number.parseInt(match.groups.month) - 1);
-    date.setDate(Number.parseInt(match.groups.day));
+    let date = null;
+
+    if (payload.eventTypeId === EventTypes.EPHEMERIS) {
+      const match = /(?<year>\d{4})-(?<month>\d{1,2})-(?<day>\d{1,2})/.exec(payload.date);
+      date = new Date();
+      date.setFullYear(Number.parseInt(match.groups.year));
+      date.setMonth(Number.parseInt(match.groups.month) - 1);
+      date.setDate(Number.parseInt(match.groups.day));
+    }
 
     const fields = {
       number: payload.number,
@@ -79,7 +84,7 @@ class EventRepository {
       objective: payload.objective,
       event_type_id: payload.eventTypeId,
       grade_id: payload.gradeId,
-      planning_id: payload.planningId,
+      unit_id: payload.unitId,
       date
     };
 
@@ -104,6 +109,12 @@ class EventRepository {
       .from('event')
       .where('event_type_id', 1)
       .where('unit_id', unitId);
+  }
+
+  deleteById(eventId) {
+    return this.connection('event')
+      .where('id', eventId)
+      .del();
   }
 }
 

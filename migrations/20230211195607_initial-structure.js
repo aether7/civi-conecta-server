@@ -96,8 +96,10 @@ exports.up = function(knex) {
       t.text('end_activity');
       t.string('teacher_material');
       t.string('student_material');
+      t.integer('event_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('event_id').references('event.id');
     })
     .createTable('survey', (t) => {
       t.increments('id', { primaryKey: true });
@@ -143,13 +145,11 @@ exports.up = function(knex) {
       t.integer('event_type_id').unsigned();
       t.integer('unit_id').unsigned();
       t.integer('grade_id').unsigned();
-      t.integer('planning_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('event_type_id').references('event_type.id');
       t.foreign('unit_id').references('unit.id');
       t.foreign('grade_id').references('grade.id');
-      t.foreign('planning_id').references('planning.id');
     })
     .createTable('answer', (t) => {
       t.increments('id', { primaryKey: true });
