@@ -13,6 +13,7 @@ routesWithAuthToken.use('/units', require('../domain/unit/routes'));
 routesWithAuthToken.use('/events', require('../domain/events/routes'));
 routesWithAuthToken.use('/establishments', require('./establishments.route'));
 routesWithAuthToken.use('/surveys', require('../domain/survey/routes'));
+routesWithAuthToken.use('/files', require('../domain/files/routes'));
 
 router.use(routesWithAuthToken);
 
