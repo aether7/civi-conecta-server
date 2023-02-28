@@ -2,9 +2,9 @@ const { Router } = require('express');
 const multer = require('multer');
 const handlers = require('./controller');
 
-const upload = multer({ dest: '/tmp' });
+const upload = multer({ dest: '/tmp/uploads' });
 const router = Router();
 
-router.post('/events/:eventId', upload.single('file'), handlers.uploadEventFile);
+router.post('/lessons/:lessonId', upload.single('file'), handlers.uploadLessonFile);
 
 module.exports = router;

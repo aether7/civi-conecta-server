@@ -1,17 +1,53 @@
 {
   "grades": [
-    { "level": "1º basico" },
-    { "level": "2º basico" },
-    { "level": "3º basico" },
-    { "level": "4º basico" },
-    { "level": "5º basico" },
-    { "level": "6º basico" },
-    { "level": "7º basico" },
-    { "level": "8º basico" },
-    { "level": "1º medio" },
-    { "level": "2º medio" },
-    { "level": "3º medio" },
-    { "level": "4º medio" }
+    {
+      "level": "1º basico",
+      "alias": "1ro-basico"
+    },
+    {
+      "level": "2º basico",
+      "alias": "2do-basico"
+    },
+    {
+      "level": "3º basico",
+      "alias": "3ro-basico"
+    },
+    {
+      "level": "4º basico",
+      "alias": "4to-basico"
+    },
+    {
+      "level": "5º basico",
+      "alias": "5to-basico"
+    },
+    {
+      "level": "6º basico",
+      "alias": "6to-basico"
+    },
+    {
+      "level": "7º basico",
+      "alias": "7mo-basico"
+    },
+    {
+      "level": "8º basico",
+      "alias": "8vo-basico"
+    },
+    {
+      "level": "1º medio",
+      "alias": "1ro-medio"
+    },
+    {
+      "level": "2º medio",
+      "alias": "2do-medio"
+    },
+    {
+      "level": "3º medio",
+      "alias": "3ro-medio"
+    },
+    {
+      "level": "4º medio",
+      "alias": "4to-medio"
+    }
   ],
   "letters": [
     { "character": "A" },

@@ -19,6 +19,7 @@ exports.up = function(knex) {
     .createTable('grade', (t) => {
       t.increments('id', { primaryKey: true });
       t.string('level');
+      t.string('alias');
       t.integer('units_quantity').defaultTo(4);
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
@@ -96,10 +97,10 @@ exports.up = function(knex) {
       t.text('end_activity');
       t.string('teacher_material');
       t.string('student_material');
-      t.integer('event_id').unsigned();
+      t.integer('lesson_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
-      t.foreign('event_id').references('event.id');
+      t.foreign('lesson_id').references('lesson.id');
     })
     .createTable('survey', (t) => {
       t.increments('id', { primaryKey: true });
@@ -157,6 +158,28 @@ exports.up = function(knex) {
       t.integer('alternative_id').unsigned();
       t.foreign('user_id').references('user.id');
       t.foreign('alternative_id').references('alternative.id');
+    })
+    .createTable('document', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('alias');
+      t.string('filename');
+      t.string('filepath');
+      t.string('mimetype');
+      t.integer('filesize');
+      t.integer('lesson_id').unsigned();
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('lesson_id').references('lesson.id');
+    })
+    .createTable('lesson', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.integer('number');
+      t.string('objective');
+      t.text('description');
+      t.integer('unit_id').unsigned();
+      t.integer('event_id').unsigned();
+      t.foreign('unit_id').references('unit.id');
+      t.foreign('event_id').references('event.id');
     })
     .then(() => knex.seed.run());
 };

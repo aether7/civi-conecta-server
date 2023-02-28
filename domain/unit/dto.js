@@ -10,15 +10,15 @@ const mapUnit = (unit) => {
 const mapUnitWithData = (data) => {
   const toArray = x => x ? x.split(',') : [];
 
-  const classes = data
+  const lessons = data
     .map((item) => {
       return {
-        id: item.event_id,
-        number: item.event_number,
-        title: item.event_title,
-        objective: item.event_objective,
-        description: item.event_description,
-        date: item.event_date,
+        id: item.lesson_id,
+        number: item.lesson_number,
+        title: item.lesson_title,
+        objective: item.lesson_objective,
+        description: item.lesson_description,
+        date: item.lesson_date,
         planning: {
           id: item.planning_id,
           topic: item.planning_topic,
@@ -38,7 +38,7 @@ const mapUnitWithData = (data) => {
     number: data[0].number,
     title: data[0].title,
     description: data[0].description,
-    classes
+    lessons
   };
 };
 

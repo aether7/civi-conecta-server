@@ -10,7 +10,7 @@ routesWithAuthToken.use(middlewares.verifyActiveState);
 routesWithAuthToken.use('/topics', require('../domain/topic/routes'));
 routesWithAuthToken.use('/grades', require('./grades.route'));
 routesWithAuthToken.use('/units', require('../domain/unit/routes'));
-routesWithAuthToken.use('/events', require('../domain/events/routes'));
+routesWithAuthToken.use('/lessons', require('../domain/lesson/routes'));
 routesWithAuthToken.use('/establishments', require('./establishments.route'));
 routesWithAuthToken.use('/surveys', require('../domain/survey/routes'));
 routesWithAuthToken.use('/files', require('../domain/files/routes'));

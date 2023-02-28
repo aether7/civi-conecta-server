@@ -43,23 +43,6 @@ const createUnit = async (req, res) => {
   res.json({ ok: true, unit: dto.mapUnit(unit) });
 };
 
-const updateUnit = async (req, res) => {
-  const gradeToSearch = req.query.grade;
-  const numberToSearch = req.query.number;
-
-  const grade = await repositories.grade.findOneByGrade(gradeToSearch);
-  const topic = await repositories.topic.findOneByNumber(numberToSearch);
-
-  const fieldsToUpdate = {
-    title: req.body.title,
-    description: req.body.description,
-    topicId: topic.id
-  };
-
-  const unit = await repositories.unit.update(number, grade.id, fieldsToUpdate);
-  res.json({ ok: true, unit });
-};
-
 const deleteUnit = async (req, res) => {
   const unitId = req.params.unitId;
   const associatedClasses = await repositories.event.findClassesByUnitId(unitId);
@@ -76,6 +59,5 @@ module.exports = {
   getUnitsByGrade: tryCatch(getUnitsByGrade),
   getUnitById: tryCatch(getUnitById),
   createUnit: tryCatch(createUnit),
-  updateUnit: tryCatch(updateUnit),
   deleteUnit: tryCatch(deleteUnit)
 };

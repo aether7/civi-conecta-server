@@ -18,12 +18,10 @@ class UnitRepository {
         number: 'unit.number',
         title: 'unit.title',
         description: 'unit.description',
-        event_id: 'event.id',
-        event_number: 'event.number',
-        event_title: 'event.title',
-        event_objective: 'event.objective',
-        event_description: 'event.description',
-        event_date: 'event.date',
+        lesson_id: 'lesson.id',
+        lesson_number: 'lesson.number',
+        lesson_objective: 'lesson.objective',
+        lesson_description: 'lesson.description',
         planning_id: 'planning.id',
         planning_topic: 'planning.topic',
         planning_keywords: 'planning.keywords',
@@ -34,9 +32,10 @@ class UnitRepository {
         planning_student_material: 'planning.student_material'
       })
       .from('unit')
-      .leftJoin('event', 'event.unit_id', 'unit.id')
-      .leftJoin('planning', 'planning.event_id', 'event.id')
-      .where('unit.id', id);
+      .leftJoin('lesson', 'lesson.unit_id', 'lesson.id')
+      .leftJoin('planning', 'planning.lesson_id', 'lesson.id')
+      .where('unit.id', id)
+      .debug();
   }
 
   findByGradeId(gradeId) {

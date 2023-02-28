@@ -25,6 +25,7 @@ const config = {
     }
   },
   ftp: {
+    rootFolder: getEnv('FTP_ROOT_FOLDER', 'temp'),
     host: getEnv('FTP_HOST', '127.0.0.1'),
     port: getEnv('FTP_PORT', 21),
     user: getEnv('FTP_USER', 'anonymous'),

@@ -3,7 +3,7 @@ class PlanningRepository {
     this.connection = connection;
   }
 
-  async create(payload, eventId) {
+  async create(payload, lessonId) {
     const fields = {
       topic: payload.topic,
       start_activity: payload.startActivity,
@@ -12,7 +12,7 @@ class PlanningRepository {
       teacher_material: payload.materials.teacher.join(','),
       student_material: payload.materials.student.join(','),
       keywords: payload.keywords.join(','),
-      event_id: eventId
+      lesson_id: lessonId
     };
 
     const [entity] = await this.connection
@@ -22,9 +22,9 @@ class PlanningRepository {
     return entity;
   }
 
-  deleteByEventId(eventId) {
+  deleteByEventId(lessonId) {
     return this.connection('planning')
-      .where('event_id', eventId)
+      .where('lesson_id', lessonId)
       .del();
   }
 }
