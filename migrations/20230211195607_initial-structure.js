@@ -88,6 +88,36 @@ exports.up = function(knex) {
       t.foreign('grade_id').references('grade.id');
       t.foreign('topic_id').references('topic.id');
     })
+    .createTable('event_type', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('name');
+    })
+    .createTable('event', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.integer('number');
+      t.string('title');
+      t.string('objective');
+      t.text('description');
+      t.string('date');
+      t.integer('event_type_id').unsigned();
+      t.integer('unit_id').unsigned();
+      t.integer('grade_id').unsigned();
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('event_type_id').references('event_type.id');
+      t.foreign('unit_id').references('unit.id');
+      t.foreign('grade_id').references('grade.id');
+    })
+    .createTable('lesson', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.integer('number');
+      t.string('objective');
+      t.text('description');
+      t.integer('unit_id').unsigned();
+      t.integer('event_id').unsigned();
+      t.foreign('unit_id').references('unit.id');
+      t.foreign('event_id').references('event.id');
+    })
     .createTable('planning', (t) => {
       t.increments('id', { primaryKey: true });
       t.text('topic');
@@ -131,26 +161,6 @@ exports.up = function(knex) {
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('question_id').references('question.id');
     })
-    .createTable('event_type', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.string('name');
-    })
-    .createTable('event', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.integer('number');
-      t.string('title');
-      t.string('objective');
-      t.text('description');
-      t.string('date');
-      t.integer('event_type_id').unsigned();
-      t.integer('unit_id').unsigned();
-      t.integer('grade_id').unsigned();
-      t.timestamp('created_at').defaultTo(knex.fn.now());
-      t.timestamp('updated_at').defaultTo(knex.fn.now());
-      t.foreign('event_type_id').references('event_type.id');
-      t.foreign('unit_id').references('unit.id');
-      t.foreign('grade_id').references('grade.id');
-    })
     .createTable('answer', (t) => {
       t.increments('id', { primaryKey: true });
       t.integer('user_id').unsigned();
@@ -169,16 +179,6 @@ exports.up = function(knex) {
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('lesson_id').references('lesson.id');
-    })
-    .createTable('lesson', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.integer('number');
-      t.string('objective');
-      t.text('description');
-      t.integer('unit_id').unsigned();
-      t.integer('event_id').unsigned();
-      t.foreign('unit_id').references('unit.id');
-      t.foreign('event_id').references('event.id');
     })
     .then(() => knex.seed.run());
 };

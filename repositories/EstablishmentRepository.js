@@ -24,7 +24,7 @@ class EstablishmentRepository {
       .leftJoin('letter', 'course.letter_id', 'letter.id')
       .leftJoin('course_student', 'course_student.course_id', 'course.id')
       .leftJoin('student', 'course_student.student_id', 'student.id')
-      .where('establishment.active', true);
+      .where('establishment.active', 1);
   }
 
   async create({ name }) {

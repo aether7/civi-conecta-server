@@ -26,7 +26,7 @@ class UserRepository {
     const entity = await this.connection.select()
       .from('user')
       .where('email', email)
-      .where('active', true)
+      .where('active', 1)
       .first();
 
     if (!entity) {
@@ -41,8 +41,8 @@ class UserRepository {
       email,
       name,
       password: passwordService.encrypt(password),
-      encrypted_password: true,
-      active: true,
+      encrypted_password: 1,
+      active: 1,
       role: RoleTypes.ADMIN
     };
 
@@ -55,8 +55,8 @@ class UserRepository {
       email,
       name,
       password,
-      encrypted_password: false,
-      active: true,
+      encrypted_password: 0,
+      active: 1,
       role: RoleTypes.USER
     };
 
@@ -66,7 +66,7 @@ class UserRepository {
 
   async updatePassword(userId, password) {
     const fields = {
-      encrypted_password: true,
+      encrypted_password: 1,
       password: passwordService.encrypt(password)
     };
 

@@ -64,16 +64,16 @@
       "name": "Catalina",
       "password": "57ff5d854602536c67c1c516fb98c0539ff26554440b7e3480cd2a10008c1d52",
       "role": "Administrator",
-      "active": true,
-      "encrypted_password": true
+      "active": 1,
+      "encrypted_password": 1
     },
     {
       "email": "eduardo@civiconecta.cl",
       "name": "Eduardo",
       "password": "57ff5d854602536c67c1c516fb98c0539ff26554440b7e3480cd2a10008c1d52",
       "role": "Administrator",
-      "active": true,
-      "encrypted_password": true
+      "active": 1,
+      "encrypted_password": 1
     }
   ],
   "eventTypes": [
