@@ -45,15 +45,49 @@ exports.up = function(knex) {
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.unique(['run'], { indexName: 'student_idx1' });
     })
-    .createTable('topic', (t) => {
+    .createTable('survey', (t) => {
       t.increments('id', { primaryKey: true });
-      t.string('title');
-      t.integer('number').unsigned();
+      t.enu('type', ['student', 'teacher']);
       t.integer('grade_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('grade_id').references('grade.id');
-      t.unique(['number'], { indexName: 'topic_idx1' });
+    })
+    .createTable('topic', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('title');
+      t.integer('number').unsigned();
+      t.integer('survey_id').unsigned();
+      t.integer('grade_id').unsigned();
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('survey_id').references('survey.id');
+      t.foreign('grade_id').references('grade.id');
+    })
+    .createTable('question', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('description');
+      t.integer('topic_id').unsigned();
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('topic_id').references('topic.id');
+    })
+    .createTable('alternative', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('letter');
+      t.string('description');
+      t.integer('value');
+      t.integer('question_id').unsigned();
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('question_id').references('question.id');
+    })
+    .createTable('answer', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.integer('user_id').unsigned();
+      t.integer('alternative_id').unsigned();
+      t.foreign('user_id').references('user.id');
+      t.foreign('alternative_id').references('alternative.id');
     })
     .createTable('course', (t) => {
       t.increments('id', { primaryKey: true });
@@ -131,42 +165,6 @@ exports.up = function(knex) {
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('lesson_id').references('lesson.id');
-    })
-    .createTable('survey', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.integer('number');
-      t.enu('type', ['student', 'teacher']);
-      t.integer('topic_id').unsigned();
-      t.integer('grade_id').unsigned();
-      t.timestamp('created_at').defaultTo(knex.fn.now());
-      t.timestamp('updated_at').defaultTo(knex.fn.now());
-      t.foreign('grade_id').references('grade.id');
-      t.foreign('topic_id').references('topic.id');
-    })
-    .createTable('question', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.string('description');
-      t.integer('survey_id').unsigned();
-      t.timestamp('created_at').defaultTo(knex.fn.now());
-      t.timestamp('updated_at').defaultTo(knex.fn.now());
-      t.foreign('survey_id').references('survey.id');
-    })
-    .createTable('alternative', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.string('letter');
-      t.string('description');
-      t.integer('value');
-      t.integer('question_id').unsigned();
-      t.timestamp('created_at').defaultTo(knex.fn.now());
-      t.timestamp('updated_at').defaultTo(knex.fn.now());
-      t.foreign('question_id').references('question.id');
-    })
-    .createTable('answer', (t) => {
-      t.increments('id', { primaryKey: true });
-      t.integer('user_id').unsigned();
-      t.integer('alternative_id').unsigned();
-      t.foreign('user_id').references('user.id');
-      t.foreign('alternative_id').references('alternative.id');
     })
     .createTable('document', (t) => {
       t.increments('id', { primaryKey: true });

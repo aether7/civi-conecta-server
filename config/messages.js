@@ -2,7 +2,8 @@ const messages = {
   auth: {
     notValid: 'El correo y/o clave son incorrectas',
     recoverPassword: 'Revisa tu correo para recuperar tu nueva password',
-    logout: 'Te has desconectado exitosamente'
+    logout: 'Te has desconectado exitosamente',
+    noStudent: 'El RUT que ingresaste, no coincide con ningun estudiante. Verifica si esta bien escrito e inténtalo nuevamente'
   },
   unit: {
     alreadyExists: 'La unidad ya existe',

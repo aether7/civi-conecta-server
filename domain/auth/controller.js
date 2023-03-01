@@ -71,10 +71,22 @@ const signUpUser = async (req, res) => {
   res.json({ ok: true, user: dto.mapUser(newUser) });
 };
 
+const verifyStudent = async (req, res) => {
+  const run = req.body.run;
+  const student = await repositories.student.findByRun(run);
+
+  if (!student) {
+    return res.status(404).json({ ok: false, error: messages.auth.noStudent });
+  }
+
+  res.json({ ok: true, student });
+};
+
 module.exports = {
   signIn: tryCatch(signIn),
   signOut,
   sendRecoverPassword: tryCatch(sendRecoverPassword),
   signUpAdmin: tryCatch(signUpAdmin),
-  signUpUser: tryCatch(signUpUser)
+  signUpUser: tryCatch(signUpUser),
+  verifyStudent: tryCatch(verifyStudent)
 };

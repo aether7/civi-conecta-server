@@ -4,7 +4,7 @@ class StudentRepository {
   }
 
   async findOrCreate(student) {
-    const result = await this.findOneByRun(student.run);
+    const result = await this.findByRun(student.run);
 
     if (result) {
       return result;
@@ -13,7 +13,7 @@ class StudentRepository {
     return this.create(student);
   }
 
-  findOneByRun(run) {
+  findByRun(run) {
     return this.connection
       .select()
       .from('student')
