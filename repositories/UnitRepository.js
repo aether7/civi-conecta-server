@@ -34,8 +34,7 @@ class UnitRepository {
       .from('unit')
       .leftJoin('lesson', 'lesson.unit_id', 'lesson.id')
       .leftJoin('planning', 'planning.lesson_id', 'lesson.id')
-      .where('unit.id', id)
-      .debug();
+      .where('unit.id', id);
   }
 
   findByGradeId(gradeId) {

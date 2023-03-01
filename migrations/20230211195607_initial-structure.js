@@ -10,8 +10,8 @@ exports.up = function(knex) {
       t.string('name');
       t.string('email');
       t.string('password');
-      t.boolean('encrypted_password');
-      t.boolean('active').defaultTo(true);
+      t.integer('encrypted_password');
+      t.integer('active').defaultTo(1);
       t.string('role');
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
@@ -33,7 +33,7 @@ exports.up = function(knex) {
     .createTable('establishment', (t) => {
       t.increments('id', { primaryKey: true });
       t.string('name');
-      t.boolean('active').defaultTo(true);
+      t.integer('active').defaultTo(1);
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
     })
@@ -106,7 +106,6 @@ exports.up = function(knex) {
       t.increments('id', { primaryKey: true });
       t.integer('number');
       t.enu('type', ['student', 'teacher']);
-      t.integer('choices_quantity').defaultTo(4);
       t.integer('topic_id').unsigned();
       t.integer('grade_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());

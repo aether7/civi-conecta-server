@@ -24,7 +24,7 @@ class LessonRepository {
       .leftJoin('unit', 'lesson.unit_id', 'unit.id')
       .leftJoin('grade', 'unit.grade_id', 'grade.id')
       .where('lesson.id', lessonId)
-      .first().debug();
+      .first();
   }
 
   async create(payload) {

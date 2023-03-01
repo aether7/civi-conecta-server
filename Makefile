@@ -12,3 +12,6 @@ migrate:
 restore:
 	rm dev.sqlite3
 	./node_modules/.bin/knex migrate:latest
+
+demo:
+	cat database/demo-data.sqlite.sql | sqlite3 dev.sqlite3

@@ -6,7 +6,7 @@ const config = require('./config');
  */
 module.exports = {
   development: {
-    client: 'better-sqlite3',
+    client: 'sqlite3',
     connection: {
       filename: './dev.sqlite3'
     },
