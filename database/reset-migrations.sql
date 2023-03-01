@@ -16,6 +16,8 @@ DROP TABLE IF EXISTS public.event_type CASCADE;
 DROP TABLE IF EXISTS public.event CASCADE;
 DROP TABLE IF EXISTS public.alternative CASCADE;
 DROP TABLE IF EXISTS public.answer CASCADE;
+DROP TABLE IF EXISTS public.lesson CASCADE;
+DROP TABLE IF EXISTS public.document CASCADE;
 
 DROP TABLE IF EXISTS public.knex_migrations CASCADE;
 DROP TABLE IF EXISTS public.knex_migrations_lock CASCADE;
