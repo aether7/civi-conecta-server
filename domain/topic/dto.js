@@ -1,8 +1,11 @@
+const DEFAULT_ALTERNATIVES = 4;
+
+
 const mapTopic = (topic) => {
   return {
     id: topic.id,
     title: topic.title,
-    alternatives: 4,
+    alternatives: DEFAULT_ALTERNATIVES,
     questions: []
   };
 };
@@ -47,7 +50,7 @@ const mapTopicWithData = (topic) => {
     surveyId: topic[0].survey_id,
     title: topic[0].topic_title,
     questions: toArray(result),
-    alternatives: 4
+    alternatives: DEFAULT_ALTERNATIVES
   };
 };
 

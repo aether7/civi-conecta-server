@@ -4,8 +4,9 @@ const exceptions = require('../../repositories/exceptions');
 const messages = require('../../config/messages');
 const dto = require('./dto');
 
-const getTopics = async (_, res) => {
-  const topics = await repositories.topic.findAll();
+const getTopics = async (req, res) => {
+  const surveyType = req.params.surveyType;
+  const topics = await repositories.topic.findBySurveyType(surveyType);
   res.json({ ok: true, topics: topics.map(dto.mapTopic) });
 };
 
@@ -26,6 +27,7 @@ const getTopicById = async (req, res) => {
 };
 
 const createTopic = async (req, res) => {
+  const topicType = req.params.topicType;
   const title = req.body.title;
   const number = req.body.number;
   const topic = await repositories.topic.create(title, number);

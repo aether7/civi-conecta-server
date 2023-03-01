@@ -5,11 +5,13 @@ class TopicRepository {
     this.connection = connection;
   }
 
-  findAll() {
+  findBySurveyType(surveyType) {
     return this.connection
-      .select()
+      .select('topic.*')
       .from('topic')
-      .orderBy('id');
+      .innerJoin('survey', 'topic.survey_id', 'survey.id')
+      .where('survey.type', surveyType)
+      .orderBy('topic.id');
   }
 
   findById(topicId) {
