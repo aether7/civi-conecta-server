@@ -4,14 +4,16 @@ const DEFAULT_ALTERNATIVES = 4;
 const mapTopic = (topic) => {
   return {
     id: topic.id,
-    title: topic.title,
-    alternatives: DEFAULT_ALTERNATIVES,
-    questions: []
+    title: topic.title
   };
 };
 
 const mapTopicWithData = (topic) => {
   const result = topic.reduce((obj, item) => {
+    if (!item.question_id) {
+      return obj;
+    }
+
     if (!obj[item.question_id]) {
       obj[item.question_id] = {
         id: item.question_id,

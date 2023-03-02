@@ -56,18 +56,10 @@ class SurveyRepository {
 
   findByType(type) {
     return this.connection
-      .column({
-        id: 'survey.id',
-        questionId: 'question.id',
-        question: 'question.description',
-        letter: 'alternative.letter',
-        alternative: 'alternative.description',
-        value: 'alternative.value'
-      })
+      .select()
       .from('survey')
-      .innerJoin('question', 'question.survey_id', 'survey.id')
-      .innerJoin('alternative', 'alternative.question_id', 'question.id')
-      .where('survey.type', type);
+      .where('type', type)
+      .first();
   }
 
   async create(type, topicId) {

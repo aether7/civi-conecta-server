@@ -1,5 +1,3 @@
-const { EntityNotFoundError } = require('./exceptions');
-
 class TopicRepository {
   constructor(connection) {
     this.connection = connection;
@@ -22,44 +20,43 @@ class TopicRepository {
       .first();
   }
 
-  findByIdWithData(topicId, surveyType) {
+  findByIdWithData(topicId) {
     return this.connection
       .column({
         topic_id: 'topic.id',
-        survey_id: 'survey.id',
+        topic_title: 'topic.title',
         question_id: 'question.id',
         alternative_id: 'alternative.id',
-        topic_title: 'topic.title',
         question_description: 'question.description',
         alternative_letter: 'alternative.letter',
         alternative_description: 'alternative.description',
         alternative_value: 'alternative.value'
       })
       .from('topic')
-      .leftJoin('survey', 'survey.topic_id', 'topic.id')
-      .leftJoin('question', 'question.survey_id', 'survey.id')
+      .leftJoin('question', 'question.topic_id', 'topic.id')
       .leftJoin('alternative', 'alternative.question_id', 'question.id')
-      .where('topic.id', topicId)
-      .where('survey.type', surveyType);
+      .where('topic.id', topicId);
   }
 
-  async findOneByNumber(number) {
-    const entity = await this.connection
-      .select()
+  _calculateNumber(surveyId) {
+    return this.connection
+      .select(this.connection.raw('COALESCE(MAX(number), 0) as number'))
       .from('topic')
-      .where('number', number)
+      .where('survey_id', surveyId)
       .first();
-
-    if (!entity) {
-      throw new EntityNotFoundError(`El tema #${number} no existe`);
-    }
-
-    return entity;
   }
 
-  async create(title, number) {
+  async create(title, surveyId) {
+    const numberResult = await this._calculateNumber(surveyId);
+
+    const fields = {
+      title,
+      number: numberResult.number,
+      survey_id: surveyId
+    };
+
     const [result] = await this.connection
-      .insert({ title, number }, ['*'])
+      .insert(fields, ['*'])
       .into('topic');
 
     return result;
