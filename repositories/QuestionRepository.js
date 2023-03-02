@@ -3,10 +3,10 @@ class QuestionRepository {
     this.connection = connection;
   }
 
-  async create({ description, surveyId }) {
+  async create({ description, topicId }) {
     const fields = {
       description,
-      survey_id: surveyId
+      topic_id: topicId
     };
 
     const [entity] = await this.connection

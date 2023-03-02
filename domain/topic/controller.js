@@ -54,9 +54,43 @@ const deleteTopic = async (req, res) => {
   res.json({ ok: true });
 };
 
+const updateTopic = async (req, res) => {
+  const topicId = req.params.topicId;
+  const title = req.body.title;
+  const alternatives = req.body.alternatives;
+  const topic = await repositories.topic.findById(topicId);
+
+  req.logger.info('saving topic with questions %s', title);
+
+  const question = await repositories.question.create({
+    description: title,
+    topicId: topic.id
+  });
+
+  for (const alternative of alternatives) {
+    await repositories.alternative.create({
+      letter: alternative.label,
+      description: alternative.description,
+      value: alternative.value,
+      questionId: question.id
+    });
+  }
+
+  res.json({ ok: true, question: dto.mapQuestion(question) });
+};
+
+const deleteQuestion = async (req, res) => {
+  const questionId = req.params.questionId;
+  await repositories.alternative.deleteByQuestionId(questionId);
+  await repositories.question.deleteById(questionId);
+  res.json({ ok: true });
+};
+
 module.exports = {
   getTopics,
   createTopic,
   getTopicById,
-  deleteTopic: tryCatch(deleteTopic)
+  deleteTopic: tryCatch(deleteTopic),
+  updateTopic: tryCatch(updateTopic),
+  deleteQuestion: tryCatch(deleteQuestion)
 };

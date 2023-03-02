@@ -3,10 +3,6 @@ const messages = require('../../config/messages');
 const { tryCatch } = require('../../helpers/controller');
 const dto = require('./dto');
 
-const SurveyTypes = {
-  STUDENT: 'student',
-  TEACHER: 'teacher'
-};
 
 const getAll = async (_, res) => {
   const surveys = await repositories.survey.findAll();
@@ -15,23 +11,16 @@ const getAll = async (_, res) => {
 
 const saveSurvey = async (req, res) => {
   const topicId = req.params.topicId;
-  const surveyType = req.params.surveyType.toLowerCase();
   const title = req.body.title;
   const alternatives = req.body.alternatives;
 
-  if (![SurveyTypes.STUDENT, SurveyTypes.TEACHER].includes(surveyType)) {
-    req.logger.error('tried to create survey type %s', surveyType);
-    return res.status(400).json({ ok: false, error: messages.survey.typeNotFound });
-  }
-
-  req.logger.info('saving survey %s', title);
+  req.logger.info('saving topic with questions %s', title);
 
   const topic = await repositories.topic.findById(topicId);
-  const survey = await repositories.survey.findOrCreate(surveyType, topic.id);
 
   const question = await repositories.question.create({
     description: title,
-    surveyId: survey.id
+    topicId: topic.id
   });
 
   for (const alternative of alternatives) {

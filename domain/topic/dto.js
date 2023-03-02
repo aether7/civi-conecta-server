@@ -56,4 +56,11 @@ const mapTopicWithData = (topic) => {
   };
 };
 
-module.exports = { mapTopic, mapTopicWithData };
+const mapQuestion = (data) => {
+  return {
+    id: data.id,
+    description: data.description
+  };
+};
+
+module.exports = { mapTopic, mapTopicWithData, mapQuestion };
