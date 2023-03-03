@@ -19,6 +19,7 @@ const QuestionRepository = require('./QuestionRepository');
 const AlternativeRepository = require('./AlternativeRepository');
 const DocumentRepository = require('./DocumentRepository');
 const LessonRepository = require('./LessonRepository');
+const FeedbackRepository = require('./FeedbackRepository');
 
 const eventRepository = new EventRepository(connection);
 const courseRepository = new CourseRepository(connection);
@@ -35,6 +36,7 @@ const questionRepository = new QuestionRepository(connection);
 const alternativeRepository = new AlternativeRepository(connection);
 const documentRepository = new DocumentRepository(connection);
 const lessonRepository = new LessonRepository(connection);
+const feedbackRepository = new FeedbackRepository(connection);
 const establishmentRepository = new EstablishmentRepository(connection, {
   courseRepository,
   studentRepository,
@@ -58,5 +60,6 @@ module.exports = {
   question: questionRepository,
   alternative: alternativeRepository,
   document: documentRepository,
-  lesson: lessonRepository
+  lesson: lessonRepository,
+  feedback: feedbackRepository
 };

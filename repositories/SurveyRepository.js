@@ -35,6 +35,27 @@ class SurveyRepository {
       .first();
   }
 
+  async findWithDataByType(type) {
+    return this.connection
+      .column({
+        topic_number: 'topic.number',
+        topic_title: 'topic.title',
+        question_id: 'question.id',
+        question_description: 'question.description',
+        alternative_letter: 'alternative.letter',
+        alternative_description: 'alternative.description',
+        alternative_value: 'alternative.value'
+      })
+      .from('survey')
+      .innerJoin('topic', 'topic.survey_id', 'survey.id')
+      .innerJoin('question', 'question.topic_id', 'topic.id')
+      .innerJoin('alternative', 'alternative.question_id', 'question.id')
+      .leftJoin('answer', 'answer.alternative_id', 'alternative.id')
+      .leftJoin('feedback', 'answer.feedback_id', 'feedback.id')
+      .where('survey.type', type)
+      .orderBy('question.id');
+  }
+
   async findOrCreate(type, topicId) {
     const entity = await this.findById(type, topicId);
 

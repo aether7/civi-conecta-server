@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 const { EntityNotFoundError } = require('./exceptions');
 const passwordService = require('../services').password;
 
@@ -38,6 +39,7 @@ class UserRepository {
 
   async createAdmin({ email, name, password }) {
     const fields = {
+      uuid: uuid.v4(),
       email,
       name,
       password: passwordService.encrypt(password),
@@ -52,6 +54,7 @@ class UserRepository {
 
   async createUser({ email, name, password }) {
     const fields = {
+      uuid: uuid.v4(),
       email,
       name,
       password,
@@ -67,6 +70,7 @@ class UserRepository {
   async updatePassword(userId, password) {
     const fields = {
       encrypted_password: 1,
+      updated_at: new Date(),
       password: passwordService.encrypt(password)
     };
 

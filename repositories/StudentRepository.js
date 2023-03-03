@@ -1,3 +1,5 @@
+const uuid = require('uuid');
+
 class StudentRepository {
   constructor(connection) {
     this.connection = connection;
@@ -22,11 +24,14 @@ class StudentRepository {
   }
 
   async create(student) {
+    const fields = {
+      name: student.name,
+      run: student.run,
+      uuid: uuid.v4()
+    };
+
     const [result] = await this.connection
-      .insert({
-        name: student.name,
-        run: student.run
-      }, ['*'])
+      .insert(fields, ['*'])
       .into('student');
 
     return result;
