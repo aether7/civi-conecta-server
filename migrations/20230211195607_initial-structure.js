@@ -7,6 +7,7 @@ exports.up = function(knex) {
     .schema
     .createTable('user', (t) => {
       t.increments('id', { primaryKey: true });
+      t.string('uuid');
       t.string('name');
       t.string('email');
       t.string('password');
@@ -39,6 +40,7 @@ exports.up = function(knex) {
     })
     .createTable('student', (t) => {
       t.increments('id', { primaryKey: true });
+      t.string('uuid');
       t.string('name');
       t.string('run');
       t.timestamp('created_at').defaultTo(knex.fn.now());
@@ -81,12 +83,23 @@ exports.up = function(knex) {
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('question_id').references('question.id');
+      t.index(['letter'], 'alternative_idx01');
+    })
+    .createTable('feedback', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.integer('is_finished').defaultTo(0);
+      t.integer('student_id').unsigned();
+      t.integer('teacher_id').unsigned();
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+      t.foreign('student_id').references('student.id');
+      t.foreign('teacher_id').references('user.id');
     })
     .createTable('answer', (t) => {
       t.increments('id', { primaryKey: true });
-      t.integer('user_id').unsigned();
+      t.integer('feedback_id').unsigned();
       t.integer('alternative_id').unsigned();
-      t.foreign('user_id').references('user.id');
+      t.foreign('feedback_id').references('feedback.id');
       t.foreign('alternative_id').references('alternative.id');
     })
     .createTable('course', (t) => {

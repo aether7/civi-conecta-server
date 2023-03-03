@@ -1,10 +1,15 @@
-INSERT INTO user(name, email, password, encrypted_password, active, role) VALUES('Mrs. Ashley Aguilar', 'ashley.aguilar@mailinator.com', 'ashley.aguilar', 0, 1, 'User');
+INSERT INTO user(name, email, password, encrypted_password, active, role, uuid) VALUES('Mrs. Ashley Aguilar', 'ashley.aguilar@mailinator.com', 'ashley.aguilar', 0, 1, 'User', '455fd91d-15ac-48b6-8b2a-e75d7891bbab');
 
 INSERT INTO establishment(name, active) VALUES('st peter', 1);
 
 INSERT INTO course(letter_id, establishment_id, grade_id, teacher_id) VALUES(3, 1, 7, 3);
 
-INSERT INTO student(name, run) VALUES ('Rachel Booker', '32514884-5'), ('Daniel Parker', '55421583-1'), ('Vickie Sullivan', '24096613-1'), ('Lauren Arellano', '79077443-4'), ('Alexandra Herrera', '16455017-6');
+INSERT INTO student(name, run, uuid) VALUES
+    ('Rachel Booker', '32514884-5', 'af2ef79e-d86c-49d2-a426-3beaa380fe38'),
+    ('Daniel Parker', '55421583-1', '722ebf37-c9d2-4137-8a0e-6caeeaa5841d'),
+    ('Vickie Sullivan', '24096613-1', '77a06d10-2daf-4d60-9bbe-d116807f4d42'),
+    ('Lauren Arellano', '79077443-4', '6d065a40-7b19-413f-b4bc-e28b9aaa7b4a'),
+    ('Alexandra Herrera', '16455017-6', 'd7bd8582-9034-4ea2-b65e-53e314407797');
 
 INSERT INTO course_student(course_id, student_id) VALUES (1, 1),(1, 2),(1, 3),(1, 4),(1, 5);
 
