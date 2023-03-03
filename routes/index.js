@@ -15,16 +15,8 @@ routesWithAuthToken.use('/lessons', require('../domain/lesson/routes'));
 routesWithAuthToken.use('/establishments', require('../domain/establishment/routes'));
 routesWithAuthToken.use('/surveys', require('../domain/survey/routes'));
 routesWithAuthToken.use('/files', require('../domain/files/routes'));
+routesWithAuthToken.use('/events', require('../domain/events/routes'));
 
 router.use(routesWithAuthToken);
-
-router.use((req, res, next) => {
-  res.status(404).json({ ok: false, error: 'resource not found' });
-});
-
-router.use((err, req, res, next) => {
-  req.logger.error(err.stack);
-  res.status(500).json({ ok: false, error: err.message });
-});
 
 module.exports = router;

@@ -141,18 +141,14 @@ exports.up = function(knex) {
     })
     .createTable('event', (t) => {
       t.increments('id', { primaryKey: true });
-      t.integer('number');
       t.string('title');
-      t.string('objective');
       t.text('description');
       t.string('date');
       t.integer('event_type_id').unsigned();
-      t.integer('unit_id').unsigned();
       t.integer('grade_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('event_type_id').references('event_type.id');
-      t.foreign('unit_id').references('unit.id');
       t.foreign('grade_id').references('grade.id');
     })
     .createTable('lesson', (t) => {

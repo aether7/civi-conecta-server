@@ -1,51 +1,31 @@
 const { EventTypes } = require('../../constants/entities');
+const dateHelper = require('../../helpers/date');
 
 const mapEvent = (data) => {
-  const toArray = x => x ? x.split(',') : [];
-
   return {
     id: data.id,
-    number: data.number,
     title: data.title,
     description: data.description,
-    date: data.date,
-    objective: data.objective,
-    grade: data.grade,
-    eventType: data.eventType,
-    planning: {
-      topic: data.topic,
-      keywords: toArray(data.keywords),
-      materials: {
-        teacher: toArray(data.teacher_material),
-        student: toArray(data.student_material)
-      },
-      startActivity: data.start_activity,
-      mainActivity: data.main_activity,
-      endActivity: data.end_activity
-    }
+    date: data.date
   };
 };
 
-const getEvent = (body, query) => {
-  let eventTypeId = query.eventType ?? EventTypes.CLASS;
-  eventTypeId = Number.parseInt(eventTypeId);
-
-  return {
-    number: body.number,
-    title: body.title,
-    description: body.description,
-    objective: body.objective,
-    unitId: null,
-    gradeId: null,
-    date: null,
+const getEvent = (eventTypeId, data) => {
+  const event = {
+    title: data.title,
+    description: data.description,
     eventTypeId,
+    date: data.date,
     get isEphemeris() {
       return this.eventTypeId === EventTypes.EPHEMERIS;
-    },
-    get isClass() {
-      return this.eventTypeId === EventTypes.CLASS;
     }
   };
+
+  if (event.isEphemeris) {
+    event.date = dateHelper.dateToMonthDay(date.date);
+  }
+
+  return event;
 };
 
 const getPlanning = (body) => {

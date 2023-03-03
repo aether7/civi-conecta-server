@@ -1,7 +1,6 @@
 const EventTypes = {
-  CLASS: 1,
-  SITUATION: 2,
-  EPHEMERIS: 3
+  SITUATION: 1,
+  EPHEMERIS: 2
 };
 
 module.exports = { EventTypes };
