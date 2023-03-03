@@ -4,23 +4,30 @@ const repositories = require('../../repositories');
 const services = require('../../services');
 const dto = require('./dto');
 
+const getFile = async (req, res) => {
+  const aliasId = req.params.aliasId;
+  const file = await repositories.document.findByAlias(aliasId);
+  const tempFile = services.tempfile.createFileStream();
+  await services.ftp.serveFile(tempFile.writer, file.filepath);
+
+  res.set('Content-Type', file.mimetype);
+  tempFile.reader.pipe(res);
+  tempFile.unlink();
+};
+
 const uploadLessonFile = async (req, res) => {
   const lessonId = req.params.lessonId;
-  const folder = await repositories.lesson.findFTPDataById(lessonId);
-  const unitNumber = String(folder.unit_number).padStart(2, '0');
-  const lessonNumber = String(folder.lesson_number).padStart(2, '0');
-  const folderPath = `${folder.alias}/unidad${unitNumber}/clase${lessonNumber}`;
   const fileName = req.body.originalFilename;
   const filePath = req.file.path;
-
-  await services.ftp.sendFile(folderPath, fileName, filePath);
+  const folderPath = await services.ftp.getLessonPath(lessonId);
+  const filepath = await services.ftp.sendFile(folderPath, fileName, filePath);
 
   const payload = {
     alias: uuid.v4(),
     filename: req.body.originalFilename,
-    filepath: services.ftp.savedFilename,
     filesize: req.file.size,
     mimetype: req.file.mimetype,
+    filepath,
     lessonId
   };
 
@@ -28,6 +35,16 @@ const uploadLessonFile = async (req, res) => {
   res.json({ ok: true, file: dto.mapFile(fileInfo) });
 };
 
+const deleteLessonFile = async (req, res) => {
+  const aliasId = req.params.aliasId;
+  const file = await repositories.document.findByAlias(aliasId);
+  await services.ftp.deleteFile(file.filepath);
+  await repositories.document.remove(file.id);
+  res.json({ ok: true });
+};
+
 module.exports = {
-  uploadLessonFile: tryCatch(uploadLessonFile)
+  getFile: tryCatch(getFile),
+  uploadLessonFile: tryCatch(uploadLessonFile),
+  deleteLessonFile: tryCatch(deleteLessonFile)
 };

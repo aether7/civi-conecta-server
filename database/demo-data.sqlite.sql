@@ -89,3 +89,8 @@ INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'A',
 INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'B', 1, 'segunda generacion');
 INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'C', 0, 'tercera generacion');
 INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'D', 1, 'ninguna de las anteriores');
+
+
+-- TEMAS DE UNIDADES
+INSERT INTO unit(number, title, description, grade_id, topic_id) VALUES(1, 'unidad 1', 'descripcion unidad 1', 7, 1);
+INSERT INTO lesson(number, objective, description, unit_id) VALUES(1, 'probar el tema de los archivos', 'no darse la mansa vuelta para el tema de los archivos', 1);

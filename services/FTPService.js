@@ -1,6 +1,7 @@
 const fs = require('fs/promises');
 const { createReadStream } = require('fs');
 const ftp = require('basic-ftp');
+const repositories = require('../repositories');
 
 class FTPService {
   constructor(rootFolder, { host, port, user, password, secure }) {
@@ -12,6 +13,7 @@ class FTPService {
     this.secure = secure;
     this.client = new ftp.Client();
     this.savedFilename = null;
+    // this.client.ftp.verbose = true
   }
 
   async sendFile(folderPath, fileName, filePath) {
@@ -22,10 +24,29 @@ class FTPService {
     await this.client.cd(remotePath);
     await this.client.uploadFrom(createReadStream(filePath), fileName);
     await fs.unlink(filePath);
+    await this._close();
 
-    this.savedFilename = `${remotePath}/${fileName}`;
+    return `${remotePath}/${fileName}`;
+  }
 
+  async deleteFile(filepath) {
+    await this._getAccess();
+    await this.client.remove(filepath);
     return this._close();
+  }
+
+  async serveFile(stream, filepath) {
+    await this._getAccess();
+    await this.client.downloadTo(stream, filepath);
+    await this._close();
+    return stream;
+  }
+
+  async getLessonPath(lessonId) {
+    const folder = await repositories.lesson.findFTPDataById(lessonId);
+    const unitNumber = String(folder.unit_number).padStart(2, '0');
+    const lessonNumber = String(folder.lesson_number).padStart(2, '0');
+    return `${folder.alias}/unidad${unitNumber}/clase${lessonNumber}`;
   }
 
   _getAccess() {

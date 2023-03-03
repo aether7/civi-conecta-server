@@ -25,6 +25,7 @@
     "node-mailer": "^0.1.1",
     "pg": "^8.9.0",
     "pino": "^8.9.0",
+    "temp": "^0.9.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

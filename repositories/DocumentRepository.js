@@ -19,6 +19,20 @@ class DocumentRepository {
 
     return result;
   }
+
+  remove(id) {
+    return this.connection('document')
+      .where('id', id)
+      .del();
+  }
+
+  findByAlias(aliasId) {
+    return this.connection
+      .select()
+      .from('document')
+      .where('alias', aliasId)
+      .first();
+  }
 }
 
 module.exports = DocumentRepository;
