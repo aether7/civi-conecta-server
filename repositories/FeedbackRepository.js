@@ -16,7 +16,7 @@ class FeedbackRepository {
   findByTypeAndAlias(type, alias) {
     let builder = this.connection
       .select('feedback.*')
-      .from('feedback')
+      .from('feedback');
 
     if (type === 'student') {
       builder.innerJoin('student', 'feedback.student_id', 'student.id');

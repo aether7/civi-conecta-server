@@ -14,8 +14,6 @@ INSERT INTO student(name, run, uuid) VALUES
 INSERT INTO course_student(course_id, student_id) VALUES (1, 1),(1, 2),(1, 3),(1, 4),(1, 5);
 
 -- encuesta para profesor
-INSERT INTO survey(type) VALUES('teacher');
-
 INSERT INTO topic(title, number, survey_id) VALUES ('conocimiento programacion', 1, 1);
 
 INSERT INTO question(topic_id, description) VALUES(1, 'con que lenguaje se desarrollo esta aplicacion?');
@@ -74,8 +72,6 @@ INSERT INTO alternative(question_id, letter, value, description) VALUES(8, 'D', 
 
 
 -- encuesta para alumno
-INSERT INTO survey(type) VALUES('student');
-
 INSERT INTO topic(title, number, survey_id) VALUES ('conocimiento pokemon', 1, 2);
 
 INSERT INTO question(topic_id, description) VALUES(5, 'con cual pokemon es mas dificil comenzar');

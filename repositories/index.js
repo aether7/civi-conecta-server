@@ -7,7 +7,6 @@ const EstablishmentRepository = require('./EstablishmentRepository');
 const UserRepository = require('./UserRepository');
 const GradeRepository = require('./GradeRepository');
 const UnitRepository = require('./UnitRepository');
-const ClassRepository = require('./ClassRepository');
 const TopicRepository = require('./TopicRepository');
 const StudentRepository = require('./StudentRepository');
 const CourseRepository = require('./CourseRepository');
@@ -27,7 +26,6 @@ const studentRepository = new StudentRepository(connection);
 const courseStudentRepository = new CourseStudentRepository(connection);
 const userRepository = new UserRepository(connection);
 const gradeRepository = new GradeRepository(connection);
-const classRepository = new ClassRepository(connection);
 const unitRepository = new UnitRepository(connection);
 const topicRepository = new TopicRepository(connection);
 const planningRepository = new PlanningRepository(connection);
@@ -48,7 +46,6 @@ const repositories = {
   user: userRepository,
   grade: gradeRepository,
   unit: unitRepository,
-  class: classRepository,
   topic: topicRepository,
   student: studentRepository,
   course: courseRepository,

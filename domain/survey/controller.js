@@ -1,5 +1,4 @@
 const repositories = require('../../repositories');
-const messages = require('../../config/messages');
 const { tryCatch } = require('../../helpers/controller');
 const dto = require('./dto');
 

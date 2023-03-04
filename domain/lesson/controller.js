@@ -16,9 +16,8 @@ const createLesson = async (req, res) => {
   const lessonPayload = dto.getLesson(req.body, req.query);
   const planningPayload = dto.getPlanning(req.body);
   const newLesson = await repositories.lesson.create(lessonPayload);
-  const planning = await repositories.planning.create(planningPayload, newLesson.id);
+  await repositories.planning.create(planningPayload, newLesson.id);
   const lesson = await repositories.lesson.findById(newLesson.id);
-
   res.json({ ok: true, lesson: dto.mapLesson(lesson) });
 };
 

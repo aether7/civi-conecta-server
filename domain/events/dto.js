@@ -22,7 +22,7 @@ const getEvent = (eventTypeId, data) => {
   };
 
   if (event.isEphemeris) {
-    event.date = dateHelper.dateToMonthDay(date.date);
+    event.date = dateHelper.dateToMonthDay(data.date);
   }
 
   return event;

@@ -8,7 +8,8 @@
     "dev": "PINO_LOG_LEVEL=debug nodemon index.js | pino-pretty",
     "debug": "PINO_LOG_LEVEL=debug nodemon --inspect --trace-warnings index.js | pino-pretty",
     "test": "tap",
-    "migrate": "./node_modules/.bin/knex migrate:latest"
+    "migrate": "./node_modules/.bin/knex migrate:latest",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "MIT",
@@ -30,6 +31,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "eslint": "^8.35.0",
     "nodemon": "^2.0.20",
     "pino-pretty": "^9.1.1",
     "sqlite3": "^5.1.4",
