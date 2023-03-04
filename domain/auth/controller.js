@@ -1,23 +1,17 @@
 const config = require('../../config');
 const messages = require('../../config/messages');
 const repositories = require('../../repositories');
+const passwordHelper = require('../../helpers/password');
 const services = require('../../services');
 const templates = require('../../constants/EmailTemplates');
 const { tryCatch } = require('../../helpers/controller');
 const dto = require('./dto');
 
-const isValidPassword = (user, password) => {
-  if (!user.encrypted_password) {
-    return user.password === password;
-  }
-
-  return services.password.compare(user.password, password);
-};
 
 const signIn = async (req, res) => {
   const { email, password } = req.body;
   const user = await repositories.user.findOneByEmail(email);
-  const isValidUser = user && isValidPassword(user, password);
+  const isValidUser = user && passwordHelper.isValidPassword(user, password);
 
   if (!isValidUser) {
     return res.status(400).json({

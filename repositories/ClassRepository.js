@@ -1,5 +1,3 @@
-const { EntityNotFoundError } = require('./exceptions');
-
 class ClassRepository {
   constructor(connection) {
     this.connection = connection;

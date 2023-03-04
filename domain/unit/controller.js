@@ -13,9 +13,11 @@ const getUnitsByGrade = async (req, res) => {
 
 const getUnitById = async (req, res) => {
   const unitId = req.params.unitId;
-  const unit = await repositories.unit.findByIdWithData(unitId);
-
-  res.json({ ok: true, unit: dto.mapUnitWithData(unit) });
+  const [documents, unit] = await Promise.all([
+    repositories.document.findByUnitId(unitId),
+    repositories.unit.findByIdWithData(unitId)
+  ]);
+  res.json({ ok: true, unit: dto.mapUnitWithData(unit, documents) });
 };
 
 const createUnit = async (req, res) => {

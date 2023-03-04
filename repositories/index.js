@@ -44,7 +44,7 @@ const establishmentRepository = new EstablishmentRepository(connection, {
   userRepository
 });
 
-module.exports = {
+const repositories = {
   user: userRepository,
   grade: gradeRepository,
   unit: unitRepository,
@@ -63,3 +63,5 @@ module.exports = {
   lesson: lessonRepository,
   feedback: feedbackRepository
 };
+
+module.exports = repositories;

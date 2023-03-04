@@ -2,18 +2,14 @@ const repositories = require('../../repositories');
 const { tryCatch } = require('../../helpers/controller');
 const dto = require('./dto');
 
-const getLessonsByGrade = async (req, res) => {
-  const gradeToSearch = req.query.grade;
-  const grade = await repositories.grade.findOneByGrade(gradeToSearch);
-  const results = await repositories.lesson.findByGradeId(grade.id);
-
-  res.json({ ok: true, events: results.map(dto.mapLesson) });
-};
-
 const getLessonById = async (req, res) => {
   const lessonId = req.params.lessonId;
-  const lesson = await repositories.lesson.findById(lessonId);
-  res.json({ ok: true, lesson: dto.mapLesson(lesson) });
+  const [lesson, documents] = await Promise.all([
+    repositories.lesson.findById(lessonId),
+    repositories.document.findByLesson(lessonId)
+  ]);
+
+  res.json({ ok: true, lesson: dto.mapLesson(lesson, documents) });
 };
 
 const createLesson = async (req, res) => {

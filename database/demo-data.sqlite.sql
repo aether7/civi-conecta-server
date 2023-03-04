@@ -94,3 +94,23 @@ INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'D',
 -- TEMAS DE UNIDADES
 INSERT INTO unit(number, title, description, grade_id, topic_id) VALUES(1, 'unidad 1', 'descripcion unidad 1', 7, 1);
 INSERT INTO lesson(number, objective, description, unit_id) VALUES(1, 'probar el tema de los archivos', 'no darse la mansa vuelta para el tema de los archivos', 1);
+
+INSERT INTO planning(
+    topic,
+    keywords,
+    start_activity,
+    main_activity,
+    end_activity,
+    teacher_material,
+    student_material,
+    lesson_id
+) VALUES (
+    'tema para colocar en clase',
+    'tanjiro,nezuko,muzan,alakazam',
+    'inicio de actividad ftw',
+    'actividad principal de la vida',
+    'actividad de cierre por si acaso',
+    'gafas,celular,cuaderno',
+    'cuaderno,estuche,cartulina',
+    1
+);

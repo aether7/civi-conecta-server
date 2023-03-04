@@ -7,8 +7,17 @@ const mapUnit = (unit) => {
   };
 };
 
-const mapUnitWithData = (data) => {
+const mapDocument = (data) => {
+  return {
+    uuid: data.alias,
+    filename: data.filename
+  };
+};
+
+const mapUnitWithData = (data, documents) => {
   const toArray = x => x ? x.split(',') : [];
+  const getDocumentsByLesson = (lessonId) =>
+    documents.filter(d => d.lesson_id === lessonId).map(mapDocument);
 
   const lessons = data
     .map((item) => {
@@ -19,6 +28,7 @@ const mapUnitWithData = (data) => {
         objective: item.lesson_objective,
         description: item.lesson_description,
         date: item.lesson_date,
+        files: getDocumentsByLesson(item.lesson_id),
         planning: {
           id: item.planning_id,
           topic: item.planning_topic,

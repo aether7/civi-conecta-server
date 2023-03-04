@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const { createReadStream } = require('fs');
 const ftp = require('basic-ftp');
-const repositories = require('../repositories');
+const repositories = require('../repositories/index');
 
 class FTPService {
   constructor(rootFolder, { host, port, user, password, secure }) {

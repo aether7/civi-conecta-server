@@ -1,4 +1,11 @@
-const mapLesson = (data) => {
+const mapDocument = (data) => {
+  return {
+    uuid: data.alias,
+    filename: data.filename
+  };
+};
+
+const mapLesson = (data, documents) => {
   const toArray = x => x ? x.split(',') : [];
 
   return {
@@ -6,6 +13,7 @@ const mapLesson = (data) => {
     number: data.number,
     description: data.description,
     objective: data.objective,
+    files: documents.map(mapDocument),
     planning: {
       topic: data.topic,
       keywords: toArray(data.keywords),

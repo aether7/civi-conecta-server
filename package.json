@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "server": "pm2 start index.js --instances 4",
     "dev": "PINO_LOG_LEVEL=debug nodemon index.js | pino-pretty",
-    "debug": "PINO_LOG_LEVEL=debug nodemon --inspect index.js | pino-pretty",
+    "debug": "PINO_LOG_LEVEL=debug nodemon --inspect --trace-warnings index.js | pino-pretty",
     "test": "tap",
     "migrate": "./node_modules/.bin/knex migrate:latest"
   },
@@ -25,7 +26,7 @@
     "node-mailer": "^0.1.1",
     "pg": "^8.9.0",
     "pino": "^8.9.0",
-    "temp": "^0.9.4",
+    "pm2": "^5.2.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
