@@ -1,4 +1,8 @@
+# include .env
+# export
+
 environment ?= "development"
+ACTIVATE_ENV = $(. .env)
 
 node_modules:
 	npm ci --no-optional
