@@ -1,7 +1,7 @@
 const repositories = require('../../repositories');
 const exceptions = require('../../repositories/exceptions');
 const messages = require('../../config/messages');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
 const getUnitsByGrade = async (req, res) => {
@@ -57,9 +57,9 @@ const deleteUnit = async (req, res) => {
   res.json({ ok: true, message: messages.unit.unitRemoved });
 };
 
-module.exports = {
-  getUnitsByGrade: tryCatch(getUnitsByGrade),
-  getUnitById: tryCatch(getUnitById),
-  createUnit: tryCatch(createUnit),
-  deleteUnit: tryCatch(deleteUnit)
-};
+module.exports = wrapRequests({
+  getUnitsByGrade,
+  getUnitById,
+  createUnit,
+  deleteUnit
+});

@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const repositories = require('../../repositories');
 const services = require('../../services');
 const dto = require('./dto');
@@ -43,8 +43,8 @@ const deleteLessonFile = async (req, res) => {
   res.json({ ok: true });
 };
 
-module.exports = {
-  getFile: tryCatch(getFile),
-  uploadLessonFile: tryCatch(uploadLessonFile),
-  deleteLessonFile: tryCatch(deleteLessonFile)
-};
+module.exports = wrapRequests({
+  getFile,
+  uploadLessonFile,
+  deleteLessonFile
+});

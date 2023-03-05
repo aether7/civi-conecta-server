@@ -1,5 +1,5 @@
 const repositories = require('../../repositories');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
 const getLessonById = async (req, res) => {
@@ -25,8 +25,8 @@ const deleteLesson = async (req, res) => {
   res.json({ ok: true });
 };
 
-module.exports = {
-  getLessonById: tryCatch(getLessonById),
+module.exports = wrapRequests({
+  getLessonById,
   createLesson,
   deleteLesson
-};
+});

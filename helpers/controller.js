@@ -10,4 +10,13 @@ const tryCatch = (fn) => async (req, res) => {
   }
 };
 
-module.exports = { tryCatch };
+const wrapRequests = (requestObj) => {
+  return Object.entries(requestObj)
+    .reduce((wrapped, entry) => {
+      const [key, handler] = entry;
+      wrapped[key] = tryCatch(handler);
+      return wrapped;
+    }, {});
+};
+
+module.exports = { tryCatch, wrapRequests };

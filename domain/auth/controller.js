@@ -4,7 +4,7 @@ const repositories = require('../../repositories');
 const passwordHelper = require('../../helpers/password');
 const services = require('../../services');
 const templates = require('../../constants/EmailTemplates');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
 
@@ -76,11 +76,11 @@ const verifyStudent = async (req, res) => {
   res.json({ ok: true, student });
 };
 
-module.exports = {
-  signIn: tryCatch(signIn),
+module.exports = wrapRequests({
+  signIn,
   signOut,
-  sendRecoverPassword: tryCatch(sendRecoverPassword),
-  signUpAdmin: tryCatch(signUpAdmin),
-  signUpUser: tryCatch(signUpUser),
-  verifyStudent: tryCatch(verifyStudent)
-};
+  sendRecoverPassword,
+  signUpAdmin,
+  signUpUser,
+  verifyStudent
+});

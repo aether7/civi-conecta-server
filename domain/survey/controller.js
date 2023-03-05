@@ -1,5 +1,5 @@
 const repositories = require('../../repositories');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
 
@@ -52,10 +52,10 @@ const deleteQuestion = async (req, res) => {
   res.json({ ok: true });
 };
 
-module.exports = {
-  getAll: tryCatch(getAll),
-  saveSurvey: tryCatch(saveSurvey),
-  findById: tryCatch(findById),
-  findByStudentType: tryCatch(findByStudentType),
-  deleteQuestion: tryCatch(deleteQuestion)
-};
+module.exports = wrapRequests({
+  getAll,
+  saveSurvey,
+  findById,
+  findByStudentType,
+  deleteQuestion
+});

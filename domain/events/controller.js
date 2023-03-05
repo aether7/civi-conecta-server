@@ -1,5 +1,5 @@
 const repositories = require('../../repositories');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
 
@@ -32,9 +32,9 @@ const deleteEvent = async (req, res) => {
   res.json({ ok: true });
 };
 
-module.exports = {
-  getEventsByType: tryCatch(getEventsByType),
-  createEvent: tryCatch(createEvent),
-  deleteEvent: tryCatch(deleteEvent),
-  getEventById: tryCatch(getEventById)
-};
+module.exports = wrapRequests({
+  getEventsByType,
+  createEvent,
+  deleteEvent,
+  getEventById
+});
