@@ -3,6 +3,7 @@ const knexConfig = require('../knexfile');
 const config = require('../config');
 const connection = knex(knexConfig[config.env.nodeEnv]);
 
+const AnswerRepository = require('./AnswerRepository');
 const EstablishmentRepository = require('./EstablishmentRepository');
 const UserRepository = require('./UserRepository');
 const GradeRepository = require('./GradeRepository');
@@ -20,6 +21,7 @@ const DocumentRepository = require('./DocumentRepository');
 const LessonRepository = require('./LessonRepository');
 const FeedbackRepository = require('./FeedbackRepository');
 
+const answerRepository = new AnswerRepository(connection);
 const eventRepository = new EventRepository(connection);
 const courseRepository = new CourseRepository(connection);
 const studentRepository = new StudentRepository(connection);
@@ -58,7 +60,8 @@ const repositories = {
   alternative: alternativeRepository,
   document: documentRepository,
   lesson: lessonRepository,
-  feedback: feedbackRepository
+  feedback: feedbackRepository,
+  answer: answerRepository
 };
 
 module.exports = repositories;

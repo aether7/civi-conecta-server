@@ -85,15 +85,24 @@ exports.up = function(knex) {
       t.foreign('question_id').references('question.id');
       t.index(['letter'], 'alternative_idx01');
     })
+    .createTable('feedback_course', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('uuid');
+      t.integer('is_finished').defaultTo(0);
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+    })
     .createTable('feedback', (t) => {
       t.increments('id', { primaryKey: true });
       t.integer('is_finished').defaultTo(0);
       t.integer('student_id').unsigned();
       t.integer('teacher_id').unsigned();
+      t.integer('feedback_course_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('student_id').references('student.id');
       t.foreign('teacher_id').references('user.id');
+      t.foreign('feedback_course_id').references('feedback_course.id');
     })
     .createTable('answer', (t) => {
       t.increments('id', { primaryKey: true });

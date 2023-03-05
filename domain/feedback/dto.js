@@ -1,7 +1,7 @@
 const mapFeedback = (data) => {
   return {
-    id: data.id,
-    isFinished: data.is_finished
+    uuid: data.uuid,
+    isFinished: Boolean(data.is_finished)
   };
 };
 
@@ -27,7 +27,33 @@ const mapSurvey = (data) => {
   return Object.values(result);
 };
 
+const mapStatus = (data) => {
+  if (!data) {
+    return {
+      survey: { completed: false },
+      teacher: { generated: false, completed: false },
+      student: { generated: false, completed: false }
+    };
+  }
+
+  return {
+    survey: {
+      completed: Boolean(data.is_finished),
+      createdAt: data.created_at
+    },
+    teacher: {
+      generated: true,
+      completed: Boolean(data.teacher_finished)
+    },
+    student: {
+      generated: data.student_surveys_qty > 0,
+      completed: false
+    }
+  };
+};
+
 module.exports = {
   mapFeedback,
-  mapSurvey
+  mapSurvey,
+  mapStatus
 };
