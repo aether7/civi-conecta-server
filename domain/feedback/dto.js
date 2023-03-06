@@ -52,8 +52,43 @@ const mapStatus = (data) => {
   };
 };
 
+const mapStatistics = (teacherProgress, studentsProgress) => {
+  const studentsTotal = studentsProgress[0].total * studentsProgress.length;
+  const currentProgress = studentsProgress.reduce((num, student) => {
+    return num + student.quantity;
+  }, 0);
+
+  return {
+    teacher: {
+      name: teacherProgress.name,
+      survey: {
+        total: teacherProgress.total,
+        completed: teacherProgress.completed_by_teacher,
+        percentage: (teacherProgress.completed_by_teacher / teacherProgress.total) * 100
+      }
+    },
+    students: {
+      total: studentsTotal,
+      completed: currentProgress,
+      percentage: (currentProgress / studentsTotal) * 100,
+      details: studentsProgress.map(result => {
+        return {
+          run: result.run,
+          name: result.name,
+          survey: {
+            completed: result.quantity,
+            total: result.total,
+            percentage: (result.quantity / result.total) * 100
+          }
+        };
+      })
+    }
+  };
+};
+
 module.exports = {
   mapFeedback,
   mapSurvey,
-  mapStatus
+  mapStatus,
+  mapStatistics
 };

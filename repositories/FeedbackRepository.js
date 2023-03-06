@@ -5,6 +5,46 @@ class FeedbackRepository {
     this.connection = connection;
   }
 
+  async findProgressByTeacher(uuid) {
+    return this.connection
+      .with('teacher_answers', (qb) => {
+        qb
+          .select('user.name')
+          .count({ quantity: 'answers_by_person.id' })
+          .from('answers_by_person')
+          .innerJoin('user', 'answers_by_person.teacher_id', 'user.id')
+          .where('answers_by_person.uuid', uuid);
+      })
+      .column({
+        total: 'questions_quantity.quantity',
+        completed_by_teacher: 'teacher_answers.quantity',
+        name: 'teacher_answers.name'
+      })
+      .from('questions_quantity')
+      .innerJoin('teacher_answers')
+      .where('questions_quantity.type', 'teacher')
+      .first();
+  }
+
+  async findProgressByStudent(uuid) {
+    return this.connection
+      .select(
+        'student.name',
+        'student.run'
+      )
+      .count({ quantity: 'answers_by_person.id' })
+      .column({ total: 'questions_quantity.quantity' })
+      .from('feedback_course')
+      .innerJoin('feedback', 'feedback.feedback_course_id', 'feedback_course.id')
+      .innerJoin('student', 'feedback.student_id', 'student.id')
+      .leftJoin('answers_by_person', 'answers_by_person.student_id', 'student.id')
+      .innerJoin('questions_quantity')
+      .where('feedback_course.uuid', uuid)
+      .where('questions_quantity.type', 'student')
+      .groupBy('student.run')
+      .orderBy('student.run');
+  }
+
   async checkStatusByTeacherAlias(aliasId) {
     return this.connection
       .with('students_feedback', (qb) => {

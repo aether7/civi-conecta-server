@@ -51,9 +51,22 @@ const saveAnswer = async (req, res) => {
   res.json({ ok: true });
 };
 
+const checkDetailedStatus = async (req, res) => {
+  const uuid = req.params.uuid;
+
+  const [teacherProgress, studentsProgress] = await Promise.all([
+    repositories.feedback.findProgressByTeacher(uuid),
+    repositories.feedback.findProgressByStudent(uuid)
+  ]);
+
+  const surveyStatistics = dto.mapStatistics(teacherProgress, studentsProgress);
+  res.json({ ok: true, surveyStatistics });
+};
+
 module.exports = wrapRequests({
   checkFeedbackStatus,
   createFeedback,
   getFeedback,
-  saveAnswer
+  saveAnswer,
+  checkDetailedStatus
 });

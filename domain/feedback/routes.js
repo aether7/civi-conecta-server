@@ -2,6 +2,7 @@ const { Router } = require('express');
 const handlers = require('./controller');
 const router = Router();
 
+router.get('/status/:uuid/detailed', handlers.checkDetailedStatus);
 router.get('/status/:uuid', handlers.checkFeedbackStatus);
 router.post('/:surveyType/:uuid', handlers.createFeedback);
 router.get('/:surveyType/:aliasId', handlers.getFeedback);

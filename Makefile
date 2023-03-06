@@ -16,8 +16,8 @@ restore:
 	rm dev.sqlite3
 	./node_modules/.bin/knex migrate:latest
 
-demo:
+demo: restore
 	sqlite3 dev.sqlite3 < database/demo-data.sqlite.sql
 
-survey: restore demo
+survey: demo
 	sqlite3 dev.sqlite3 < database/demo-survey.sqlite.sql
