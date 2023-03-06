@@ -2,7 +2,6 @@
 # export
 
 environment ?= "development"
-ACTIVATE_ENV = $(. .env)
 
 node_modules:
 	npm ci --no-optional
@@ -18,4 +17,7 @@ restore:
 	./node_modules/.bin/knex migrate:latest
 
 demo:
-	cat database/demo-data.sqlite.sql | sqlite3 dev.sqlite3
+	sqlite3 dev.sqlite3 < database/demo-data.sqlite.sql
+
+survey: restore demo
+	sqlite3 dev.sqlite3 < database/demo-survey.sqlite.sql
