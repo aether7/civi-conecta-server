@@ -1,7 +1,7 @@
 const mapFile = (fileInfo) => {
   return {
     uuid: fileInfo.alias,
-    name: fileInfo.filename
+    filename: fileInfo.filename
   };
 };
 

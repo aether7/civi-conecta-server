@@ -3,11 +3,11 @@ const knexConfig = require('../knexfile');
 const config = require('../config');
 const connection = knex(knexConfig[config.env.nodeEnv]);
 
+const AnswerRepository = require('./AnswerRepository');
 const EstablishmentRepository = require('./EstablishmentRepository');
 const UserRepository = require('./UserRepository');
 const GradeRepository = require('./GradeRepository');
 const UnitRepository = require('./UnitRepository');
-const ClassRepository = require('./ClassRepository');
 const TopicRepository = require('./TopicRepository');
 const StudentRepository = require('./StudentRepository');
 const CourseRepository = require('./CourseRepository');
@@ -21,13 +21,13 @@ const DocumentRepository = require('./DocumentRepository');
 const LessonRepository = require('./LessonRepository');
 const FeedbackRepository = require('./FeedbackRepository');
 
+const answerRepository = new AnswerRepository(connection);
 const eventRepository = new EventRepository(connection);
 const courseRepository = new CourseRepository(connection);
 const studentRepository = new StudentRepository(connection);
 const courseStudentRepository = new CourseStudentRepository(connection);
 const userRepository = new UserRepository(connection);
 const gradeRepository = new GradeRepository(connection);
-const classRepository = new ClassRepository(connection);
 const unitRepository = new UnitRepository(connection);
 const topicRepository = new TopicRepository(connection);
 const planningRepository = new PlanningRepository(connection);
@@ -44,11 +44,10 @@ const establishmentRepository = new EstablishmentRepository(connection, {
   userRepository
 });
 
-module.exports = {
+const repositories = {
   user: userRepository,
   grade: gradeRepository,
   unit: unitRepository,
-  class: classRepository,
   topic: topicRepository,
   student: studentRepository,
   course: courseRepository,
@@ -61,5 +60,8 @@ module.exports = {
   alternative: alternativeRepository,
   document: documentRepository,
   lesson: lessonRepository,
-  feedback: feedbackRepository
+  feedback: feedbackRepository,
+  answer: answerRepository
 };
+
+module.exports = repositories;

@@ -1,3 +1,6 @@
+# include .env
+# export
+
 environment ?= "development"
 
 node_modules:
@@ -13,5 +16,8 @@ restore:
 	rm dev.sqlite3
 	./node_modules/.bin/knex migrate:latest
 
-demo:
-	cat database/demo-data.sqlite.sql | sqlite3 dev.sqlite3
+demo: restore
+	sqlite3 dev.sqlite3 < database/demo-data.sqlite.sql
+
+survey: demo
+	sqlite3 dev.sqlite3 < database/demo-survey.sqlite.sql

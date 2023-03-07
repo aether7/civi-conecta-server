@@ -14,8 +14,6 @@ INSERT INTO student(name, run, uuid) VALUES
 INSERT INTO course_student(course_id, student_id) VALUES (1, 1),(1, 2),(1, 3),(1, 4),(1, 5);
 
 -- encuesta para profesor
-INSERT INTO survey(type) VALUES('teacher');
-
 INSERT INTO topic(title, number, survey_id) VALUES ('conocimiento programacion', 1, 1);
 
 INSERT INTO question(topic_id, description) VALUES(1, 'con que lenguaje se desarrollo esta aplicacion?');
@@ -74,8 +72,6 @@ INSERT INTO alternative(question_id, letter, value, description) VALUES(8, 'D', 
 
 
 -- encuesta para alumno
-INSERT INTO survey(type) VALUES('student');
-
 INSERT INTO topic(title, number, survey_id) VALUES ('conocimiento pokemon', 1, 2);
 
 INSERT INTO question(topic_id, description) VALUES(5, 'con cual pokemon es mas dificil comenzar');
@@ -89,3 +85,28 @@ INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'A',
 INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'B', 1, 'segunda generacion');
 INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'C', 0, 'tercera generacion');
 INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'D', 1, 'ninguna de las anteriores');
+
+
+-- TEMAS DE UNIDADES
+INSERT INTO unit(number, title, description, grade_id, topic_id) VALUES(1, 'unidad 1', 'descripcion unidad 1', 7, 1);
+INSERT INTO lesson(number, objective, description, unit_id) VALUES(1, 'probar el tema de los archivos', 'no darse la mansa vuelta para el tema de los archivos', 1);
+
+INSERT INTO planning(
+    topic,
+    keywords,
+    start_activity,
+    main_activity,
+    end_activity,
+    teacher_material,
+    student_material,
+    lesson_id
+) VALUES (
+    'tema para colocar en clase',
+    'tanjiro,nezuko,muzan,alakazam',
+    'inicio de actividad ftw',
+    'actividad principal de la vida',
+    'actividad de cierre por si acaso',
+    'gafas,celular,cuaderno',
+    'cuaderno,estuche,cartulina',
+    1
+);

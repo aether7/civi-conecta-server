@@ -3,6 +3,16 @@ class AlternativeRepository {
     this.connection = connection;
   }
 
+  findByQuestionAndLetter(questionId, letter) {
+    return this.connection
+      .select('alternative.*')
+      .from('alternative')
+      .innerJoin('question', 'alternative.question_id', 'question.id')
+      .where('question.id', questionId)
+      .where('alternative.letter', letter)
+      .first();
+  }
+
   async create({ letter, description, value, questionId }) {
     const fields = {
       letter,

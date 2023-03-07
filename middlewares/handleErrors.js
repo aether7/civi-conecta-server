@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const handleNotFound = (req, res, next) => {
   res.status(404).json({ ok: false, error: 'resource not found' });
 };

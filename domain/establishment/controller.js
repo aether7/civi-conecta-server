@@ -1,7 +1,7 @@
 const repositories = require('../../repositories');
 const messages = require('../../config/messages');
 const exceptions = require('../../repositories/exceptions');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto.js');
 
 const getEstablishments = async (_, res) => {
@@ -46,9 +46,9 @@ const updateTeacherToCourse = async (req, res) => {
   res.json({ ok : true, user: dto.mapTeacher(user) });
 };
 
-module.exports = {
+module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
   updateCoursesEstablishment,
-  updateTeacherToCourse: tryCatch(updateTeacherToCourse)
-};
+  updateTeacherToCourse
+});

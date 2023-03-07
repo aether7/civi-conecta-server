@@ -1,7 +1,10 @@
-const getCleanedRun = (value) =>
-  typeof value === "string"
-    ? value.replace(/[^0-9kK]+/g, "").toUpperCase()
-    : "";
+const getCleanedRun = (value) => {
+  if (typeof value !== 'string') {
+    return '';
+  }
+
+  return value.replace(/[^0-9kK]+/g, '').toUpperCase();
+};
 
 const isValidRun = (value) => {
   const run = getCleanedRun(value);
@@ -15,7 +18,7 @@ const isValidRun = (value) => {
     m += 1;
   }
 
-  const checkDigit = s > 0 ? String(s - 1) : "K";
+  const checkDigit = s > 0 ? String(s - 1) : 'K';
   return checkDigit === run.slice(-1);
 };
 

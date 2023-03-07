@@ -4,7 +4,8 @@ const mapUser = (user) => {
     name: user.name,
     role: user.role,
     active: user.active,
-    password: user.password
+    password: user.password,
+    uuid: user.uuid,
   };
 };
 

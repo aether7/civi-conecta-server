@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 const { EntityNotFoundError } = require('./exceptions');
-const passwordService = require('../services').password;
+const passwordHelper = require('../helpers/password');
 
 const RoleTypes = {
   ADMIN: 'Administrator',
@@ -17,7 +17,7 @@ class UserRepository {
       const entity = await this.findOneByEmail(email);
       return entity;
     } catch (err) {
-      const password = await passwordService.createRandomPassword();
+      const password = await passwordHelper.createRandomPassword();
       const entity = await this.createUser({ name, email, password });
       return entity;
     }
@@ -42,7 +42,7 @@ class UserRepository {
       uuid: uuid.v4(),
       email,
       name,
-      password: passwordService.encrypt(password),
+      password: passwordHelper.encrypt(password),
       encrypted_password: 1,
       active: 1,
       role: RoleTypes.ADMIN
@@ -71,7 +71,7 @@ class UserRepository {
     const fields = {
       encrypted_password: 1,
       updated_at: new Date(),
-      password: passwordService.encrypt(password)
+      password: passwordHelper.encrypt(password)
     };
 
     return this.connection('user')

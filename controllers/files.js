@@ -1,3 +1,4 @@
+/* eslint-disable */
 const AdmZip = require("adm-zip");
 const ftp = require("basic-ftp");
 const fs = require("fs");

@@ -2,7 +2,7 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex
     .schema
     .createTable('user', (t) => {
@@ -85,15 +85,24 @@ exports.up = function(knex) {
       t.foreign('question_id').references('question.id');
       t.index(['letter'], 'alternative_idx01');
     })
+    .createTable('feedback_course', (t) => {
+      t.increments('id', { primaryKey: true });
+      t.string('uuid');
+      t.integer('is_finished').defaultTo(0);
+      t.timestamp('created_at').defaultTo(knex.fn.now());
+      t.timestamp('updated_at').defaultTo(knex.fn.now());
+    })
     .createTable('feedback', (t) => {
       t.increments('id', { primaryKey: true });
       t.integer('is_finished').defaultTo(0);
       t.integer('student_id').unsigned();
       t.integer('teacher_id').unsigned();
+      t.integer('feedback_course_id').unsigned();
       t.timestamp('created_at').defaultTo(knex.fn.now());
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('student_id').references('student.id');
       t.foreign('teacher_id').references('user.id');
+      t.foreign('feedback_course_id').references('feedback_course.id');
     })
     .createTable('answer', (t) => {
       t.increments('id', { primaryKey: true });
@@ -187,6 +196,31 @@ exports.up = function(knex) {
       t.timestamp('updated_at').defaultTo(knex.fn.now());
       t.foreign('lesson_id').references('lesson.id');
     })
+    .createView('questions_quantity', (view) => {
+      view.as(
+        knex
+          .select('survey.type')
+          .count({ quantity: 'question.id' })
+          .from('survey')
+          .innerJoin('topic', 'topic.survey_id', 'survey.id')
+          .innerJoin('question', 'question.topic_id', 'topic.id')
+          .groupBy('survey.type')
+      );
+    })
+    .createView('answers_by_person', (view) => {
+      view.as(
+        knex
+          .select(
+            'feedback_course.uuid',
+            'answer.id',
+            'feedback.teacher_id',
+            'feedback.student_id'
+          )
+          .from('feedback_course')
+          .innerJoin('feedback', 'feedback.feedback_course_id', 'feedback_course.id')
+          .innerJoin('answer', 'answer.feedback_id', 'feedback.id')
+      );
+    })
     .then(() => knex.seed.run());
 };
 
@@ -194,6 +228,6 @@ exports.up = function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
+exports.down = function () {
 
 };

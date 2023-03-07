@@ -1,7 +1,7 @@
 const mapFeedback = (data) => {
   return {
-    id: data.id,
-    isFinished: data.is_finished
+    uuid: data.uuid,
+    isFinished: Boolean(data.is_finished)
   };
 };
 
@@ -27,7 +27,68 @@ const mapSurvey = (data) => {
   return Object.values(result);
 };
 
+const mapStatus = (data) => {
+  if (!data) {
+    return {
+      survey: { completed: false },
+      teacher: { generated: false, completed: false },
+      student: { generated: false, completed: false }
+    };
+  }
+
+  return {
+    survey: {
+      completed: Boolean(data.is_finished),
+      createdAt: data.created_at
+    },
+    teacher: {
+      generated: true,
+      completed: Boolean(data.teacher_finished)
+    },
+    student: {
+      generated: data.student_surveys_qty > 0,
+      completed: false
+    }
+  };
+};
+
+const mapStatistics = (teacherProgress, studentsProgress) => {
+  const studentsTotal = studentsProgress[0].total * studentsProgress.length;
+  const currentProgress = studentsProgress.reduce((num, student) => {
+    return num + student.quantity;
+  }, 0);
+
+  return {
+    teacher: {
+      name: teacherProgress.name,
+      survey: {
+        total: teacherProgress.total,
+        completed: teacherProgress.completed_by_teacher,
+        percentage: (teacherProgress.completed_by_teacher / teacherProgress.total) * 100
+      }
+    },
+    students: {
+      total: studentsTotal,
+      completed: currentProgress,
+      percentage: (currentProgress / studentsTotal) * 100,
+      details: studentsProgress.map(result => {
+        return {
+          run: result.run,
+          name: result.name,
+          survey: {
+            completed: result.quantity,
+            total: result.total,
+            percentage: (result.quantity / result.total) * 100
+          }
+        };
+      })
+    }
+  };
+};
+
 module.exports = {
   mapFeedback,
-  mapSurvey
+  mapSurvey,
+  mapStatus,
+  mapStatistics
 };

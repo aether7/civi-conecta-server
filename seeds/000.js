@@ -9,4 +9,5 @@ exports.seed = async function(knex) {
   await knex('letter').insert(data.letters);
   await knex('user').insert(data.users);
   await knex('event_type').insert(data.eventTypes);
+  await knex('survey').insert(data.surveys);
 };

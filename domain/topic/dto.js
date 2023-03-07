@@ -36,7 +36,7 @@ const mapTopicWithData = (topic) => {
 
     Object.entries(dict).forEach(entry => {
       const question = {
-        id: entry[0],
+        id: Number.parseInt(entry[0]),
         description: entry[1].description,
         alternatives: entry[1].alternatives
       };

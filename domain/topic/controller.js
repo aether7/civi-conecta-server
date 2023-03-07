@@ -1,5 +1,5 @@
 const repositories = require('../../repositories');
-const { tryCatch } = require('../../helpers/controller');
+const { wrapRequests } = require('../../helpers/controller');
 const exceptions = require('../../repositories/exceptions');
 const messages = require('../../config/messages');
 const dto = require('./dto');
@@ -86,11 +86,11 @@ const deleteQuestion = async (req, res) => {
   res.json({ ok: true });
 };
 
-module.exports = {
+module.exports = wrapRequests({
   getTopics,
   createTopic,
   getTopicById,
-  deleteTopic: tryCatch(deleteTopic),
-  updateTopic: tryCatch(updateTopic),
-  deleteQuestion: tryCatch(deleteQuestion)
-};
+  deleteTopic,
+  updateTopic,
+  deleteQuestion
+});
