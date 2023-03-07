@@ -9,12 +9,10 @@ class EventRepository {
     const entity = await this.connection
       .column({
         id: 'event.id',
-        number: 'event.number',
         title: 'event.title',
         description: 'event.description',
         date: 'event.date',
         grade: 'grade.level',
-        objective: 'event.objective',
         topic: 'planning.topic',
         start_activity: 'planning.start_activity',
         main_activity: 'planning.main_activity',
@@ -25,7 +23,8 @@ class EventRepository {
         eventType: 'event_type.name'
       })
       .from('event')
-      .innerJoin('planning', 'planning.event_id', 'event.id')
+      .innerJoin('lesson', 'lesson.event_id', 'event.id')
+      .innerJoin('planning', 'planning.lesson_id', 'lesson.id')
       .leftJoin('grade', 'event.grade_id', 'grade.id')
       .innerJoin('event_type', 'event.event_type_id', 'event_type.id')
       .where('event.id', eventId)
@@ -43,7 +42,8 @@ class EventRepository {
       title: payload.title,
       description: payload.description,
       event_type_id: payload.eventTypeId,
-      date: payload.date
+      date: payload.date,
+      grade_id: payload.grade
     };
 
     const [entity] = await this.connection
@@ -53,12 +53,17 @@ class EventRepository {
     return entity;
   }
 
-  findByEventTypeId(eventTypeId) {
-    return this.connection
+  findByEventTypeId(eventTypeId, gradeId=null) {
+    const builder = this.connection
       .select()
       .from('event')
-      .where('event_type_id', eventTypeId)
-      .orderBy('date', 'desc');
+      .where('event_type_id', eventTypeId);
+
+    if (gradeId) {
+      builder.where('grade_id', gradeId);
+    }
+
+    return builder.orderBy('date', 'desc');
   }
 
   deleteById(eventId) {

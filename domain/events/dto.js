@@ -10,12 +10,35 @@ const mapEvent = (data) => {
   };
 };
 
+const mapEventWithPlanning = (data) => {
+  return {
+    id: data.id,
+    title: data.title,
+    description: data.description,
+    eventType: data.eventType,
+    grade: data.grade,
+    date: data.date,
+    planning: {
+      topic: data.topic,
+      keywords: data.keywords,
+      startActivity: data.start_activity,
+      mainActivity: data.main_activity,
+      endActivity: data.end_activity,
+      materials: {
+        teacher: data.teacher_material.split(','),
+        student: data.student_material.split(',')
+      }
+    }
+  };
+};
+
 const getEvent = (eventTypeId, data) => {
   const event = {
     title: data.title,
     description: data.description,
+    grade: data.grade,
+    date: null,
     eventTypeId,
-    date: data.date,
     get isEphemeris() {
       return this.eventTypeId === EventTypes.EPHEMERIS;
     }
@@ -45,5 +68,6 @@ const getPlanning = (body) => {
 module.exports = {
   mapEvent,
   getEvent,
-  getPlanning
+  getPlanning,
+  mapEventWithPlanning
 };
