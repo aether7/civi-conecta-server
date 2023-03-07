@@ -35,6 +35,7 @@ const createEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
   const eventId = req.params.eventId;
   await repositories.planning.deleteByEventId(eventId);
+  await repositories.lesson.deleteByEventId(eventId);
   await repositories.event.deleteById(eventId);
 
   res.json({ ok: true });
@@ -44,5 +45,6 @@ module.exports = wrapRequests({
   getEventsByType,
   createEvent,
   deleteEvent,
-  getEventById
+  getEventById,
+  deleteEvent
 });

@@ -56,6 +56,12 @@ class LessonRepository {
       .where('lesson.id', lessonId)
       .first();
   }
+
+  deleteByEventId(eventId) {
+    return this.connection('lesson')
+      .where('event_id', eventId)
+      .del();
+  }
 }
 
 module.exports = LessonRepository;
