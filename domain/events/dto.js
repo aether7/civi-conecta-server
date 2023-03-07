@@ -33,6 +33,8 @@ const mapEventWithPlanning = (data) => {
 };
 
 const getEvent = (eventTypeId, data) => {
+  eventTypeId = Number.parseInt(eventTypeId);
+
   const event = {
     title: data.title,
     description: data.description,

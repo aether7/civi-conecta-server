@@ -6,6 +6,7 @@ const getEventsByType = async (req, res) => {
   const eventType = req.params.eventType;
   const gradeId = req.query.grade;
   const results = await repositories.event.findByEventTypeId(eventType, gradeId);
+
   res.json({ ok: true, events: results.map(dto.mapEvent) });
 };
 
@@ -27,12 +28,12 @@ const createEvent = async (req, res) => {
   });
   await repositories.planning.create(planningPayload, lesson.id);
   const eventWithPlanning = await repositories.event.findById(newEvent.id);
+
   res.json({ ok: true, event: dto.mapEventWithPlanning(eventWithPlanning) });
 };
 
 const deleteEvent = async (req, res) => {
   const eventId = req.params.eventId;
-
   await repositories.planning.deleteByEventId(eventId);
   await repositories.event.deleteById(eventId);
 
