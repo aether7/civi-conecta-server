@@ -34,8 +34,11 @@ const createEvent = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
   const eventId = req.params.eventId;
-  await repositories.planning.deleteByEventId(eventId);
-  await repositories.lesson.deleteByEventId(eventId);
+  const { planning_id, lesson_id } = await repositories.planning
+    .findRelatedDataByEventId(eventId);
+
+  await repositories.planning.deleteById(planning_id);
+  await repositories.lesson.deleteById(lesson_id);
   await repositories.event.deleteById(eventId);
 
   res.json({ ok: true });

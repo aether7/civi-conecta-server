@@ -57,9 +57,9 @@ class LessonRepository {
       .first();
   }
 
-  deleteByEventId(eventId) {
+  deleteById(lessonId) {
     return this.connection('lesson')
-      .where('event_id', eventId)
+      .where('id', lessonId)
       .del();
   }
 }

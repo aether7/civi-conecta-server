@@ -22,10 +22,24 @@ class PlanningRepository {
     return entity;
   }
 
-  deleteByEventId(lessonId) {
+  deleteById(planningId) {
     return this.connection('planning')
-      .where('lesson_id', lessonId)
+      .where('id', planningId)
       .del();
+  }
+
+  findRelatedDataByEventId(eventId) {
+    return this.connection
+      .column({
+        planning_id: 'planning.id',
+        lesson_id: 'lesson.id',
+        event_id: 'event.id'
+      })
+      .from('planning')
+      .innerJoin('lesson', 'planning.lesson_id', 'lesson.id')
+      .innerJoin('event', 'lesson.event_id', 'event.id')
+      .where('event.id', eventId)
+      .first();
   }
 }
 
