@@ -48,20 +48,15 @@ class FeedbackRepository {
 
   async checkStatusByTeacherAlias(aliasId) {
     return this.connection
-      .with('students_feedback', (qb) => {
-        qb.select().from('feedback').whereNot('student_id', null);
-      })
       .column({
         uuid: 'feedback_course.uuid',
         is_finished: 'feedback_course.is_finished',
         created_at: 'feedback_course.created_at',
         teacher_finished: 'feedback.is_finished'
       })
-      .count({ student_surveys_qty: 'students_feedback.id' })
       .from('feedback_course')
       .innerJoin('feedback', 'feedback.feedback_course_id', 'feedback_course.id')
       .innerJoin('user', 'feedback.teacher_id', 'user.id')
-      .leftJoin('students_feedback', 'students_feedback.feedback_course_id', 'feedback_course.id')
       .where('user.uuid', aliasId)
       .first();
   }
