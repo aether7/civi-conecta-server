@@ -3,4 +3,9 @@ const EventTypes = {
   EPHEMERIS: 2
 };
 
-module.exports = { EventTypes };
+const SurveyTypes = {
+  TEACHER: 'teacher',
+  STUDENT: 'student'
+};
+
+module.exports = { EventTypes, SurveyTypes };

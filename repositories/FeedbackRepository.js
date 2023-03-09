@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const { SurveyTypes } = require('../constants/entities');
 
 class FeedbackRepository {
   constructor(connection) {
@@ -71,7 +72,7 @@ class FeedbackRepository {
       .from('feedback')
       .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id');
 
-    if (type === 'student') {
+    if (type === SurveyTypes.STUDENT) {
       builder.innerJoin('student', 'feedback.student_id', 'student.id');
       builder.where('student.uuid', alias);
     } else {
@@ -79,12 +80,11 @@ class FeedbackRepository {
       builder.where('user.uuid', alias);
     }
 
-    builder.first();
-    return builder;
+    return builder.first();
   }
 
   async createByType(type, alias) {
-    if (type === 'student') {
+    if (type === SurveyTypes.STUDENT) {
       return this._createStudentFeedback(alias);
     }
 
@@ -135,7 +135,7 @@ class FeedbackRepository {
       .from('feedback_course')
       .innerJoin('feedback', 'feedback.feedback_course_id', 'feedback_course.id');
 
-    if (type === 'teacher') {
+    if (type === SurveyTypes.TEACHER) {
       builder.innerJoin('user', 'feedback.teacher_id', 'user.id');
       builder.where('user.uuid', userAlias);
     } else {
