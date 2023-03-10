@@ -13,8 +13,9 @@ const getEventsByType = async (req, res) => {
 const getEventById = async (req, res) => {
   const eventId = req.params.eventId;
   const event = await repositories.event.findById(eventId);
+  const files = await repositories.document.findByLesson(event.lesson_id);
 
-  res.json({ ok: true, event: dto.mapEventWithPlanning(event) });
+  res.json({ ok: true, event: dto.mapEventWithPlanning(event, files) });
 };
 
 const createEvent = async (req, res) => {

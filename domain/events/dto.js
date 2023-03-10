@@ -10,7 +10,12 @@ const mapEvent = (data) => {
   };
 };
 
-const mapEventWithPlanning = (data) => {
+const mapDocument = document => ({
+  uuid: document.alias,
+  filename: document.filename
+});
+
+const mapEventWithPlanning = (data, documents) => {
   return {
     id: data.id,
     title: data.title,
@@ -18,6 +23,7 @@ const mapEventWithPlanning = (data) => {
     eventType: data.eventType,
     grade: data.grade,
     date: data.date,
+    documents: documents.map(mapDocument),
     planning: {
       topic: data.topic,
       keywords: data.keywords,

@@ -20,13 +20,14 @@ class EventRepository {
         teacher_material: 'planning.teacher_material',
         student_material: 'planning.student_material',
         keywords: 'planning.keywords',
-        eventType: 'event_type.name'
+        eventType: 'event_type.name',
+        lesson_id: 'lesson.id'
       })
       .from('event')
+      .innerJoin('event_type', 'event.event_type_id', 'event_type.id')
       .innerJoin('lesson', 'lesson.event_id', 'event.id')
       .innerJoin('planning', 'planning.lesson_id', 'lesson.id')
       .leftJoin('grade', 'event.grade_id', 'grade.id')
-      .innerJoin('event_type', 'event.event_type_id', 'event_type.id')
       .where('event.id', eventId)
       .first();
 
