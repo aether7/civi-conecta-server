@@ -15,7 +15,7 @@ const mapDocument = document => ({
   filename: document.filename
 });
 
-const mapEventWithPlanning = (data, documents) => {
+const mapEventWithPlanning = (data, documents = []) => {
   return {
     id: data.id,
     title: data.title,

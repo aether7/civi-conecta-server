@@ -65,8 +65,7 @@ class LessonRepository {
       return this.connection
         .column({
           alias: 'grade.alias',
-          event_number: 'event.id',
-          lesson_number: '1'
+          event_number: 'event.id'
         })
         .from('lesson')
         .innerJoin('event', 'lesson.event_id', 'event.id')

@@ -54,7 +54,7 @@ class FTPService {
       subfolder = `evento${eventNumber}`;
     }
 
-    const lessonNumber = String(folder.lesson_number).padStart(2, '0');
+    const lessonNumber = String(folder.lesson_number ?? 1).padStart(2, '0');
     return `${folder.alias}/${subfolder}/clase${lessonNumber}`;
   }
 
