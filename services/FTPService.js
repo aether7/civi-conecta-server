@@ -44,9 +44,18 @@ class FTPService {
 
   async getLessonPath(lessonId) {
     const folder = await repositories.lesson.findFTPDataById(lessonId);
-    const unitNumber = String(folder.unit_number).padStart(2, '0');
+    let subfolder;
+
+    if (folder.unit_number) {
+      const unitNumber = String(folder.unit_number).padStart(2, '0');
+      subfolder = `unidad${unitNumber}`;
+    } else {
+      const eventNumber = String(folder.event_number).padStart(2, '0');
+      subfolder = `evento${eventNumber}`;
+    }
+
     const lessonNumber = String(folder.lesson_number).padStart(2, '0');
-    return `${folder.alias}/unidad${unitNumber}/clase${lessonNumber}`;
+    return `${folder.alias}/${subfolder}/clase${lessonNumber}`;
   }
 
   _getAccess() {

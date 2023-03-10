@@ -43,18 +43,37 @@ class LessonRepository {
     return result;
   }
 
-  findFTPDataById(lessonId) {
-    return this.connection
-      .column({
-        alias: 'grade.alias',
-        unit_number: 'unit.number',
-        lesson_number: 'lesson.number'
-      })
+  async findFTPDataById(lessonId) {
+    const lesson = await this.connection
+      .first()
       .from('lesson')
-      .innerJoin('unit', 'lesson.unit_id', 'unit.id')
-      .innerJoin('grade', 'unit.grade_id', 'grade.id')
-      .where('lesson.id', lessonId)
-      .first();
+      .where('id', lessonId);
+
+    if (lesson.unit_id) {
+      return this.connection
+        .column({
+          alias: 'grade.alias',
+          unit_number: 'unit.number',
+          lesson_number: 'lesson.number'
+        })
+        .from('lesson')
+        .innerJoin('unit', 'lesson.unit_id', 'unit.id')
+        .innerJoin('grade', 'unit.grade_id', 'grade.id')
+        .where('lesson.id', lessonId)
+        .first();
+    } else {
+      return this.connection
+        .column({
+          alias: 'grade.alias',
+          event_number: 'event.id',
+          lesson_number: 'lesson.number'
+        })
+        .from('lesson')
+        .innerJoin('event', 'lesson.event_id', 'event.id')
+        .innerJoin('grade', 'event.grade_id', 'grade.id')
+        .where('lesson.id', lessonId)
+        .first();
+    }
   }
 
   deleteById(lessonId) {
