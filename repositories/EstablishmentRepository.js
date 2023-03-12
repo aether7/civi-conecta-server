@@ -66,6 +66,20 @@ class EstablishmentRepository {
       }
     }
   }
+
+  async getInfoByTeacher(uuid) {
+    return this.connection
+      .column({
+        establishment_name: 'establishment.name',
+        grade: 'grade.level'
+      })
+      .from('user')
+      .innerJoin('course', 'course.teacher_id', 'user.id')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('establishment', 'course.establishment_id', 'establishment.id')
+      .where('user.uuid', uuid)
+      .first();
+  }
 }
 
 module.exports = EstablishmentRepository;

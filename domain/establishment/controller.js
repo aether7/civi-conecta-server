@@ -46,9 +46,16 @@ const updateTeacherToCourse = async (req, res) => {
   res.json({ ok : true, user: dto.mapTeacher(user) });
 };
 
+const getProfile = async (req, res) => {
+  const uuid = req.params.uuid;
+  const result = await repositories.establishment.getInfoByTeacher(uuid);
+  res.json({ ok: true, info: dto.mapProfileInfo(result) });
+};
+
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
   updateCoursesEstablishment,
-  updateTeacherToCourse
+  updateTeacherToCourse,
+  getProfile
 });

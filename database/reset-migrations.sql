@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS public.answer CASCADE;
 DROP TABLE IF EXISTS public.lesson CASCADE;
 DROP TABLE IF EXISTS public.document CASCADE;
 DROP TABLE IF EXISTS public.feedback CASCADE;
+DROP TABLE IF EXISTS public.feedback_course CASCADE;
 
 DROP TABLE IF EXISTS public.knex_migrations CASCADE;
 DROP TABLE IF EXISTS public.knex_migrations_lock CASCADE;

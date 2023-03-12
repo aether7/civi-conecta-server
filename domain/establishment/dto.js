@@ -66,4 +66,11 @@ const mapTeacher = (user) => {
   };
 };
 
-module.exports = { mapEstablishments, mapTeacher };
+const mapProfileInfo = (data) => {
+  return {
+    establishment: data.establishment_name,
+    grade: data.grade
+  };
+};
+
+module.exports = { mapEstablishments, mapTeacher, mapProfileInfo };
