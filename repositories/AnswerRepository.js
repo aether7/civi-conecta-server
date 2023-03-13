@@ -3,12 +3,36 @@ class AnswerRepository {
     this.connection = connection;
   }
 
-  async save(feedbackId, alternativeId) {
+  async findByAlias(uuid) {
+    const results = await this.connection
+      .select('alternative.*')
+      .from('answers_by_person')
+      .innerJoin('answer', 'answers_by_person.id', 'answer.id')
+      .innerJoin('alternative', 'answer.alternative_id', 'alternative.id')
+      .innerJoin('user', 'answers_by_person.teacher_id', 'user.id')
+      .where('user.uuid', uuid);
+
+    if (results.length) {
+      return results;
+    }
+
+    return this.connection
+      .select('alternative.*')
+      .from('answers_by_person')
+      .innerJoin('answer', 'answers_by_person.id', 'answer.id')
+      .innerJoin('alternative', 'answer.alternative_id', 'alternative.id')
+      .innerJoin('student', 'answers_by_person.student_id', 'student.id')
+      .where('student.uuid', uuid);
+  }
+
+  async save(feedbackId, questionId, alternativeId) {
     let result = await this.connection
-      .select()
+      .select('answer.*')
       .from('answer')
-      .where('feedback_id', feedbackId)
-      .where('alternative_id', alternativeId)
+      .innerJoin('alternative', 'answer.alternative_id', 'alternative.id')
+      .innerJoin('question', 'alternative.question_id', 'question.id')
+      .where('answer.feedback_id', feedbackId)
+      .where('question.id', questionId)
       .first();
 
     if (result) {

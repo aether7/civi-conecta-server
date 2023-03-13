@@ -44,7 +44,8 @@ class SurveyRepository {
         question_description: 'question.description',
         alternative_letter: 'alternative.letter',
         alternative_description: 'alternative.description',
-        alternative_value: 'alternative.value'
+        alternative_value: 'alternative.value',
+        alternative_id: 'alternative.id'
       })
       .from('survey')
       .innerJoin('topic', 'topic.survey_id', 'survey.id')
@@ -53,7 +54,7 @@ class SurveyRepository {
       .leftJoin('answer', 'answer.alternative_id', 'alternative.id')
       .leftJoin('feedback', 'answer.feedback_id', 'feedback.id')
       .where('survey.type', type)
-      .orderBy('question.id');
+      .orderBy(['question.id', 'alternative.id']);
   }
 
   async findOrCreate(type, topicId) {

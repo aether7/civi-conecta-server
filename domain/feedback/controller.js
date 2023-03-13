@@ -21,12 +21,16 @@ const getFeedback = async (req, res) => {
   const alias = req.params.aliasId;
   const surveyType = req.params.surveyType;
   const feedback = await repositories.feedback.findByTypeAndAlias(surveyType, alias);
-  const result = await repositories.survey.findWithDataByType(surveyType);
+
+  const [survey, answers] = await Promise.all([
+    repositories.survey.findWithDataByType(surveyType),
+    repositories.answer.findByAlias(alias)
+  ]);
 
   res.json({
     ok: true,
     feedback: dto.mapFeedback(feedback),
-    survey: dto.mapSurvey(result)
+    survey: dto.mapSurvey(survey, answers)
   });
 };
 
@@ -46,7 +50,7 @@ const saveAnswer = async (req, res) => {
     repositories.alternative.findByQuestionAndLetter(questionId, letter)
   ]);
 
-  await repositories.answer.save(feedback.id, alternative.id);
+  await repositories.answer.save(feedback.id, questionId, alternative.id);
 
   res.json({ ok: true });
 };

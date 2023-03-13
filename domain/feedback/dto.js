@@ -5,7 +5,9 @@ const mapFeedback = (data) => {
   };
 };
 
-const mapSurvey = (data) => {
+const mapSurvey = (data, answers) => {
+  const chosenAnswers = answers.map(answer => answer.id);
+
   const result = data.reduce((obj, item) => {
     if (!obj[item.question_id]) {
       obj[item.question_id] = {
@@ -18,7 +20,9 @@ const mapSurvey = (data) => {
     obj[item.question_id].alternatives.push({
       letter: item.alternative_letter,
       description: item.alternative_description,
-      value: item.alternative_value
+      value: item.alternative_value,
+      alternativeId: item.alternative_id,
+      isSelected: chosenAnswers.includes(item.alternative_id)
     });
 
     return obj;
