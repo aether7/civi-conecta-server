@@ -49,6 +49,12 @@ class DocumentRepository {
       .where('id', id)
       .del();
   }
+
+  deleteByLessonId(lessonId) {
+    return this.connection('document')
+      .where('lesson_id', lessonId)
+      .del();
+  }
 }
 
 module.exports = DocumentRepository;

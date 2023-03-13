@@ -38,8 +38,16 @@ const deleteEvent = async (req, res) => {
   const { planning_id, lesson_id } = await repositories.planning
     .findRelatedDataByEventId(eventId);
 
-  await repositories.planning.deleteById(planning_id);
-  await repositories.lesson.deleteById(lesson_id);
+  if (planning_id) {
+    await repositories.planning.deleteById(planning_id);
+  }
+
+  if (lesson_id) {
+    // TODO: remove documents from FTP
+    await repositories.document.deleteByLessonId(lesson_id);
+    await repositories.lesson.deleteById(lesson_id);
+  }
+
   await repositories.event.deleteById(eventId);
 
   res.json({ ok: true });

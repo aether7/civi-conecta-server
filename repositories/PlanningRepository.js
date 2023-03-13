@@ -35,9 +35,9 @@ class PlanningRepository {
         lesson_id: 'lesson.id',
         event_id: 'event.id'
       })
-      .from('planning')
-      .innerJoin('lesson', 'planning.lesson_id', 'lesson.id')
-      .innerJoin('event', 'lesson.event_id', 'event.id')
+      .from('event')
+      .leftJoin('lesson', 'lesson.event_id', 'event.id')
+      .leftJoin('planning', 'planning.lesson_id', 'lesson.id')
       .where('event.id', eventId)
       .first();
   }
