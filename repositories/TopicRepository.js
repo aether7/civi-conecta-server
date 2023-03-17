@@ -4,12 +4,18 @@ class TopicRepository {
   }
 
   findBySurveyType(surveyType) {
-    return this.connection
+    const builder = this.connection
       .select('topic.*')
       .from('topic')
-      .innerJoin('survey', 'topic.survey_id', 'survey.id')
-      .where('survey.type', surveyType)
-      .orderBy('topic.id');
+      .innerJoin('survey', 'topic.survey_id', 'survey.id');
+
+    if (surveyType !== 'all') {
+      builder.where('survey.type', surveyType);
+    }
+
+    builder.orderBy('topic.id');
+
+    return builder;
   }
 
   findById(topicId) {

@@ -5,7 +5,7 @@ const messages = require('../../config/messages');
 const dto = require('./dto');
 
 const getTopics = async (req, res) => {
-  const surveyType = req.params.surveyType;
+  const surveyType = req.params.surveyType ?? 'all';
   const topics = await repositories.topic.findBySurveyType(surveyType);
   res.json({ ok: true, topics: topics.map(dto.mapTopic) });
 };
