@@ -10,19 +10,18 @@ const getAll = async (_, res) => {
 
 const saveSurvey = async (req, res) => {
   const topicId = req.params.topicId;
-  const title = req.body.title;
-  const alternatives = req.body.alternatives;
+  const survey = dto.getSurvey(req.body);
 
-  req.logger.info('saving topic with questions %s', title);
+  req.logger.info('saving topic with questions %s', survey.title);
 
   const topic = await repositories.topic.findById(topicId);
 
   const question = await repositories.question.create({
-    description: title,
+    description: survey.title,
     topicId: topic.id
   });
 
-  for (const alternative of alternatives) {
+  for (const alternative of survey.alternatives) {
     await repositories.alternative.create({
       letter: alternative.label,
       description: alternative.description,

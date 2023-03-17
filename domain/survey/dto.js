@@ -56,4 +56,20 @@ const mapQuestion = (data) => {
   };
 };
 
-module.exports = { mapSurveys, mapSurvey, mapQuestion };
+const getSurvey = (data) => {
+  const title = data.title;
+  const alternatives = data.alternatives
+    .filter(a => a.description.trim() !== '');
+
+  return {
+    title,
+    alternatives
+  };
+};
+
+module.exports = {
+  mapSurveys,
+  mapSurvey,
+  mapQuestion,
+  getSurvey
+};
