@@ -19,9 +19,7 @@ const messages = {
     created: 'La encuesta se ha creado exitosamente'
   },
   topic: {
-    canNotDeleteTopic: 'El tema no se puede borrar porque tiene {}',
-    studentQuestions: '{} preguntas de estudiante',
-    teacherQuestions: '{} preguntas de profesor'
+    canNotDeleteTopic: 'El tema no se puede borrar porque tiene {} preguntas asociadas'
   }
 };
 

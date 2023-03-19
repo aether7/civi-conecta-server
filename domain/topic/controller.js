@@ -26,30 +26,13 @@ const createTopic = async (req, res) => {
 
 const deleteTopic = async (req, res) => {
   const topicId = req.params.topicId;
-  const groups = await repositories.topic.groupAssociatedQuestions(topicId);
+  const quantity = await repositories.topic.groupAssociatedQuestions(topicId);
 
-  if (groups.student || groups.teacher) {
-    const associatedGroups = [];
-
-    if (groups.student) {
-      associatedGroups.push(
-        messages.topic.studentQuestions.replace('{}', groups.student)
-      );
-    }
-
-    if (groups.teacher) {
-      associatedGroups.push(
-        messages.topic.teacherQuestions.replace('{}', groups.teacher)
-      );
-    }
-
-    const associatedQuestions = associatedGroups.join(' y ');
-    const message = messages.topic.canNotDeleteTopic.replace('{}', associatedQuestions);
-
+  if (quantity) {
+    const message = messages.topic.canNotDeleteTopic.replace('{}', quantity);
     throw new exceptions.TopicWithAssociatedQuestionsError(message);
   }
 
-  await repositories.survey.deleteByTopicId(topicId);
   await repositories.topic.deleteById(topicId);
   res.json({ ok: true });
 };

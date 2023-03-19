@@ -70,24 +70,12 @@ class TopicRepository {
 
   async groupAssociatedQuestions(topicId) {
     const results = await this.connection
-      .select('survey.type')
       .count({ quantity: 'question.id' })
-      .from('topic')
-      .innerJoin('survey', 'survey.topic_id', 'topic.id')
-      .innerJoin('question', 'question.survey_id', 'survey.id')
-      .where('topic.id', topicId)
-      .groupBy('survey.type');
+      .from('question')
+      .where('topic_id', topicId)
+      .first();
 
-    const groupQty = { student: 0, teacher: 0 };
-
-    if (!results.length) {
-      return groupQty;
-    }
-
-    return results.reduce((obj, item) => ({
-      ...obj,
-      [item.type]: item.quantity
-    }), groupQty);
+    return results.quantity;
   }
 
   deleteById(topicId) {
