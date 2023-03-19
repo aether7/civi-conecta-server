@@ -142,6 +142,26 @@ class FeedbackRepository {
       .where('feedback_course.uuid', surveyAlias)
       .first();
   }
+
+  async finishSurvey(surveyType, uuid) {
+    const personId = await this._getPersonId(surveyType, uuid);
+    const lookupField = surveyType === SurveyTypes.TEACHER ? 'teacher_id' : 'student_id';
+
+    return this.connection('feedback')
+      .where(lookupField, personId)
+      .update('is_finished', 1);
+  }
+
+  async _getPersonId(surveyType, uuid) {
+    const tableName = surveyType === SurveyTypes.TEACHER ? 'user' : 'student';
+    const result = await this.connection
+      .select()
+      .from(tableName)
+      .where('uuid', uuid)
+      .first();
+
+    return result.id;
+  }
 }
 
 module.exports = FeedbackRepository;
