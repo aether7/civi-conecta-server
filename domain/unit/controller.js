@@ -26,7 +26,6 @@ const createUnit = async (req, res) => {
   const description = req.body.description;
   const gradeId = req.body.grade;
   const topicId = req.body.topicId;
-
   const previousUnit = await repositories.unit.findOneByNumberAndGradeId(number, gradeId);
 
   if (previousUnit) {
@@ -47,10 +46,12 @@ const createUnit = async (req, res) => {
 
 const deleteUnit = async (req, res) => {
   const unitId = req.params.unitId;
-  const associatedClasses = await repositories.event.findClassesByUnitId(unitId);
+  const quantity = await repositories.lesson.countAssociatedLessonsByUnitId(unitId);
+  req.logger.info('trying to delete unit %s', unitId);
 
-  if (associatedClasses.length) {
-    throw new exceptions.EntityWithDependenciesError(messages.unit.hasAssociatedClass);
+  if (quantity) {
+    const message = messages.unit.canNotDeleteUnit.replace('{}', quantity);
+    throw new exceptions.EntityWithDependenciesError(message);
   }
 
   await repositories.unit.remove(unitId);

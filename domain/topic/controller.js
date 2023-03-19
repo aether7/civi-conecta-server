@@ -26,7 +26,8 @@ const createTopic = async (req, res) => {
 
 const deleteTopic = async (req, res) => {
   const topicId = req.params.topicId;
-  const quantity = await repositories.topic.groupAssociatedQuestions(topicId);
+  const quantity = await repositories.topic.countAssociatedQuestionsByTopicId(topicId);
+  req.logger.info('trying to delete topic %s', topicId);
 
   if (quantity) {
     const message = messages.topic.canNotDeleteTopic.replace('{}', quantity);
@@ -64,6 +65,8 @@ const updateTopic = async (req, res) => {
 
 const deleteQuestion = async (req, res) => {
   const questionId = req.params.questionId;
+  req.logger.info('deleting question %s', questionId);
+
   await repositories.alternative.deleteByQuestionId(questionId);
   await repositories.question.deleteById(questionId);
   res.json({ ok: true });

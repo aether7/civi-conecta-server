@@ -68,14 +68,14 @@ class TopicRepository {
     return result;
   }
 
-  async groupAssociatedQuestions(topicId) {
+  async countAssociatedQuestionsByTopicId(topicId) {
     const results = await this.connection
       .count({ quantity: 'question.id' })
       .from('question')
       .where('topic_id', topicId)
       .first();
 
-    return results.quantity;
+    return Number.parseInt(results.quantity);
   }
 
   deleteById(topicId) {

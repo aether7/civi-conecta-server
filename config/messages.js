@@ -7,7 +7,7 @@ const messages = {
   },
   unit: {
     alreadyExists: 'La unidad ya existe',
-    hasAssociatedClass: 'La unidad ya tiene al menos una clase asociada',
+    canNotDeleteUnit: 'La unidad no se puede borrar porque tiene {} clases asociadas',
     unitRemoved: 'La unidad ha sido removida exitosamente'
   },
   establishment: {

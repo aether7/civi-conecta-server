@@ -80,6 +80,16 @@ class LessonRepository {
       .where('id', lessonId)
       .del();
   }
+
+  async countAssociatedLessonsByUnitId(unitId) {
+    const results = await this.connection
+      .count({ quantity: 'lesson.id' })
+      .from('lesson')
+      .where('unit_id', unitId)
+      .first();
+
+    return Number.parseInt(results.quantity);
+  }
 }
 
 module.exports = LessonRepository;
