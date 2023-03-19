@@ -3,6 +3,7 @@ const handlers = require('./controller');
 const middlewares = require('../../middlewares/authentication');
 const router = Router();
 
+router.get('/', handlers.getTopics);
 router.get('/type/:surveyType', handlers.getTopics);
 router.get('/:topicId', handlers.getTopicById);
 router.post('/:surveyType', middlewares.verifyAdminRole, handlers.createTopic);
