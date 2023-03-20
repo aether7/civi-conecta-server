@@ -21,7 +21,7 @@ const signIn = async (req, res) => {
   }
 
   const loggedUser = dto.mapUser(user);
-  const token = services.token.createToken(loggedUser);
+  const token = services.token.createToken({ uuid: loggedUser.uuid, name: loggedUser.name });
   loggedUser.token = token;
 
   res.cookie('token', token);
@@ -73,7 +73,8 @@ const verifyStudent = async (req, res) => {
     return res.status(404).json({ ok: false, error: messages.auth.noStudent });
   }
 
-  res.json({ ok: true, student });
+  const token = await services.token.createToken({ uuid: student.uuid, name: student.name });
+  res.json({ ok: true, student: {...student, token} });
 };
 
 module.exports = wrapRequests({
