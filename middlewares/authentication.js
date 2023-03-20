@@ -2,14 +2,13 @@ const config = require('../config');
 const jwt = require('jsonwebtoken');
 
 const _verifyToken = (isByCookiesOrHeaders) => (seed) => (req, res, next) => {
-  const loginToken = req.cookies.token || req.headers.token;
+  const loginToken = req.headers.token;
   const token = isByCookiesOrHeaders ? loginToken : req.query.token;
 
   jwt.verify(token, seed, (err, decoded) => {
     if (err) {
       return res.status(401).json({ ok: false, error: err });
     }
-
     req.user = decoded.user;
     next();
   });

@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 class TokenService {
-  createToken({ uuid, name }) {
+  createToken(user) {
     const expiration = { expiresIn: config.token.expiration.userLogin };
-    return jwt.sign({ uuid, name }, config.seed.userLogin, expiration);
+    return jwt.sign({ user }, config.seed.userLogin, expiration);
   }
 }
 
