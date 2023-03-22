@@ -2,12 +2,15 @@
 
 ## Requirements
 
-1. MongoDB.
-2. Node.js.
-3. NPM.
+1. NodeJS v16+
+2. PostgreSQL
+3. SQLite
+4. NPM
+5. Makefile
 
 ## Steps
-
 1. Open terminal inside project root path.
-2. Execute 'npm i' commands to install node_modules.
-3. Execute 'npm start' to start project.
+2. run make to install project dependencies
+3. you have these commands at your disposal to run the service
+    - run command `npm run dev` to start server in dev mode
+    - run command `npm run debug` to start using debugger inside chrome dev tools

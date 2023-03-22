@@ -54,6 +54,16 @@ class UnitRepository {
       .first();
   }
 
+  async findByTeacherAlias(uuid) {
+    return this.connection
+      .select('unit.*')
+      .from('course')
+      .innerJoin('user', 'course.teacher_id', 'user.id')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('unit', 'grade.id', 'unit.grade_id')
+      .where('user.uuid', uuid);
+  }
+
   async create({ number, title, description, gradeId, topicId }) {
     const fields = {
       number,

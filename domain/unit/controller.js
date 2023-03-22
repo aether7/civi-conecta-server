@@ -58,9 +58,18 @@ const deleteUnit = async (req, res) => {
   res.json({ ok: true, message: messages.unit.unitRemoved });
 };
 
+const getUnitsByTeacherAlias = async (req, res) => {
+  const teacherId = req.params.uuid;
+  const units = await repositories.unit.findByTeacherAlias(teacherId);
+  req.logger.info('getting units from teacher %s', teacherId);
+
+  res.json({ ok: true, units: units.map(dto.mapUnit) });
+};
+
 module.exports = wrapRequests({
   getUnitsByGrade,
   getUnitById,
   createUnit,
-  deleteUnit
+  deleteUnit,
+  getUnitsByTeacherAlias
 });

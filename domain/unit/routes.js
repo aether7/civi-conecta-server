@@ -5,6 +5,7 @@ const router = Router();
 
 router.get('/', handlers.getUnitsByGrade);
 router.get('/:unitId', handlers.getUnitById);
+router.get('/teacher/:uuid', handlers.getUnitsByTeacherAlias);
 router.post('/', middlewares.verifyAdminRole, handlers.createUnit);
 router.delete('/:unitId', middlewares.verifyAdminRole, handlers.deleteUnit);
 
