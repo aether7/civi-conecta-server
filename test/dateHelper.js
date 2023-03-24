@@ -8,9 +8,15 @@ tap.test('dateToMonthDay', (t) => {
     t.end();
   });
 
-  t.test('dateToMonthDay(10-12) => 12-10', (t) => {
+  t.test('dateToMonthDay(10-12) => 10-12', (t) => {
     const actual = dateToMonthDay('10-12');
-    t.equal(actual, '12-10');
+    t.equal(actual, '10-12');
+    t.end();
+  });
+
+  t.test('dateToMonthDay(2023-07-13) => 07-13', (t) => {
+    const actual = dateToMonthDay('2023-07-13');
+    t.equal(actual, '07-13');
     t.end();
   });
 

@@ -46,7 +46,6 @@ const findByStudentType = async (req, res) => {
 
 const deleteQuestion = async (req, res) => {
   const questionId = req.params.questionId;
-  await repositories.alternative.deleteByQuestionId(questionId);
   await repositories.question.deleteById(questionId);
   res.json({ ok: true });
 };

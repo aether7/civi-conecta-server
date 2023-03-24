@@ -20,6 +20,9 @@ const messages = {
   },
   topic: {
     canNotDeleteTopic: 'El tema no se puede borrar porque tiene {} preguntas asociadas'
+  },
+  question: {
+    canNotDeleteQuestion: 'La pregunta ya tiene respuestas asociadas en una encuesta'
   }
 };
 

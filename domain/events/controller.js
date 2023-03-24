@@ -57,6 +57,5 @@ module.exports = wrapRequests({
   getEventsByType,
   createEvent,
   deleteEvent,
-  getEventById,
-  deleteEvent
+  getEventById
 });
