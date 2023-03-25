@@ -66,8 +66,6 @@ const updateTopic = async (req, res) => {
 const deleteQuestion = async (req, res) => {
   const questionId = req.params.questionId;
   req.logger.info('deleting question %s', questionId);
-
-  await repositories.alternative.deleteByQuestionId(questionId);
   await repositories.question.deleteById(questionId);
   res.json({ ok: true });
 };
