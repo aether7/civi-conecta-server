@@ -1,5 +1,11 @@
 class EstablishmentRepository {
-  constructor(connection, { courseRepository, courseStudentRepository, studentRepository, userRepository }) {
+  constructor(
+    connection, {
+      courseRepository,
+      courseStudentRepository,
+      studentRepository,
+      userRepository
+    }) {
     this.connection = connection;
     this.courseRepository = courseRepository;
     this.courseStudentRepository = courseStudentRepository;
@@ -36,10 +42,13 @@ class EstablishmentRepository {
   }
 
   async update(number, courses) {
+    const [resultGrades, resultLetters] = await Promise.all([
+      this.connection.select().from('grade').orderBy('id'),
+      this.connection.select().from('letter').orderBy('id')
+    ]);
     const grades = new Map();
     const letters = new Map();
-    const resultGrades = await this.connection.select().from('grade').orderBy('id');
-    const resultLetters = await this.connection.select().from('letter').orderBy('id');
+
     resultGrades.forEach(g => grades.set(g.level, g.id));
     resultLetters.forEach(l => letters.set(l.character, l.id));
 

@@ -3,7 +3,7 @@ class TopicRepository {
     this.connection = connection;
   }
 
-  findBySurveyType(surveyType) {
+  findBySurveyType(surveyType = 'all') {
     const builder = this.connection
       .select('topic.*')
       .from('topic')

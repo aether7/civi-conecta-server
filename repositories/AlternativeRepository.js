@@ -27,12 +27,6 @@ class AlternativeRepository {
 
     return entity;
   }
-
-  deleteByQuestionId(questionId) {
-    return this.connection('alternative')
-      .where('question_id', questionId)
-      .del();
-  }
 }
 
 module.exports = AlternativeRepository;

@@ -40,12 +40,14 @@ class CourseRepository {
   }
 
   async create(establishmentId, gradeId, letterId) {
+    const fields = {
+      establishment_id: establishmentId,
+      grade_id: gradeId,
+      letter_id: letterId
+    };
+
     const [result] = await this.connection
-      .insert({
-        establishment_id: establishmentId,
-        grade_id: gradeId,
-        letter_id: letterId
-      }, ['*'])
+      .insert(fields, ['*'])
       .into('course');
 
     return result;
