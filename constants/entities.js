@@ -8,4 +8,9 @@ const SurveyTypes = {
   STUDENT: 'student'
 };
 
-module.exports = { EventTypes, SurveyTypes };
+const RoleTypes = {
+  ADMIN: 'Administrator',
+  USER: 'User'
+};
+
+module.exports = { EventTypes, SurveyTypes, RoleTypes };

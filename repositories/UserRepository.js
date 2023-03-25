@@ -1,11 +1,7 @@
 const uuid = require('uuid');
 const { EntityNotFoundError } = require('./exceptions');
 const passwordHelper = require('../helpers/password');
-
-const RoleTypes = {
-  ADMIN: 'Administrator',
-  USER: 'User'
-};
+const { RoleTypes } = require('../constants/entities');
 
 class UserRepository {
   constructor(connection) {
