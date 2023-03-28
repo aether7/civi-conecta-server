@@ -152,6 +152,26 @@ class FeedbackRepository {
       .update('is_finished', 1);
   }
 
+  async finishSurveyCompletely(uuid) {
+    const feedbackCourse = await this.connection
+      .select('id')
+      .from('feedback_course')
+      .where('uuid', uuid)
+      .first();
+
+    return this._closeSurvey(feedbackCourse.id);
+  }
+
+  async _closeSurvey(id) {
+    await this.connection('feedback')
+      .where('feedback_course_id', id)
+      .update('is_finished', 1);
+
+    return this.connection('feedback_course')
+      .where('id', id)
+      .update('is_finished', 1);
+  }
+
   async _getPersonId(surveyType, uuid) {
     const tableName = surveyType === SurveyTypes.TEACHER ? 'user' : 'student';
     const result = await this.connection
