@@ -73,6 +73,7 @@ INSERT INTO public.alternative(question_id, letter, value, description) VALUES(8
 
 -- encuesta para alumno
 INSERT INTO public.topic(title, number, survey_id) VALUES ('conocimiento pokemon', 1, 2);
+INSERT INTO public.unit(number, title, description, grade_id, topic_id) VALUES(1, 'unidad 01', 'descripcion unidad 1', 7, 5);
 
 INSERT INTO public.question(topic_id, description) VALUES(5, 'con cual pokemon es mas dificil comenzar');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(9, 'A', 1, 'bulbasaur');

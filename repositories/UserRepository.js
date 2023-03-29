@@ -74,6 +74,14 @@ class UserRepository {
       .where('id', userId)
       .update(fields);
   }
+
+  findByAlias(uuid) {
+    return this.connection
+      .select()
+      .from('user')
+      .where('uuid', uuid)
+      .first();
+  }
 }
 
 module.exports = UserRepository;

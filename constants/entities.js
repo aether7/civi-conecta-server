@@ -5,7 +5,9 @@ const EventTypes = {
 
 const SurveyTypes = {
   TEACHER: 'teacher',
-  STUDENT: 'student'
+  STUDENT: 'student',
+  TEACHER_ID: 1,
+  STUDENT_ID: 2
 };
 
 const RoleTypes = {

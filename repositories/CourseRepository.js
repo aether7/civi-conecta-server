@@ -63,7 +63,8 @@ class CourseRepository {
     return this.connection
       .select()
       .from('course')
-      .where('teacher_id', teacherId);
+      .where('teacher_id', teacherId)
+      .first();
   }
 }
 

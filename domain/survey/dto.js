@@ -1,22 +1,22 @@
-const toArray = (result) => {
-  const arr = [];
+const mapSurveys = (surveys) => {
+  const toArray = (result) => {
+    const arr = [];
 
-  Object.entries(result).forEach(entry => {
-    const survey = entry[1];
-    const questions = [];
+    Object.entries(result).forEach(entry => {
+      const survey = entry[1];
+      const questions = [];
 
-    Object.entries(survey.questions).forEach(e => {
-      const question = e[1];
-      questions.push(question);
+      Object.entries(survey.questions).forEach(e => {
+        const question = e[1];
+        questions.push(question);
+      });
+
+      arr.push({ ...survey, questions });
     });
 
-    arr.push({ ...survey, questions });
-  });
+    return arr;
+  };
 
-  return arr;
-};
-
-const mapSurveys = (surveys) => {
   const result = surveys.reduce((dict, item) => {
     if (!dict[item.id]) {
       dict[item.id] = {
@@ -68,22 +68,39 @@ const getSurvey = (data) => {
 };
 
 const mapStudentAnswerReport = (data) => {
-  return data.reduce((obj, item) => {
-    if (!obj[item.topic_name]) {
-      obj[item.topic_name] = {};
+  const toArray = (result) => {
+    return Object.entries(result)
+      .map(([title, questions]) => {
+        return {
+          title,
+          questions: Object.entries(questions).map(([question, answers]) => ({
+            question,
+            answers
+          }))
+        };
+      });
+  };
+
+  const result = data.reduce((obj, item) => {
+    const key = `${item.unit_title} - ${item.topic_name}`;
+
+    if (!obj[key]) {
+      obj[key] = {};
     }
 
-    if (!obj[item.topic_name][item.question_made]) {
-      obj[item.topic_name][item.question_made] = [];
+    if (!obj[key][item.question_made]) {
+      obj[key][item.question_made] = [];
     }
 
-    obj[item.topic_name][item.question_made].push({
+    obj[key][item.question_made].push({
       description: item.alternative_description,
       percent: Number.parseFloat(((item.qty_answers / item.total) * 100).toFixed(2))
     });
 
     return obj;
   }, {});
+
+  return toArray(result);
 };
 
 module.exports = {

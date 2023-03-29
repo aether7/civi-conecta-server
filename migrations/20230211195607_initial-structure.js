@@ -50,6 +50,30 @@ exports.up = async function (knex) {
     t.unique(['run'], { indexName: 'student_idx1' });
   });
 
+  await knex.schema.createTable('course', (t) => {
+    t.increments('id', { primaryKey: true });
+    t.integer('letter_id').unsigned();
+    t.integer('establishment_id').unsigned();
+    t.integer('grade_id').unsigned();
+    t.integer('teacher_id').unsigned();
+    t.timestamp('created_at').defaultTo(knex.fn.now());
+    t.timestamp('updated_at').defaultTo(knex.fn.now());
+    t.foreign('letter_id').references('letter.id');
+    t.foreign('establishment_id').references('establishment.id');
+    t.foreign('teacher_id').references('user.id');
+    t.foreign('grade_id').references('grade.id');
+  });
+
+  await knex.schema.createTable('course_student', (t) => {
+    t.increments('id', { primaryKey: true });
+    t.integer('course_id').unsigned();
+    t.integer('student_id').unsigned();
+    t.timestamp('created_at').defaultTo(knex.fn.now());
+    t.timestamp('updated_at').defaultTo(knex.fn.now());
+    t.foreign('course_id').references('course.id');
+    t.foreign('student_id').references('student.id');
+  });
+
   await knex.schema.createTable('survey', (t) => {
     t.increments('id', { primaryKey: true });
     t.enu('type', ['student', 'teacher']);
@@ -121,30 +145,6 @@ exports.up = async function (knex) {
     t.integer('alternative_id').unsigned();
     t.foreign('feedback_id').references('feedback.id');
     t.foreign('alternative_id').references('alternative.id');
-  });
-
-  await knex.schema.createTable('course', (t) => {
-    t.increments('id', { primaryKey: true });
-    t.integer('letter_id').unsigned();
-    t.integer('establishment_id').unsigned();
-    t.integer('grade_id').unsigned();
-    t.integer('teacher_id').unsigned();
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
-    t.foreign('letter_id').references('letter.id');
-    t.foreign('establishment_id').references('establishment.id');
-    t.foreign('teacher_id').references('user.id');
-    t.foreign('grade_id').references('grade.id');
-  });
-
-  await knex.schema.createTable('course_student', (t) => {
-    t.increments('id', { primaryKey: true });
-    t.integer('course_id').unsigned();
-    t.integer('student_id').unsigned();
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
-    t.foreign('course_id').references('course.id');
-    t.foreign('student_id').references('student.id');
   });
 
   await knex.schema.createTable('unit', (t) => {

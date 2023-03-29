@@ -52,7 +52,9 @@ const deleteQuestion = async (req, res) => {
 
 const getReport = async (req, res) => {
   const uuid = req.params.uuid;
-  const results = await repositories.survey.getReportForSomething(1);
+  const teacher = await repositories.user.findByAlias(uuid);
+  const course = await repositories.course.findByTeacher(teacher.id);
+  const results = await repositories.survey.getReportForSomething(course.id);
   res.json({ ok: true, report: dto.mapStudentAnswerReport(results) });
 };
 

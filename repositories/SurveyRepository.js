@@ -1,3 +1,5 @@
+const { SurveyTypes } = require('../constants/entities');
+
 class SurveyRepository {
   constructor(connection) {
     this.connection = connection;
@@ -103,34 +105,35 @@ class SurveyRepository {
       .del();
   }
 
-  async getReportForSomething(courseId = 1) {
-    const query = `
-      SELECT
-        topic.title as topic_name,
-        question.description AS question_made,
-        alternative.description AS alternative_description,
-        COUNT(answer.id) over(partition BY alternative.id) AS qty_answers,
-        COUNT(answer.id) over(
-          partition BY question.description
-        ) AS total,
-        alternative.value AS alternative_value
-      FROM survey
-      INNER JOIN topic ON survey.id = topic.survey_id
-      LEFT JOIN unit ON topic.id = unit.topic_id
-      LEFT JOIN question ON question.topic_id = topic.id
-      LEFT JOIN alternative ON question.id = alternative.question_id
-      LEFT JOIN answer ON answer.alternative_id = alternative.id
-      LEFT JOIN feedback on answer.feedback_id = feedback.id
-      LEFT JOIN feedback_course on feedback.feedback_course_id = feedback_course.id
-      LEFT JOIN course on course.id = feedback_course.course_id
-      LEFT join grade on course.grade_id = grade.id
-      WHERE survey.id = 2
-      GROUP BY topic_name, question_made, alternative_description
-    `;
-
-    const results = await this.connection.raw(query);
-    console.log('results', results);
-    return results;
+  async getReportForSomething(courseId) {
+    return this.connection
+      .column({
+        topic_name: 'topic.title',
+        unit_title: 'unit.title',
+        question_made: 'question.description',
+        alternative_description: 'alternative.description',
+        qty_answers: this.connection.raw('COUNT(answer.id)'),
+        total: this.connection.raw('COUNT(answer.id) OVER(PARTITION BY question.description)')
+      })
+      .from('survey')
+      .innerJoin('topic', 'survey.id', 'topic.survey_id')
+      .innerJoin('unit', 'topic.id', 'unit.topic_id')
+      .innerJoin('question', 'topic.id', 'question.topic_id')
+      .innerJoin('alternative', 'question.id', 'alternative.question_id')
+      .leftJoin('answer', 'answer.alternative_id', 'alternative.id')
+      .leftJoin('feedback', 'answer.feedback_id', 'feedback.id')
+      .leftJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .leftJoin('course', 'feedback_course.course_id', 'course.id')
+      .leftJoin('grade', 'course.grade_id', 'grade.id')
+      .where('survey.id', SurveyTypes.STUDENT_ID)
+      .whereRaw('(course.id = ? OR course.id IS NULL)', [courseId])
+      .groupBy(
+        'topic_name',
+        'unit_title',
+        'question_made',
+        'answer.id',
+        'alternative_description'
+      );
   }
 }
 
