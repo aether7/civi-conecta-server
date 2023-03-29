@@ -5,7 +5,11 @@ const config = {
     nodeEnv: getEnv('NODE_ENV', 'development'),
     port: getEnv('PORT', 3001),
     logLevel: getEnv('PINO_LOG_LEVEL', 'info'),
-    host: getEnv('HOST', '0.0.0.0')
+    host: getEnv('HOST', '0.0.0.0'),
+    showRoutes: getEnv('ROUTES_SHOW', false),
+    get mustShowRoutes() {
+      return this.nodeEnv === 'development' && this.showRoutes === true;
+    }
   },
   seed: {
     userLogin: getEnv('SEED_USER_LOGIN', 'seed-user-login'),

@@ -1,4 +1,4 @@
-INSERT INTO feedback_course(uuid) VALUES('ecdd61b7-bb94-4c2f-a946-3bba4447247e');
+INSERT INTO feedback_course(course_id, uuid) VALUES(1, 'ecdd61b7-bb94-4c2f-a946-3bba4447247e');
 INSERT INTO feedback(feedback_course_id, teacher_id) VALUES (1, 3);
 
 -- contestacion parcial por parte del profe 6 de 8

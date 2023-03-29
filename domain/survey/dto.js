@@ -67,9 +67,29 @@ const getSurvey = (data) => {
   };
 };
 
+const mapStudentAnswerReport = (data) => {
+  return data.reduce((obj, item) => {
+    if (!obj[item.topic_name]) {
+      obj[item.topic_name] = {};
+    }
+
+    if (!obj[item.topic_name][item.question_made]) {
+      obj[item.topic_name][item.question_made] = [];
+    }
+
+    obj[item.topic_name][item.question_made].push({
+      description: item.alternative_description,
+      percent: Number.parseFloat(((item.qty_answers / item.total) * 100).toFixed(2))
+    });
+
+    return obj;
+  }, {});
+};
+
 module.exports = {
   mapSurveys,
   mapSurvey,
   mapQuestion,
-  getSurvey
+  getSurvey,
+  mapStudentAnswerReport
 };

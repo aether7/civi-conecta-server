@@ -102,6 +102,36 @@ class SurveyRepository {
       .where('topic_id', topicId)
       .del();
   }
+
+  async getReportForSomething(courseId = 1) {
+    const query = `
+      SELECT
+        topic.title as topic_name,
+        question.description AS question_made,
+        alternative.description AS alternative_description,
+        COUNT(answer.id) over(partition BY alternative.id) AS qty_answers,
+        COUNT(answer.id) over(
+          partition BY question.description
+        ) AS total,
+        alternative.value AS alternative_value
+      FROM survey
+      INNER JOIN topic ON survey.id = topic.survey_id
+      LEFT JOIN unit ON topic.id = unit.topic_id
+      LEFT JOIN question ON question.topic_id = topic.id
+      LEFT JOIN alternative ON question.id = alternative.question_id
+      LEFT JOIN answer ON answer.alternative_id = alternative.id
+      LEFT JOIN feedback on answer.feedback_id = feedback.id
+      LEFT JOIN feedback_course on feedback.feedback_course_id = feedback_course.id
+      LEFT JOIN course on course.id = feedback_course.course_id
+      LEFT join grade on course.grade_id = grade.id
+      WHERE survey.id = 2
+      GROUP BY topic_name, question_made, alternative_description
+    `;
+
+    const results = await this.connection.raw(query);
+    console.log('results', results);
+    return results;
+  }
 }
 
 module.exports = SurveyRepository;

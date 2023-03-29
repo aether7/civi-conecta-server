@@ -50,10 +50,17 @@ const deleteQuestion = async (req, res) => {
   res.json({ ok: true });
 };
 
+const getReport = async (req, res) => {
+  const uuid = req.params.uuid;
+  const results = await repositories.survey.getReportForSomething(1);
+  res.json({ ok: true, report: dto.mapStudentAnswerReport(results) });
+};
+
 module.exports = wrapRequests({
   getAll,
   saveSurvey,
   findById,
   findByStudentType,
-  deleteQuestion
+  deleteQuestion,
+  getReport
 });
