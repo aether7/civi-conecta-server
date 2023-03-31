@@ -7,6 +7,7 @@ router.get('/', handlers.getEstablishments);
 router.post('/', middlewares.verifyAdminRole, handlers.createEstablishment);
 router.put('/:number/courses/teacher', middlewares.verifyAdminRole, handlers.updateTeacherToCourse);
 router.put('/:number/courses', middlewares.verifyAdminRole, handlers.updateCoursesEstablishment);
+router.put('/:id/status/:status', middlewares.verifyAdminRole, handlers.updateEstablishmentStatus);
 router.get('/info/:uuid', handlers.getProfile);
 
 module.exports = router;

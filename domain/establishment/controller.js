@@ -52,10 +52,18 @@ const getProfile = async (req, res) => {
   res.json({ ok: true, info: dto.mapProfileInfo(result) });
 };
 
+const updateEstablishmentStatus = async (req, res) => {
+  const establishmentId = req.params.id;
+  const isActive = req.params.status === 'active' ? 1 : 0;
+  await repositories.establishment.updateActiveStatus(establishmentId, isActive);
+  res.json({ok: true});
+};
+
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
   updateCoursesEstablishment,
   updateTeacherToCourse,
-  getProfile
+  getProfile,
+  updateEstablishmentStatus
 });

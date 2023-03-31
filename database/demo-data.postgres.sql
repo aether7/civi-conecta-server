@@ -86,3 +86,24 @@ INSERT INTO public.alternative(question_id, letter, value, description) VALUES(1
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(10, 'B', 1, 'segunda generacion');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(10, 'C', 0, 'tercera generacion');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(10, 'D', 1, 'ninguna de las anteriores');
+
+-- situaciones emergentes 4 situaciones emergentes
+INSERT INTO public.event(title, description, event_type_id, grade_id) VALUES('situacion emergente 01', 'lorem ipsum', 1, 7);
+INSERT INTO public.event(title, description, event_type_id, grade_id) VALUES('situacion emergente 02', 'lorem ipsum', 1, 7);
+INSERT INTO public.event(title, description, event_type_id, grade_id) VALUES('situacion emergente 03', 'lorem ipsum', 1, 7);
+INSERT INTO public.event(title, description, event_type_id, grade_id) VALUES('situacion emergente 04', 'lorem ipsum', 1, 7);
+
+-- efemerides 6 efemerides
+INSERT INTO public.event(title, description, date, event_type_id, grade_id) VALUES('dia del trabajo', 'dia del trabajo','05-01',2, 7);
+INSERT INTO public.event(title, description, date, event_type_id, grade_id) VALUES('18 de septiembre', '18 de septiembre','09-18',2, 7);
+INSERT INTO public.event(title, description, date, event_type_id, grade_id) VALUES('navidad', 'navidad','12-25',2, 7);
+INSERT INTO public.event(title, description, date, event_type_id, grade_id) VALUES('año nuevo', 'año nuevo','12-31',2, 7);
+INSERT INTO public.event(title, description, date, event_type_id, grade_id) VALUES('dia del virgen de lo vasquez', 'dia del virgen de lo vasquez','12-08',2, 7);
+INSERT INTO public.event(title, description, date, event_type_id, grade_id) VALUES('combate naval de iquique glorioso', 'combate naval de iquique glorioso','05-21',2, 7);
+
+-- 2 lecciones para 2 temas
+INSERT INTO public.lesson(number, description, event_id) VALUES(1, 'descripcion para la situacion emergente 01 bla bla bla', 1);
+INSERT INTO public.lesson(number, description, event_id) VALUES(1, 'hablar del 18 septiembre y los terremotos y las empanadas', 6);
+
+INSERT INTO public.planning(topic, keywords, start_activity, main_activity, end_activity, teacher_material, student_material, lesson_id) VALUES('tema a tratar','actividad,dummy,test','actividad de inicio','actividad principal','termino actividad','material01,material02','material1,material2', 1);
+INSERT INTO public.planning(topic, keywords, start_activity, main_activity, end_activity, teacher_material, student_material, lesson_id) VALUES('iniciar actividades del 18 de septiembre','18 sept,fiestas patrias,uyuuui','preparar las cosas','dar comienzo al 18','celebrar el 18 eaea','anticucho,cola de mono','chicha,terremoto,empanada', 2);

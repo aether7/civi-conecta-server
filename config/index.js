@@ -6,9 +6,9 @@ const config = {
     port: getEnv('PORT', 3001),
     logLevel: getEnv('PINO_LOG_LEVEL', 'info'),
     host: getEnv('HOST', '0.0.0.0'),
-    showRoutes: getEnv('ROUTES_SHOW', false),
+    showRoutes: getEnv('ROUTES_SHOW', 'no'),
     get mustShowRoutes() {
-      return this.nodeEnv === 'development' && this.showRoutes === true;
+      return this.nodeEnv === 'development' && this.showRoutes === 'yes';
     }
   },
   seed: {

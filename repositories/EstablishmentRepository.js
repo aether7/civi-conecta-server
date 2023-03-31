@@ -89,6 +89,12 @@ class EstablishmentRepository {
       .where('user.uuid', uuid)
       .first();
   }
+
+  async updateActiveStatus(id, status) {
+    return this.connection('establishment')
+      .where('id', id)
+      .update('active', status);
+  }
 }
 
 module.exports = EstablishmentRepository;
