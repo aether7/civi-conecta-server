@@ -87,33 +87,69 @@ class FeedbackRepository {
   }
 
   async _createStudentFeedback(alias) {
-    const result = await this.connection
-      .select('id')
-      .from('student')
-      .where('uuid', alias)
+    const studentCourse = await this.connection
+      .select('course_student.*')
+      .from('course_student')
+      .innerJoin('student', 'course_student.student_id', 'student.id')
+      .where('student.uuid', alias)
       .first();
 
+    let feedbackCourse = await this.connection
+      .select()
+      .from('feedback_course')
+      .where('course_id', studentCourse.course_id)
+      .first();
+
+    if (!feedbackCourse) {
+      [feedbackCourse] = await this.connection
+        .insert({
+          uuid: uuid.v4(),
+          is_finished: 0,
+          course_id: studentCourse.course_id
+        }, ['*'])
+        .into('feedback_course');
+    }
+
     const fields = {
-      student_id: result.id,
-      is_finished: 0
+      student_id: studentCourse.student_id,
+      is_finished: 0,
+      feedback_course_id: feedbackCourse.id
     };
 
     return this.connection.insert(fields, ['*']).into('feedback');
   }
 
   async _createTeacherFeedback(alias) {
-    const [courseFeedback] = await this.connection
-      .insert({
-        uuid: uuid.v4(),
-        is_finished: 0
-      }, ['*'])
-      .into('feedback_course');
-
     const teacher = await this.connection
       .select('id')
       .from('user')
       .where('uuid', alias)
       .first();
+
+    const course = await this.connection
+      .select('course.*')
+      .from('course')
+      .innerJoin('user', 'course.teacher_id', 'user.id')
+      .where('user.uuid', alias)
+      .first();
+
+    let courseFeedback = await this.connection
+      .select()
+      .from('feedback_course')
+      .where('course_id', course.id)
+      .first();
+
+    if (courseFeedback) {
+      return courseFeedback;
+    }
+
+    [courseFeedback] = await this.connection
+      .insert({
+        uuid: uuid.v4(),
+        is_finished: 0,
+        course_id: course.id
+      }, ['*'])
+      .into('feedback_course');
 
     return this.connection
       .insert({
