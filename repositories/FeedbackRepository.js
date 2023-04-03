@@ -94,29 +94,10 @@ class FeedbackRepository {
       .where('student.uuid', alias)
       .first();
 
-    let feedbackCourse = await this.connection
-      .select()
-      .from('feedback_course')
-      .where('course_id', studentCourse.course_id)
-      .first();
+    const feedbackCourse = await this._findOrCreateCourseFeedback(studentCourse.course_id);
+    const feedback = await this._findOrCreateStudentFeedback(feedbackCourse.id, studentCourse.student_id);
 
-    if (!feedbackCourse) {
-      [feedbackCourse] = await this.connection
-        .insert({
-          uuid: uuid.v4(),
-          is_finished: 0,
-          course_id: studentCourse.course_id
-        }, ['*'])
-        .into('feedback_course');
-    }
-
-    const fields = {
-      student_id: studentCourse.student_id,
-      is_finished: 0,
-      feedback_course_id: feedbackCourse.id
-    };
-
-    return this.connection.insert(fields, ['*']).into('feedback');
+    return feedback;
   }
 
   async _createTeacherFeedback(alias) {
@@ -134,14 +115,7 @@ class FeedbackRepository {
       .first();
 
     const courseFeedback = await this._findOrCreateCourseFeedback(course.id);
-
-    const [feedback] = await this.connection
-      .insert({
-        feedback_course_id: courseFeedback.id,
-        teacher_id: teacher.id,
-        is_finished: 0
-      }, ['*'])
-      .into('feedback');
+    const feedback = await this._findOrCreateTeacherFeedback(courseFeedback.id, teacher.id);
 
     return feedback;
   }
@@ -157,15 +131,67 @@ class FeedbackRepository {
       return courseFeedback;
     }
 
+    const fields = {
+      uuid: uuid.v4(),
+      is_finished: 0,
+      course_id: course.id
+    };
+
     [courseFeedback] = await this.connection
-      .insert({
-        uuid: uuid.v4(),
-        is_finished: 0,
-        course_id: course.id
-      }, ['*'])
+      .insert(fields, ['*'])
       .into('feedback_course');
 
     return courseFeedback;
+  }
+
+  async _findOrCreateTeacherFeedback(courseFeedbackId, teacherId) {
+    let feedback = await this.connection
+      .select()
+      .from('feedback')
+      .where('teacher_id', teacherId)
+      .where('is_finished', 0)
+      .first();
+
+    if (feedback) {
+      return feedback;
+    }
+
+    const fields = {
+      feedback_course_id: courseFeedbackId,
+      teacher_id: teacherId,
+      is_finished: 0
+    };
+
+    [feedback] = await this.connection
+      .insert(fields, ['*'])
+      .into('feedback');
+
+    return feedback;
+  }
+
+  async _findOrCreateStudentFeedback(feedbackCourseId, studentId) {
+    let feedback = await this.connection
+      .select()
+      .from('feedback')
+      .where('student_id', studentId)
+      .where('is_finished', 0)
+      .first();
+
+    if (feedback) {
+      return feedback;
+    }
+
+    const fields = {
+      student_id: studentId,
+      is_finished: 0,
+      feedback_course_id: feedbackCourseId
+    };
+
+    [feedback] = await this.connection
+      .insert(fields, ['*'])
+      .into('feedback');
+
+    return feedback;
   }
 
   findBySurveyAliasAndTypeAndAlias(surveyAlias, type, userAlias) {
