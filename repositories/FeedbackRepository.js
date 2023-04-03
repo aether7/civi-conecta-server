@@ -133,10 +133,24 @@ class FeedbackRepository {
       .where('user.uuid', alias)
       .first();
 
+    const courseFeedback = await this._findOrCreateCourseFeedback(course.id);
+
+    const [feedback] = await this.connection
+      .insert({
+        feedback_course_id: courseFeedback.id,
+        teacher_id: teacher.id,
+        is_finished: 0
+      }, ['*'])
+      .into('feedback');
+
+    return feedback;
+  }
+
+  async _findOrCreateCourseFeedback(courseId) {
     let courseFeedback = await this.connection
       .select()
       .from('feedback_course')
-      .where('course_id', course.id)
+      .where('course_id', courseId)
       .first();
 
     if (courseFeedback) {
@@ -151,13 +165,7 @@ class FeedbackRepository {
       }, ['*'])
       .into('feedback_course');
 
-    return this.connection
-      .insert({
-        feedback_course_id: courseFeedback.id,
-        teacher_id: teacher.id,
-        is_finished: 0
-      }, ['*'])
-      .into('feedback');
+    return courseFeedback;
   }
 
   findBySurveyAliasAndTypeAndAlias(surveyAlias, type, userAlias) {

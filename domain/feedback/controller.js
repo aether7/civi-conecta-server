@@ -12,6 +12,7 @@ const checkFeedbackStatus = async (req, res) => {
 const createFeedback = async (req, res) => {
   const surveyType = req.params.surveyType;
   const uuid = req.params.uuid;
+
   await repositories.feedback.createByType(surveyType, uuid);
 
   res.json({ ok: true });
