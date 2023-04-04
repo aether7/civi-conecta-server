@@ -14,7 +14,7 @@ INSERT INTO public.student(name, run, uuid) VALUES
 INSERT INTO public.course_student(course_id, student_id) VALUES (1, 1),(1, 2),(1, 3),(1, 4),(1, 5);
 
 -- encuesta para profesor
-INSERT INTO public.topic(title, number, survey_id) VALUES ('conocimiento programacion', 1, 1);
+INSERT INTO public.topic(title, number) VALUES ('conocimiento programacion', 1);
 
 INSERT INTO public.question(topic_id, description) VALUES(1, 'con que lenguaje se desarrollo esta aplicacion?');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(1, 'A', 1, 'Node JS');
@@ -28,7 +28,7 @@ INSERT INTO public.alternative(question_id, letter, value, description) VALUES(2
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(2, 'C', 1, 'programacion orientada a restricciones');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(2, 'D', 0, 'ninguna de las anteriores');
 
-INSERT INTO public.topic(title, number, survey_id) VALUES ('Base de datos', 2, 1);
+INSERT INTO public.topic(title, number) VALUES ('Base de datos', 2);
 
 INSERT INTO public.question(topic_id, description) VALUES(2, 'que base de datos se esta utilizando?');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(3, 'A', 2, 'ninguna de las anteriores');
@@ -42,7 +42,7 @@ INSERT INTO public.alternative(question_id, letter, value, description) VALUES(4
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(4, 'C', 2, 'Apache Cassandra');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(4, 'D', 1, 'DuckDB');
 
-INSERT INTO public.topic(title, number, survey_id) VALUES ('GIT', 3, 1);
+INSERT INTO public.topic(title, number) VALUES ('GIT', 3);
 
 INSERT INTO public.question(topic_id, description) VALUES(3, 'que comando se usa para ingresar cambios al staging area');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(5, 'A', 1, 'git commit');
@@ -56,7 +56,7 @@ INSERT INTO public.alternative(question_id, letter, value, description) VALUES(6
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(6, 'C', 0, 'git bisect');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(6, 'D', 1, 'git checkout');
 
-INSERT INTO public.topic(title, number, survey_id) VALUES ('variados', 4, 1);
+INSERT INTO public.topic(title, number) VALUES ('variados', 4);
 
 INSERT INTO public.question(topic_id, description) VALUES(4, 'que sistema operativo es mejor para el gaming');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(7, 'A', 1, 'Linux');
@@ -72,16 +72,16 @@ INSERT INTO public.alternative(question_id, letter, value, description) VALUES(8
 
 
 -- encuesta para alumno
-INSERT INTO public.topic(title, number, survey_id) VALUES ('conocimiento pokemon', 1, 2);
+INSERT INTO public.topic(title, number) VALUES ('conocimiento pokemon', 1);
 INSERT INTO public.unit(number, title, description, grade_id, topic_id) VALUES(1, 'unidad 01', 'descripcion unidad 1', 7, 5);
 
-INSERT INTO public.question(topic_id, description) VALUES(5, 'con cual pokemon es mas dificil comenzar');
+INSERT INTO public.question(topic_id, is_for_student, description) VALUES(5, 1, 'con cual pokemon es mas dificil comenzar');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(9, 'A', 1, 'bulbasaur');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(9, 'B', 0, 'charmander');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(9, 'C', 1, 'squartle');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(9, 'D', 2, 'ninguna de las anteriores');
 
-INSERT INTO public.question(topic_id, description) VALUES(5, 'cual es la generacion de slaking');
+INSERT INTO public.question(topic_id, is_for_student, description) VALUES(5, 1, 'cual es la generacion de slaking');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(10, 'A', 2, 'primera generacion');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(10, 'B', 1, 'segunda generacion');
 INSERT INTO public.alternative(question_id, letter, value, description) VALUES(10, 'C', 0, 'tercera generacion');

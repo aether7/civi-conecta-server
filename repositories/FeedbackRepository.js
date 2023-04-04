@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const { SurveyTypes } = require('../constants/entities');
+const { SurveyTypes, FeedbackStatus } = require('../constants/entities');
 
 class FeedbackRepository {
   constructor(connection) {
@@ -23,7 +23,7 @@ class FeedbackRepository {
       })
       .from('questions_quantity')
       .innerJoin('teacher_answers')
-      .where('questions_quantity.type', 'teacher')
+      .where('questions_quantity.type', SurveyTypes.TEACHER)
       .first();
   }
 
@@ -41,7 +41,7 @@ class FeedbackRepository {
       .leftJoin('answers_by_person', 'answers_by_person.student_id', 'student.id')
       .innerJoin('questions_quantity')
       .where('feedback_course.uuid', uuid)
-      .where('questions_quantity.type', 'student')
+      .where('questions_quantity.type', SurveyTypes.STUDENT)
       .groupBy('student.run')
       .orderBy('student.run');
   }
@@ -133,7 +133,7 @@ class FeedbackRepository {
 
     const fields = {
       uuid: uuid.v4(),
-      is_finished: 0,
+      is_finished: FeedbackStatus.NOT_FINISHED,
       course_id: course.id
     };
 
@@ -149,7 +149,7 @@ class FeedbackRepository {
       .select()
       .from('feedback')
       .where('teacher_id', teacherId)
-      .where('is_finished', 0)
+      .where('is_finished', FeedbackStatus.NOT_FINISHED)
       .first();
 
     if (feedback) {
@@ -159,7 +159,7 @@ class FeedbackRepository {
     const fields = {
       feedback_course_id: courseFeedbackId,
       teacher_id: teacherId,
-      is_finished: 0
+      is_finished: FeedbackStatus.NOT_FINISHED
     };
 
     [feedback] = await this.connection
@@ -174,7 +174,7 @@ class FeedbackRepository {
       .select()
       .from('feedback')
       .where('student_id', studentId)
-      .where('is_finished', 0)
+      .where('is_finished', FeedbackStatus.NOT_FINISHED)
       .first();
 
     if (feedback) {
@@ -183,7 +183,7 @@ class FeedbackRepository {
 
     const fields = {
       student_id: studentId,
-      is_finished: 0,
+      is_finished: FeedbackStatus.NOT_FINISHED,
       feedback_course_id: feedbackCourseId
     };
 
@@ -219,7 +219,7 @@ class FeedbackRepository {
 
     return this.connection('feedback')
       .where(lookupField, personId)
-      .update('is_finished', 1);
+      .update('is_finished', FeedbackStatus.FINISHED);
   }
 
   async finishSurveyCompletely(uuid) {
@@ -235,11 +235,11 @@ class FeedbackRepository {
   async _closeSurvey(id) {
     await this.connection('feedback')
       .where('feedback_course_id', id)
-      .update('is_finished', 1);
+      .update('is_finished', FeedbackStatus.FINISHED);
 
     return this.connection('feedback_course')
       .where('id', id)
-      .update('is_finished', 1);
+      .update('is_finished', FeedbackStatus.FINISHED);
   }
 
   async _getPersonId(surveyType, uuid) {

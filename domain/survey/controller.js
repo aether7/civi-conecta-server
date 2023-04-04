@@ -44,12 +44,6 @@ const findByStudentType = async (req, res) => {
   res.json({ ok: true, surveys: dto.mapSurveys(surveys) });
 };
 
-const deleteQuestion = async (req, res) => {
-  const questionId = req.params.questionId;
-  await repositories.question.deleteById(questionId);
-  res.json({ ok: true });
-};
-
 const getReport = async (req, res) => {
   const uuid = req.params.uuid;
   const teacher = await repositories.user.findByAlias(uuid);
@@ -63,6 +57,5 @@ module.exports = wrapRequests({
   saveSurvey,
   findById,
   findByStudentType,
-  deleteQuestion,
   getReport
 });

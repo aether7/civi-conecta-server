@@ -9,6 +9,10 @@ const mapTopic = (topic) => {
 };
 
 const mapTopicWithData = (topic) => {
+  if (!topic) {
+    return {};
+  }
+
   const result = topic.reduce((obj, item) => {
     if (!item.question_id) {
       return obj;

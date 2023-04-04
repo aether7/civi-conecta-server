@@ -81,9 +81,5 @@
   "eventTypes": [
     { "name": "situación emergente" },
     { "name": "efemerides" }
-  ],
-  "surveys": [
-    { "type": "teacher" },
-    { "type": "student" }
   ]
 }

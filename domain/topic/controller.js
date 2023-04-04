@@ -1,26 +1,40 @@
+const { EventEmitter } = require('events');
 const repositories = require('../../repositories');
 const { wrapRequests } = require('../../helpers/controller');
 const exceptions = require('../../repositories/exceptions');
 const messages = require('../../config/messages');
 const dto = require('./dto');
 
-const getTopics = async (req, res) => {
-  const surveyType = req.params.surveyType ?? 'all';
-  const topics = await repositories.topic.findBySurveyType(surveyType);
+const emitter = new EventEmitter();
+
+emitter.on('updatedAt', (topicId) => {
+  (async function triggerUpdateAt() {
+    await repositories.topic.triggerUpdateAt(topicId);
+  })();
+});
+
+const getTopics = async (_, res) => {
+  const topics = await repositories.topic.findAll();
   res.json({ ok: true, topics: topics.map(dto.mapTopic) });
 };
 
 const getTopicById = async (req, res) => {
   const topicId = req.params.topicId;
-  const result = await repositories.topic.findByIdWithData(topicId);
+  const isForStudent = req.params.questionType === 'teacher' ? 0 : 1;
+  const result = await repositories.topic.findByIdWithData(topicId, isForStudent);
+
+  if (!result.length) {
+    const topic = await repositories.topic.findById(topicId);
+    return res.json({ ok: true, topic: dto.mapTopic(topic) });
+  }
+
   res.json({ ok: true, topic: dto.mapTopicWithData(result) });
 };
 
 const createTopic = async (req, res) => {
-  const surveyType = req.params.surveyType;
   const title = req.body.title;
-  const survey = await repositories.survey.findByType(surveyType);
-  const topic = await repositories.topic.create(title, survey.id);
+  const number = Number.parseInt(req.body.number);
+  const topic = await repositories.topic.create(title, number);
   res.json({ ok: true, topic: dto.mapTopic(topic) });
 };
 
@@ -42,13 +56,15 @@ const updateTopic = async (req, res) => {
   const topicId = req.params.topicId;
   const title = req.body.title;
   const alternatives = req.body.alternatives;
+  const isForStudent = req.body.surveyType === 'teacher' ? 0 : 1;
   const topic = await repositories.topic.findById(topicId);
 
   req.logger.info('saving topic with questions %s', title);
 
   const question = await repositories.question.create({
     description: title,
-    topicId: topic.id
+    topicId: topic.id,
+    isForStudent
   });
 
   for (const alternative of alternatives) {
@@ -60,13 +76,18 @@ const updateTopic = async (req, res) => {
     });
   }
 
+  emitter.emit('updatedAt', topicId);
   res.json({ ok: true, question: dto.mapQuestion(question) });
 };
 
 const deleteQuestion = async (req, res) => {
+  const topicId = req.params.topicId;
   const questionId = req.params.questionId;
+
   req.logger.info('deleting question %s', questionId);
   await repositories.question.deleteById(questionId);
+
+  emitter.emit('updatedAt', topicId);
   res.json({ ok: true });
 };
 

@@ -19,6 +19,7 @@ const messages = {
     created: 'La encuesta se ha creado exitosamente'
   },
   topic: {
+    topicAlreadyExists: 'El Tema "{}" ya existe',
     canNotDeleteTopic: 'El tema no se puede borrar porque tiene {} preguntas asociadas'
   },
   question: {

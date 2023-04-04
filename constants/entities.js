@@ -15,4 +15,9 @@ const RoleTypes = {
   USER: 'User'
 };
 
-module.exports = { EventTypes, SurveyTypes, RoleTypes };
+const FeedbackStatus = {
+  FINISHED: 1,
+  NOT_FINISHED: 0
+};
+
+module.exports = { EventTypes, SurveyTypes, RoleTypes, FeedbackStatus };

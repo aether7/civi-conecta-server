@@ -1,21 +1,17 @@
+const exceptions = require('./exceptions');
+const messages = require('../config/messages');
+const knex = require('knex');
+
 class TopicRepository {
   constructor(connection) {
     this.connection = connection;
   }
 
-  findBySurveyType(surveyType = 'all') {
-    const builder = this.connection
+  findAll() {
+    return this.connection
       .select('topic.*')
       .from('topic')
-      .innerJoin('survey', 'topic.survey_id', 'survey.id');
-
-    if (surveyType !== 'all') {
-      builder.where('survey.type', surveyType);
-    }
-
-    builder.orderBy('topic.id');
-
-    return builder;
+      .orderBy('topic.id');
   }
 
   findById(topicId) {
@@ -26,7 +22,7 @@ class TopicRepository {
       .first();
   }
 
-  findByIdWithData(topicId) {
+  findByIdWithData(topicId, isForStudent) {
     return this.connection
       .column({
         topic_id: 'topic.id',
@@ -41,27 +37,25 @@ class TopicRepository {
       .from('topic')
       .leftJoin('question', 'question.topic_id', 'topic.id')
       .leftJoin('alternative', 'alternative.question_id', 'question.id')
-      .where('topic.id', topicId);
+      .where('topic.id', topicId)
+      .where('question.is_for_student', isForStudent);
   }
 
-  _calculateNumber(surveyId) {
-    return this.connection
-      .select(this.connection.raw('COALESCE(MAX(number), 0) as number'))
+  async create(title, number) {
+    let result = await this.connection
+      .select()
       .from('topic')
-      .where('survey_id', surveyId)
+      .where('title', title)
       .first();
-  }
 
-  async create(title, surveyId) {
-    const numberResult = await this._calculateNumber(surveyId);
+    if (result) {
+      const message = messages.topic.topicAlreadyExists.replace('{}', title);
+      throw new exceptions.EntityAlreadyExistsError(message);
+    }
 
-    const fields = {
-      title,
-      number: numberResult.number,
-      survey_id: surveyId
-    };
+    const fields = { title, number };
 
-    const [result] = await this.connection
+    [result] = await this.connection
       .insert(fields, ['*'])
       .into('topic');
 
@@ -82,6 +76,25 @@ class TopicRepository {
     return this.connection('topic')
       .where('id', topicId)
       .del();
+  }
+
+  findByQuestionId(questionId) {
+    return this.connection
+      .select('topic.*')
+      .from('topic')
+      .innerJoin('question', 'topic.id', 'question.topic_id')
+      .where('question.id', questionId)
+      .first();
+  }
+
+  triggerUpdateAt(topicId) {
+    const now = new Date().toISOString()
+      .replace('T', ' ')
+      .replace(/\.\d+Z$/, '');
+
+    return this.connection('topic')
+      .update('updated_at', now)
+      .where('id', topicId);
   }
 }
 

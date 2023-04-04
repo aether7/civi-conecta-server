@@ -74,24 +74,13 @@ exports.up = async function (knex) {
     t.foreign('student_id').references('student.id');
   });
 
-  await knex.schema.createTable('survey', (t) => {
-    t.increments('id', { primaryKey: true });
-    t.enu('type', ['student', 'teacher']);
-    t.integer('grade_id').unsigned();
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
-    t.foreign('grade_id').references('grade.id');
-  });
-
   await knex.schema.createTable('topic', (t) => {
     t.increments('id', { primaryKey: true });
     t.string('title');
     t.integer('number').unsigned();
-    t.integer('survey_id').unsigned();
     t.integer('grade_id').unsigned();
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
-    t.foreign('survey_id').references('survey.id');
     t.foreign('grade_id').references('grade.id');
   });
 
@@ -99,10 +88,11 @@ exports.up = async function (knex) {
     t.increments('id', { primaryKey: true });
     t.string('description');
     t.integer('topic_id').unsigned();
+    t.integer('is_for_student').defaultTo(0);
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
     t.foreign('topic_id').references('topic.id');
-  })
+  });
 
   await knex.schema.createTable('alternative', (t) => {
     t.increments('id', { primaryKey: true });
@@ -218,14 +208,15 @@ exports.up = async function (knex) {
   });
 
   await knex.schema.createView('questions_quantity', (view) => {
+    const questionType = "CASE question.is_for_student WHEN 1 THEN 'student' ELSE 'teacher' END";
+
     view.as(
       knex
-        .select('survey.type')
+        .column({ type: knex.raw(questionType) })
         .count({ quantity: 'question.id' })
-        .from('survey')
-        .innerJoin('topic', 'topic.survey_id', 'survey.id')
-        .innerJoin('question', 'question.topic_id', 'topic.id')
-        .groupBy('survey.type')
+        .from('topic')
+        .innerJoin('question', 'topic.id', 'question.topic_id')
+        .groupBy('type')
     );
   });
 
