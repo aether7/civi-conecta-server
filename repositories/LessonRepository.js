@@ -45,9 +45,10 @@ class LessonRepository {
 
   async findFTPDataById(lessonId) {
     const lesson = await this.connection
-      .first()
+      .select()
       .from('lesson')
-      .where('id', lessonId);
+      .where('id', lessonId)
+      .first();
 
     return lesson.unit_id ?
       this._findGradeDataByUnit(lessonId) :

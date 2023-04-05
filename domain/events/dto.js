@@ -24,6 +24,7 @@ const mapEventWithPlanning = (data, documents = []) => {
     grade: data.grade,
     date: data.date,
     documents: documents.map(mapDocument),
+    lessonId: data.lesson_id,
     planning: {
       topic: data.topic,
       keywords: data.keywords,

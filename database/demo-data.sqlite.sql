@@ -89,7 +89,6 @@ INSERT INTO alternative(question_id, letter, value, description) VALUES(10, 'D',
 
 -- TEMAS DE UNIDADES
 INSERT INTO unit(number, title, description, grade_id, topic_id) VALUES(1, 'unidad 01', 'descripcion unidad 1', 7, 1);
-INSERT INTO unit(number, title, description, grade_id, topic_id) VALUES(1, 'unidad 01', 'descripcion unidad 1', 7, 5);
 INSERT INTO lesson(number, objective, description, unit_id) VALUES(1, 'probar el tema de los archivos', 'no darse la mansa vuelta para el tema de los archivos', 1);
 
 INSERT INTO planning(
