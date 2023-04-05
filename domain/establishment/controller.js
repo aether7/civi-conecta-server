@@ -59,11 +59,19 @@ const updateEstablishmentStatus = async (req, res) => {
   res.json({ok: true});
 };
 
+const getEstablishmentGrades = async (req, res) => {
+  const establishmentId = req.params.establishmentId;
+  const gradeId = req.params.gradeId;
+  const results = await repositories.course.findByEstablishmentAndGrade(establishmentId, gradeId);
+  res.json({ ok: true, courses: results });
+};
+
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
   updateCoursesEstablishment,
   updateTeacherToCourse,
   getProfile,
-  updateEstablishmentStatus
+  updateEstablishmentStatus,
+  getEstablishmentGrades
 });

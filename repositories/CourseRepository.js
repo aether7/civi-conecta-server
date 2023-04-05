@@ -39,6 +39,20 @@ class CourseRepository {
       .first();
   }
 
+  findByEstablishmentAndGrade(establishmentId, gradeId) {
+    return this.connection
+      .column({
+        id: 'course.id',
+        label: 'grade.level',
+        letter: 'letter.character'
+      })
+      .from('course')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('letter', 'course.letter_id', 'letter.id')
+      .where('course.establishment_id', establishmentId)
+      .where('course.grade_id', gradeId);
+  }
+
   async create(establishmentId, gradeId, letterId) {
     const fields = {
       establishment_id: establishmentId,
