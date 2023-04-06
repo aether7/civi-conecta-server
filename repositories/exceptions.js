@@ -38,10 +38,19 @@ class TopicWithAssociatedQuestionsError extends Error {
   }
 }
 
+class SurveyWithInsufficientCompletionError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'SurveyWithInsufficientCompletionError';
+    this.isCustomException = true;
+  }
+}
+
 module.exports = {
   EntityNotFoundError,
   EntityAlreadyExistsError,
   EntityWithDependenciesError,
   TeacherAlreadyAssignedError,
-  TopicWithAssociatedQuestionsError
+  TopicWithAssociatedQuestionsError,
+  SurveyWithInsufficientCompletionError
 };

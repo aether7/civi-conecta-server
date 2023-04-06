@@ -1,6 +1,11 @@
 const repositories = require('../../repositories');
 const { wrapRequests } = require('../../helpers/controller');
+const exceptions = require('../../repositories/exceptions');
+const messages = require('../../config/messages');
 const dto = require('./dto');
+
+
+const MINIMUM_PERCENTAGE_TO_CLOSE_SURVEY = 51;
 
 const checkFeedbackStatus = async (req, res) => {
   const uuid = req.params.uuid;
@@ -77,6 +82,17 @@ const finishSurvey = async (req, res) => {
 
 const finishAllSurveys = async (req, res) => {
   const uuid = req.params.uuid;
+  const results = await repositories.feedback.checkCurrentSurveyCompletion(uuid);
+  const completed = Number(results.find(r => r.is_finished === 'yes').quantity);
+  const notCompleted = Number(results.find(r => r.is_finished === 'no').quantity);
+  const total = completed + notCompleted;
+  const completionRate = (completed / total) * 100;
+
+  if (completionRate < MINIMUM_PERCENTAGE_TO_CLOSE_SURVEY) {
+    const message = messages.survey.canNotCloseSurvey.replace('{}', completionRate.toFixed(2));
+    throw new exceptions.SurveyWithInsufficientCompletionError(message);
+  }
+
   await repositories.feedback.finishSurveyCompletely(uuid);
   res.json({ ok: true });
 };

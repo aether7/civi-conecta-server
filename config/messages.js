@@ -16,7 +16,8 @@ const messages = {
   },
   survey: {
     typeNotFound: 'Se debe elegir un tipo de encuesta tipo estudiante o profesor',
-    created: 'La encuesta se ha creado exitosamente'
+    created: 'La encuesta se ha creado exitosamente',
+    canNotCloseSurvey: 'La encuesta no se puede cerrar porque tiene solo {}% completado'
   },
   topic: {
     topicAlreadyExists: 'El Tema "{}" ya existe',

@@ -5,7 +5,11 @@ const tryCatch = (fn) => async (req, res) => {
     req.logger.error(err);
 
     if (err.isCustomException) {
-      return res.status(400).json({ ok: false, error: err.message });
+      return res.status(400).json({
+        ok: false,
+        error: err.message,
+        type: err.name
+      });
     }
 
     throw err;

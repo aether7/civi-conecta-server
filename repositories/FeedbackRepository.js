@@ -222,6 +222,18 @@ class FeedbackRepository {
       .update('is_finished', FeedbackStatus.FINISHED);
   }
 
+  async checkCurrentSurveyCompletion(uuid) {
+    return this.connection
+      .column({
+        quantity: this.connection.raw('COUNT(feedback.id)'),
+        is_finished: this.connection.raw("CASE feedback.is_finished WHEN 1 THEN 'yes' ELSE 'no' END")
+      })
+      .from('feedback_course')
+      .leftJoin('feedback', 'feedback_course.id', 'feedback.feedback_course_id')
+      .where('feedback_course.uuid', uuid)
+      .groupBy('feedback.is_finished');
+  }
+
   async finishSurveyCompletely(uuid) {
     const feedbackCourse = await this.connection
       .select('id')
