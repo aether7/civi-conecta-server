@@ -11,7 +11,7 @@ class TempFileService {
       get reader() {
         return fs.createReadStream(name);
       },
-      unlink(time=60000) {
+      unlink(time=300 * 1000) {
         setTimeout(() => {
           writer.close();
           fs.unlinkSync(name);

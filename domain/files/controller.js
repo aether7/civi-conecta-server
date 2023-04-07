@@ -2,7 +2,9 @@ const uuid = require('uuid');
 const { wrapRequests } = require('../../helpers/controller');
 const repositories = require('../../repositories');
 const services = require('../../services');
+const LessonPathCreator = require('../../helpers/LessonPathCreator');
 const dto = require('./dto');
+
 
 const getFile = async (req, res) => {
   const aliasId = req.params.aliasId;
@@ -19,7 +21,8 @@ const uploadLessonFile = async (req, res) => {
   const lessonId = req.params.lessonId;
   const fileName = req.body.originalFilename;
   const filePath = req.file.path;
-  const folderPath = await services.ftp.getLessonPath(lessonId);
+  const folderResult = await repositories.lesson.findFTPDataById(lessonId);
+  const folderPath = new LessonPathCreator(folderResult).getLessonPath();
   const filepath = await services.ftp.sendFile(folderPath, fileName, filePath);
 
   const payload = {

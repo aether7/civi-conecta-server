@@ -4,7 +4,7 @@ const fs = require('fs/promises');
 const { createReadStream } = require('fs');
 const ftp = require('basic-ftp');
 const AdmZip = require('adm-zip');
-const repositories = require('../repositories/index');
+const TaskQueue = require('../helpers/TaskQueue');
 
 const emitter = new EventEmitter();
 
@@ -27,21 +27,25 @@ class FTPService {
     this.password = password;
     this.secure = secure;
     this.client = new ftp.Client();
-    this.queue = new Map();
+    this.taskQueue = new TaskQueue();
     // this.client.ftp.verbose = true
   }
 
-  async sendFile(folderPath, fileName, filePath) {
-    const remotePath = `/${this.rootFolder}/${folderPath}`;
+  sendFile(folderPath, fileName, filePath) {
+    return this.taskQueue.add((done) => {
+      const execute = async () => {
+        const remotePath = `/${this.rootFolder}/${folderPath}`;
+        await this._getAccess();
+        await this.client.ensureDir(remotePath);
+        await this.client.cd(remotePath);
+        await this.client.uploadFrom(createReadStream(filePath), fileName);
+        await fs.unlink(filePath);
+        await this._close();
+        done(`${remotePath}/${fileName}`);
+      };
 
-    await this._getAccess();
-    await this.client.ensureDir(remotePath);
-    await this.client.cd(remotePath);
-    await this.client.uploadFrom(createReadStream(filePath), fileName);
-    await fs.unlink(filePath);
-    await this._close();
-
-    return `${remotePath}/${fileName}`;
+      execute();
+    });
   }
 
   async deleteFile(filepath) {
@@ -57,32 +61,11 @@ class FTPService {
     return stream;
   }
 
-  async getLessonPath(lessonId) {
-    const folder = await repositories.lesson.findFTPDataById(lessonId);
-    const subfolder = this._getSubfolder(folder);
-    const lessonNumber = String(folder.lesson_number ?? 1).padStart(2, '0');
-    return `${folder.alias}/${subfolder}/clase${lessonNumber}`;
-  }
-
-  _getSubfolder(folder) {
-    if (folder.unit_number) {
-      const unitNumber = String(folder.unit_number).padStart(2, '0');
-      return `unidad${unitNumber}`;
-    }
-
-    const eventNumber = String(folder.event_number).padStart(2, '0');
-    return `evento${eventNumber}`;
-  }
-
-  async downloadFTPFolder(folderPath) {
-    if (this.queue.has(folderPath)) {
-      return this.queue.get(folderPath);
-    }
-
-    const promise = this._createPromiseDownload(folderPath);
-
-    this.queue.set(folderPath, promise);
-    return this.queue.get(folderPath);
+  downloadFTPFolder(folderPath) {
+    return this.taskQueue.add((done) => {
+      this._createPromiseDownload(folderPath)
+        .then(buffer => done(buffer));
+    });
   }
 
   _createPromiseDownload(folderPath) {
@@ -99,7 +82,6 @@ class FTPService {
       execute();
     })
       .then((buffer) => {
-        this.queue.delete(folderPath);
         emitter.emit('FOLDER::REMOVE', temporaryPath);
         return buffer;
       });
