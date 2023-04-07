@@ -43,8 +43,17 @@ const deleteLessonFile = async (req, res) => {
   res.json({ ok: true });
 };
 
+const downloadZipfile = async (req, res) => {
+  const lessonId = req.params.lessonId;
+  const folderPath = await repositories.document.findFolderPathFromLesson(lessonId);
+  const zipBuffer = await services.ftp.downloadFTPFolder(folderPath);
+  res.set('Content-Type', 'application/zip');
+  res.send(zipBuffer);
+};
+
 module.exports = wrapRequests({
   getFile,
   uploadLessonFile,
-  deleteLessonFile
+  deleteLessonFile,
+  downloadZipfile
 });

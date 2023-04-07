@@ -27,6 +27,16 @@ class DocumentRepository {
       .first();
   }
 
+  async findFolderPathFromLesson(lessonId) {
+    const result = await this.connection
+      .select()
+      .from('document')
+      .where('lesson_id', lessonId)
+      .first();
+
+    return result.filepath.split('/').slice(0, -1).join('/');
+  }
+
   async create(data) {
     const fields = {
       alias: data.alias,
