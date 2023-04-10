@@ -38,6 +38,8 @@ class SurveyRepository {
   }
 
   async findWithDataByType(type) {
+    const isForStudent = type === 'teacher' ? 0 : 1;
+
     return this.connection
       .column({
         topic_number: 'topic.number',
@@ -49,13 +51,12 @@ class SurveyRepository {
         alternative_value: 'alternative.value',
         alternative_id: 'alternative.id'
       })
-      .from('survey')
-      .innerJoin('topic', 'topic.survey_id', 'survey.id')
+      .from('topic')
       .innerJoin('question', 'question.topic_id', 'topic.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
       .leftJoin('answer', 'answer.alternative_id', 'alternative.id')
       .leftJoin('feedback', 'answer.feedback_id', 'feedback.id')
-      .where('survey.type', type)
+      .where('question.is_for_student', isForStudent)
       .orderBy(['question.id', 'alternative.id']);
   }
 

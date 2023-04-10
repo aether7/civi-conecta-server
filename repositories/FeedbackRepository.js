@@ -134,7 +134,7 @@ class FeedbackRepository {
     const fields = {
       uuid: uuid.v4(),
       is_finished: FeedbackStatus.NOT_FINISHED,
-      course_id: course.id
+      course_id: courseId
     };
 
     [courseFeedback] = await this.connection
