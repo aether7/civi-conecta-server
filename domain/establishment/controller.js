@@ -30,7 +30,7 @@ const updateTeacherToCourse = async (req, res) => {
 
   const coursesTakenByTeacher = await repositories.course.findByTeacher(user.id);
 
-  if (coursesTakenByTeacher.length) {
+  if (coursesTakenByTeacher) {
     throw new exceptions.TeacherAlreadyAssignedError(messages.establishment.teacherAlreadyAssigned);
   }
 

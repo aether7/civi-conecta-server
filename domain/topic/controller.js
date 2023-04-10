@@ -33,7 +33,12 @@ const getTopicById = async (req, res) => {
 
 const createTopic = async (req, res) => {
   const title = req.body.title;
-  const number = Number.parseInt(req.body.number);
+  let number = Number.parseInt(req.body.number);
+
+  if (Number.isNaN(number)) {
+    number = 1;
+  }
+
   const topic = await repositories.topic.create(title, number);
   res.json({ ok: true, topic: dto.mapTopic(topic) });
 };
