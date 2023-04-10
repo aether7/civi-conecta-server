@@ -4,6 +4,7 @@ const dateHelper = require('../../helpers/date');
 const mapEvent = (data) => {
   return {
     id: data.id,
+    lessonId: data.lesson_id,
     title: data.title,
     description: data.description,
     date: data.date

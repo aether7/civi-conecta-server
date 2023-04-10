@@ -56,8 +56,10 @@ class EventRepository {
 
   findByEventTypeId(eventTypeId, gradeId=null) {
     const builder = this.connection
-      .select()
+      .select('event.*')
+      .column({ lesson_id: 'lesson.id' })
       .from('event')
+      .innerJoin('lesson', 'lesson.event_id', 'event.id')
       .where('event_type_id', eventTypeId);
 
     if (gradeId) {
