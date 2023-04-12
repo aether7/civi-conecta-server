@@ -83,8 +83,8 @@ const finishSurvey = async (req, res) => {
 const finishAllSurveys = async (req, res) => {
   const uuid = req.params.uuid;
   const results = await repositories.feedback.checkCurrentSurveyCompletion(uuid);
-  const completed = Number(results.find(r => r.is_finished === 'yes').quantity);
-  const notCompleted = Number(results.find(r => r.is_finished === 'no').quantity);
+  const completed = Number(results.find(r => r.is_finished === 'yes')?.quantity ?? 0);
+  const notCompleted = Number(results.find(r => r.is_finished === 'no')?.quantity ?? 0);
   const total = completed + notCompleted;
   const completionRate = (completed / total) * 100;
 
