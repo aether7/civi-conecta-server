@@ -46,7 +46,7 @@ class FeedbackRepository {
       .orderBy('student.run');
   }
 
-  async checkStatusByTeacherAlias(aliasId) {
+  checkStatusByTeacherAlias(aliasId) {
     return this.connection
       .column({
         uuid: 'feedback_course.uuid',
@@ -58,6 +58,19 @@ class FeedbackRepository {
       .innerJoin('feedback', 'feedback.feedback_course_id', 'feedback_course.id')
       .innerJoin('user', 'feedback.teacher_id', 'user.id')
       .where('user.uuid', aliasId)
+      .first();
+  }
+
+  async checkStudentStatusByTeacherAlias(aliasId) {
+    return this.connection
+      .count({ pendingStudentCompletion: 'feedback.id' })
+      .from('feedback')
+      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .innerJoin('course', 'feedback_course.course_id', 'course.id')
+      .innerJoin('user', 'course.teacher_id', 'user.id')
+      .where('user.uuid', aliasId)
+      .whereNotNull('feedback.student_id')
+      .where('feedback.is_finished', FeedbackStatus.NOT_FINISHED)
       .first();
   }
 

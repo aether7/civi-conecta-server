@@ -31,8 +31,8 @@ const mapSurvey = (data, answers) => {
   return Object.values(result);
 };
 
-const mapStatus = (data) => {
-  if (!data) {
+const mapStatus = (teacherStatus, studentStatus) => {
+  if (!teacherStatus) {
     return {
       survey: { completed: false },
       teacher: { generated: false, completed: false },
@@ -42,16 +42,16 @@ const mapStatus = (data) => {
 
   return {
     survey: {
-      completed: Boolean(data.is_finished),
-      createdAt: data.created_at
+      completed: Boolean(teacherStatus.is_finished),
+      createdAt: teacherStatus.created_at
     },
     teacher: {
       generated: true,
-      completed: Boolean(data.teacher_finished)
+      completed: Boolean(teacherStatus.teacher_finished)
     },
     student: {
-      generated: data.student_surveys_qty > 0,
-      completed: false
+      generated: !!studentStatus,
+      completed: studentStatus && studentStatus.pendingStudentCompletion == 0
     }
   };
 };
