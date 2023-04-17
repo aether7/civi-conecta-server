@@ -40,6 +40,9 @@ const mapStatus = (teacherStatus, studentStatus) => {
     };
   }
 
+  const studentGenerated = studentStatus.reduce((acc, x) => acc + x.quantity, 0) > 0;
+  const studentCompleted = studentGenerated && studentStatus.find(s => s.completed === 'no').quantity == 0;
+
   return {
     survey: {
       completed: Boolean(teacherStatus.is_finished),
@@ -50,8 +53,8 @@ const mapStatus = (teacherStatus, studentStatus) => {
       completed: Boolean(teacherStatus.teacher_finished)
     },
     student: {
-      generated: !!studentStatus,
-      completed: studentStatus && studentStatus.pendingStudentCompletion == 0
+      generated: studentGenerated,
+      completed: studentCompleted
     }
   };
 };

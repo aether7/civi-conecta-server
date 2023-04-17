@@ -62,16 +62,41 @@ class FeedbackRepository {
   }
 
   async checkStudentStatusByTeacherAlias(aliasId) {
-    return this.connection
-      .count({ pendingStudentCompletion: 'feedback.id' })
-      .from('feedback')
-      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
-      .innerJoin('course', 'feedback_course.course_id', 'course.id')
-      .innerJoin('user', 'course.teacher_id', 'user.id')
-      .where('user.uuid', aliasId)
-      .whereNotNull('feedback.student_id')
-      .where('feedback.is_finished', FeedbackStatus.NOT_FINISHED)
-      .first();
+    const query = `
+      SELECT
+        COUNT(feedback.id) as quantity,
+        'no' as completed
+      FROM feedback
+      INNER JOIN feedback_course ON feedback.feedback_course_id = feedback_course.id
+      INNER JOIN course ON feedback_course.course_id = course.id
+      INNER JOIN public.user ON course.teacher_id = public.user.id
+      WHERE
+        public.user.uuid = ? AND
+        feedback.student_id IS NOT NULL AND
+        feedback.is_finished = ?
+      UNION
+      SELECT
+        COUNT(feedback.id) as quantity,
+        'yes' as completed
+      FROM feedback
+      INNER JOIN feedback_course ON feedback.feedback_course_id = feedback_course.id
+      INNER JOIN course ON feedback_course.course_id = course.id
+      INNER JOIN public.user ON course.teacher_id = public.user.id
+      WHERE
+        public.user.uuid = ? AND
+        feedback.student_id IS NOT NULL AND
+        feedback.is_finished = ?
+    `;
+
+    const results = await this.connection.raw(query, [
+      aliasId,
+      FeedbackStatus.NOT_FINISHED,
+      aliasId,
+      FeedbackStatus.FINISHED
+    ]);
+
+    const rows = results.rows;
+    return rows;
   }
 
   findByTypeAndAlias(type, alias) {
