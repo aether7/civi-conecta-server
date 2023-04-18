@@ -17,15 +17,6 @@ const checkFeedbackStatus = async (req, res) => {
   res.json({ ok: true, status: dto.mapStatus(teacherStatus, studentStatus) });
 };
 
-const createFeedback = async (req, res) => {
-  const surveyType = req.params.surveyType;
-  const uuid = req.params.uuid;
-
-  await repositories.feedback.createByType(surveyType, uuid);
-
-  res.json({ ok: true });
-};
-
 const getFeedback = async (req, res) => {
   const alias = req.params.aliasId;
   const surveyType = req.params.surveyType;
@@ -102,7 +93,6 @@ const finishAllSurveys = async (req, res) => {
 
 module.exports = wrapRequests({
   checkFeedbackStatus,
-  createFeedback,
   getFeedback,
   saveAnswer,
   checkDetailedStatus,

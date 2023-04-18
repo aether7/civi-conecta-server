@@ -1,5 +1,6 @@
 const repositories = require('../../repositories');
 const { wrapRequests } = require('../../helpers/controller');
+const { SurveyTypes } = require('../../constants/entities');
 const dto = require('./dto');
 
 
@@ -40,7 +41,7 @@ const findById = async (req, res) => {
 };
 
 const findByStudentType = async (req, res) => {
-  const surveys = await repositories.survey.findByType('student');
+  const surveys = await repositories.survey.findByType(SurveyTypes.STUDENT);
   res.json({ ok: true, surveys: dto.mapSurveys(surveys) });
 };
 
@@ -52,10 +53,34 @@ const getReport = async (req, res) => {
   res.json({ ok: true, report: dto.mapStudentAnswerReport(results) });
 };
 
+const createStudentsSurvey = async (req, res) => {
+  const teacherUUID = req.params.uuid;
+  const teacher = await repositories.user.findByAlias(teacherUUID);
+  const course = await repositories.course.findByTeacher(teacher.id);
+  const students = await repositories.student.findByCourse(course.id);
+
+  await repositories.survey.findOrCreateCourseFeedback(course.id);
+
+  const proms = students.map(student =>
+    repositories.survey.createByType(SurveyTypes.STUDENT, student.uuid));
+
+  await Promise.all(proms);
+
+  res.json({ok: true});
+};
+
+const createTeacherSurvey = async (req, res) => {
+  const teacherUUID = req.params.uuid;
+  await repositories.survey.createByType(SurveyTypes.TEACHER, teacherUUID);
+  res.json({ ok: true });
+};
+
 module.exports = wrapRequests({
   getAll,
   saveSurvey,
   findById,
   findByStudentType,
-  getReport
+  getReport,
+  createStudentsSurvey,
+  createTeacherSurvey
 });

@@ -36,6 +36,15 @@ class StudentRepository {
 
     return result;
   }
+
+  async findByCourse(courseId) {
+    return this.connection
+      .select('student.*')
+      .from('student')
+      .innerJoin('course_student', 'course_student.student_id', 'student.id')
+      .innerJoin('course', 'course_student.course_id', 'course.id')
+      .where('course.id', courseId);
+  }
 }
 
 module.exports = StudentRepository;

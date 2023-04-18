@@ -6,7 +6,6 @@ router.get('/status/:uuid/detailed', handlers.checkDetailedStatus);
 router.get('/status/:uuid', handlers.checkFeedbackStatus);
 router.get('/:surveyType/:aliasId', handlers.getFeedback);
 router.put('/:surveyType/:aliasId', handlers.finishSurvey);
-router.post('/:surveyType/:uuid', handlers.createFeedback);
 router.post('/:surveyId/:type/:aliasId', handlers.saveAnswer);
 router.put('/:uuid', handlers.finishAllSurveys);
 

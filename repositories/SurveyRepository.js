@@ -1,4 +1,5 @@
-const { SurveyTypes } = require('../constants/entities');
+const uuid = require('uuid');
+const { SurveyTypes, FeedbackStatus } = require('../constants/entities');
 
 class SurveyRepository {
   constructor(connection) {
@@ -135,6 +136,122 @@ class SurveyRepository {
         'answer.id',
         'alternative_description'
       );
+  }
+
+  createByType(type, alias) {
+    if (type === SurveyTypes.STUDENT) {
+      return this._createStudentFeedback(alias);
+    }
+
+    return this._createTeacherFeedback(alias);
+  }
+
+  async _createStudentFeedback(alias) {
+    const studentCourse = await this.connection
+      .select('course_student.*')
+      .from('course_student')
+      .innerJoin('student', 'course_student.student_id', 'student.id')
+      .where('student.uuid', alias)
+      .first();
+
+    const feedbackCourse = await this.findOrCreateCourseFeedback(studentCourse.course_id);
+    const feedback = await this._findOrCreateStudentFeedback(feedbackCourse.id, studentCourse.student_id);
+
+    return feedback;
+  }
+
+  async _createTeacherFeedback(alias) {
+    const teacher = await this.connection
+      .select('id')
+      .from('user')
+      .where('uuid', alias)
+      .first();
+
+    const course = await this.connection
+      .select('course.*')
+      .from('course')
+      .innerJoin('user', 'course.teacher_id', 'user.id')
+      .where('user.uuid', alias)
+      .first();
+
+    const courseFeedback = await this.findOrCreateCourseFeedback(course.id);
+    const feedback = await this._findOrCreateTeacherFeedback(courseFeedback.id, teacher.id);
+
+    return feedback;
+  }
+
+  async findOrCreateCourseFeedback(courseId) {
+    let courseFeedback = await this.connection
+      .select()
+      .from('feedback_course')
+      .where('course_id', courseId)
+      .first();
+
+    if (courseFeedback) {
+      return courseFeedback;
+    }
+
+    const fields = {
+      uuid: uuid.v4(),
+      is_finished: FeedbackStatus.NOT_FINISHED,
+      course_id: courseId
+    };
+
+    [courseFeedback] = await this.connection
+      .insert(fields, ['*'])
+      .into('feedback_course');
+
+    return courseFeedback;
+  }
+
+  async _findOrCreateStudentFeedback(feedbackCourseId, studentId) {
+    let feedback = await this.connection
+      .select()
+      .from('feedback')
+      .where('student_id', studentId)
+      .where('is_finished', FeedbackStatus.NOT_FINISHED)
+      .first();
+
+    if (feedback) {
+      return feedback;
+    }
+
+    const fields = {
+      student_id: studentId,
+      is_finished: FeedbackStatus.NOT_FINISHED,
+      feedback_course_id: feedbackCourseId
+    };
+
+    [feedback] = await this.connection
+      .insert(fields, ['*'])
+      .into('feedback');
+
+    return feedback;
+  }
+
+  async _findOrCreateTeacherFeedback(courseFeedbackId, teacherId) {
+    let feedback = await this.connection
+      .select()
+      .from('feedback')
+      .where('teacher_id', teacherId)
+      .where('is_finished', FeedbackStatus.NOT_FINISHED)
+      .first();
+
+    if (feedback) {
+      return feedback;
+    }
+
+    const fields = {
+      feedback_course_id: courseFeedbackId,
+      teacher_id: teacherId,
+      is_finished: FeedbackStatus.NOT_FINISHED
+    };
+
+    [feedback] = await this.connection
+      .insert(fields, ['*'])
+      .into('feedback');
+
+    return feedback;
   }
 }
 
