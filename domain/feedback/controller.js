@@ -22,6 +22,9 @@ const getFeedback = async (req, res) => {
   const surveyType = req.params.surveyType;
   const feedback = await repositories.feedback.findByTypeAndAlias(surveyType, alias);
 
+  req.logger.info('alias from user: %s', alias);
+  req.logger.info('survey type got: %s', surveyType);
+
   const [survey, answers] = await Promise.all([
     repositories.survey.findWithDataByType(surveyType),
     repositories.answer.findByAlias(alias)

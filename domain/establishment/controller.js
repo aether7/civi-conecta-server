@@ -19,6 +19,10 @@ const updateCoursesEstablishment = async (req, res) => {
   const number = req.params.number;
   const courses = req.body.courses;
   const establishment = await repositories.establishment.update(number, courses);
+
+  req.logger.info('updating number %s', number);
+  req.logger.info('updating courses %s', courses);
+
   res.json({ ok: true, establishment });
 };
 
@@ -49,6 +53,8 @@ const updateTeacherToCourse = async (req, res) => {
 const getProfile = async (req, res) => {
   const uuid = req.params.uuid;
   const result = await repositories.establishment.getInfoByTeacher(uuid);
+  req.logger.info('Getting profile for teacher with uuid %s', uuid);
+
   res.json({ ok: true, info: dto.mapProfileInfo(result) });
 };
 

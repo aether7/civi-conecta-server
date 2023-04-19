@@ -68,8 +68,8 @@ const mapTeacher = (user) => {
 
 const mapProfileInfo = (data) => {
   return {
-    establishment: data.establishment_name,
-    grade: data.grade
+    establishment: data?.establishment_name,
+    grade: data?.grade
   };
 };
 
