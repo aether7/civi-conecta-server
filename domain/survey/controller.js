@@ -49,7 +49,10 @@ const getReport = async (req, res) => {
   const uuid = req.params.uuid;
   const teacher = await repositories.user.findByAlias(uuid);
   const course = await repositories.course.findByTeacher(teacher.id);
-  const results = await repositories.survey.getReportForSomething(course.id);
+  const results = await repositories.survey.getStudentCompletionReport(course.id);
+
+  req.logger.info('getting the student completion report for teacher %s', teacher.name);
+
   res.json({ ok: true, report: dto.mapStudentAnswerReport(results) });
 };
 

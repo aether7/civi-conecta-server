@@ -68,39 +68,15 @@ const getSurvey = (data) => {
 };
 
 const mapStudentAnswerReport = (data) => {
-  const toArray = (result) => {
-    return Object.entries(result)
-      .map(([title, questions]) => {
-        return {
-          title,
-          questions: Object.entries(questions).map(([question, answers]) => ({
-            question,
-            answers
-          }))
-        };
-      });
-  };
-
-  const result = data.reduce((obj, item) => {
-    const key = `${item.unit_title} - ${item.topic_name}`;
-
-    if (!obj[key]) {
-      obj[key] = {};
+  return data.map(student => ({
+    name: student.name,
+    run: student.run,
+    survey: {
+      answered: Number(student.answers),
+      total: Number(student.question_count),
+      percentage: (Number(student.answers) / Number(student.question_count)) * 100
     }
-
-    if (!obj[key][item.question_made]) {
-      obj[key][item.question_made] = [];
-    }
-
-    obj[key][item.question_made].push({
-      description: item.alternative_description,
-      percent: Number.parseFloat(((item.qty_answers / item.total) * 100).toFixed(2))
-    });
-
-    return obj;
-  }, {});
-
-  return toArray(result);
+  }));
 };
 
 module.exports = {

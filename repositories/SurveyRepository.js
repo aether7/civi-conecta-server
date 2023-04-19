@@ -107,35 +107,24 @@ class SurveyRepository {
       .del();
   }
 
-  async getReportForSomething(courseId) {
+  async getStudentCompletionReport(courseId) {
+    const subquery = this.connection
+      .count('question.id')
+      .from('question')
+      .where('is_for_student', 1)
+      .as('question_count');
+
     return this.connection
-      .column({
-        topic_name: 'topic.title',
-        unit_title: 'unit.title',
-        question_made: 'question.description',
-        alternative_description: 'alternative.description',
-        qty_answers: this.connection.raw('COUNT(answer.id)'),
-        total: this.connection.raw('COUNT(answer.id) OVER(PARTITION BY question.description)')
-      })
-      .from('survey')
-      .innerJoin('topic', 'survey.id', 'topic.survey_id')
-      .innerJoin('unit', 'topic.id', 'unit.topic_id')
-      .innerJoin('question', 'topic.id', 'question.topic_id')
-      .innerJoin('alternative', 'question.id', 'alternative.question_id')
-      .leftJoin('answer', 'answer.alternative_id', 'alternative.id')
-      .leftJoin('feedback', 'answer.feedback_id', 'feedback.id')
-      .leftJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
-      .leftJoin('course', 'feedback_course.course_id', 'course.id')
-      .leftJoin('grade', 'course.grade_id', 'grade.id')
-      .where('survey.id', SurveyTypes.STUDENT_ID)
-      .whereRaw('(course.id = ? OR course.id IS NULL)', [courseId])
-      .groupBy(
-        'topic_name',
-        'unit_title',
-        'question_made',
-        'answer.id',
-        'alternative_description'
-      );
+      .select('student.run', 'student.name', subquery)
+      .count({ answers: 'answer.id' })
+      .from('student')
+      .innerJoin('feedback', 'feedback.student_id', 'student.id')
+      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .leftJoin('answer', 'answer.feedback_id', 'feedback.id')
+      .where('feedback_course.course_id', courseId)
+      .groupBy('student.run', 'student.name')
+      .orderBy('student.run')
+      .debug();
   }
 
   createByType(type, alias) {
