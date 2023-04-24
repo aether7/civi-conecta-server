@@ -80,11 +80,13 @@ class EstablishmentRepository {
     return this.connection
       .column({
         establishment_name: 'establishment.name',
-        grade: 'grade.level'
+        grade: 'grade.level',
+        letter: 'letter.character'
       })
       .from('user')
       .innerJoin('course', 'course.teacher_id', 'user.id')
       .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('letter', 'course.letter_id', 'letter.id')
       .innerJoin('establishment', 'course.establishment_id', 'establishment.id')
       .where('user.uuid', uuid)
       .first();
