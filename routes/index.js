@@ -16,6 +16,7 @@ routesWithAuthToken.use('/establishments', require('../domain/establishment/rout
 routesWithAuthToken.use('/surveys', require('../domain/survey/routes'));
 routesWithAuthToken.use('/files', require('../domain/files/routes'));
 routesWithAuthToken.use('/events', require('../domain/events/routes'));
+routesWithAuthToken.use('/reports', require('../domain/reports/routes'));
 
 router.use(routesWithAuthToken);
 
