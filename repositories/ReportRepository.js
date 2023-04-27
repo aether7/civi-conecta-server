@@ -22,8 +22,8 @@ class ReportRepository {
       .orderBy('student.run');
   }
 
-  getStudentAnswers(teacherUUID) {
-    return this.connection
+  getStudentAnswers(teacherUUID, questionId) {
+    const builder = this.connection
       .column({
         topic_name: 'topic.title',
         question_description: 'question.description',
@@ -38,12 +38,18 @@ class ReportRepository {
       .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
       .innerJoin('course', 'feedback_course.course_id', 'course.id')
       .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
-      .where({
-        'public.user.uuid': teacherUUID,
-        'question.is_for_student': 1
-      })
+      .where('public.user.uuid', teacherUUID)
+      .where('question.is_for_student', 1);
+
+    if (questionId) {
+      builder.where('question.id', questionId);
+    }
+
+    builder
       .groupBy('topic.id', 'question.id', 'alternative.id')
       .orderBy(['topic.id', 'question.id', 'alternative.id']);
+
+    return builder;
   }
 }
 

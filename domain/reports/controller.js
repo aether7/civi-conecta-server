@@ -11,14 +11,23 @@ const checkStudentCompletion = async (req, res) => {
   res.json({ok: true, report: dto.studentCompletionReport(students)});
 };
 
-const checkStudentAnswersByQuestion = async (req, res) => {
+const checkStudentAnswers = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
   const results = await repositories.report.getStudentAnswers(teacherUUID);
 
   res.json({ok:true, results: dto.getStudentAnswers(results)});
 };
 
+const checkStudentAnswersByQuestion = async (req, res) => {
+  const teacherUUID = req.params.teacherUUID;
+  const questionId = req.params.questionId;
+  const results = await repositories.report.getStudentAnswers(teacherUUID, questionId);
+
+  res.json({ok: true, results: dto.getStudentAnswers(results)});
+};
+
 module.exports = wrapRequests({
   checkStudentCompletion,
+  checkStudentAnswers,
   checkStudentAnswersByQuestion
 });
