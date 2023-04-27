@@ -70,7 +70,18 @@ const getStudentAnswers = (data) => {
   return toArray(groupedResults);
 };
 
+const getMostCriticalAnswers = (data) => {
+  return data.map(row => {
+    return {
+      questionId: row.question_id,
+      description: row.question_description,
+      average: Number(Number.parseFloat(row.average).toFixed(2))
+    };
+  });
+};
+
 module.exports = {
   studentCompletionReport,
-  getStudentAnswers
+  getStudentAnswers,
+  getMostCriticalAnswers
 };

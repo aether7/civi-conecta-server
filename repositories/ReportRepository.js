@@ -51,6 +51,31 @@ class ReportRepository {
 
     return builder;
   }
+
+  getMostCriticalStudentAnswers(teacherUUID) {
+    return this.connection
+      .column({
+        topic_name: 'topic.title',
+        question_id: 'question.id',
+        question_description: 'question.description',
+        answer_description: 'alternative.value',
+        average: this.connection.raw('AVG(alternative.value) OVER(PARTITION BY question.id)')
+      })
+      .from('question')
+      .innerJoin('topic', 'question.topic_id', 'topic.id')
+      .innerJoin('alternative', 'alternative.question_id', 'question.id')
+      .innerJoin('answer', 'answer.alternative_id', 'alternative.id')
+      .innerJoin('feedback', 'answer.feedback_id', 'feedback.id')
+      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .innerJoin('course', 'feedback_course.course_id', 'course.id')
+      .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
+      .where('public.user.uuid', teacherUUID)
+      .orderBy([
+        {column: 'average', order: 'desc'},
+        {column: 'question.id'}
+      ])
+      .limit(3);
+  }
 }
 
 module.exports = ReportRepository;
