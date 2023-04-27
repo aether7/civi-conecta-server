@@ -55,8 +55,6 @@ class SurveyRepository {
       .from('topic')
       .innerJoin('question', 'question.topic_id', 'topic.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
-      .leftJoin('answer', 'answer.alternative_id', 'alternative.id')
-      .leftJoin('feedback', 'answer.feedback_id', 'feedback.id')
       .where('question.is_for_student', isForStudent)
       .orderBy(['question.id', 'alternative.id']);
   }

@@ -81,7 +81,8 @@ class EstablishmentRepository {
       .column({
         establishment_name: 'establishment.name',
         grade: 'grade.level',
-        letter: 'letter.character'
+        letter: 'letter.character',
+        grade_id: 'grade.id'
       })
       .from('user')
       .innerJoin('course', 'course.teacher_id', 'user.id')

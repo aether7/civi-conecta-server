@@ -5,10 +5,10 @@ const mapFeedback = (data) => {
   };
 };
 
-const mapSurvey = (data, answers) => {
+const mapSurvey = (survey, answers) => {
   const chosenAnswers = answers.map(answer => answer.id);
 
-  const result = data.reduce((obj, item) => {
+  const result = survey.reduce((obj, item) => {
     if (!obj[item.question_id]) {
       obj[item.question_id] = {
         id: item.question_id,

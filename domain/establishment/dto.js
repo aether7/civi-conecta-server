@@ -70,6 +70,7 @@ const mapProfileInfo = (data) => {
   return {
     establishment: data?.establishment_name,
     grade: data?.grade,
+    gradeId: data?.grade_id,
     letter: data?.letter
   };
 };
