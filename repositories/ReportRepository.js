@@ -57,10 +57,9 @@ class ReportRepository {
       .column({
         topic_name: 'topic.title',
         question_id: 'question.id',
-        question_description: 'question.description',
-        answer_description: 'alternative.value',
-        average: this.connection.raw('AVG(alternative.value) OVER(PARTITION BY question.id)')
+        question_description: 'question.description'
       })
+      .avg({ average: 'alternative.value' })
       .from('question')
       .innerJoin('topic', 'question.topic_id', 'topic.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
@@ -70,6 +69,8 @@ class ReportRepository {
       .innerJoin('course', 'feedback_course.course_id', 'course.id')
       .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
       .where('public.user.uuid', teacherUUID)
+      .where('question.is_for_student', 1)
+      .groupBy('topic.title', 'question.id')
       .orderBy([
         {column: 'average', order: 'desc'},
         {column: 'question.id'}
