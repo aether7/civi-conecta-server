@@ -82,6 +82,22 @@ class UserRepository {
       .where('uuid', uuid)
       .first();
   }
+
+  findByFeedbackCourseUUID(uuid) {
+    return this.connection
+      .select('user.*')
+      .from('user')
+      .innerJoin('course', 'user.id', 'course.teacher_id')
+      .innerJoin('feedback_course','feedback_course.course_id', 'course.id')
+      .where('feedback_course.uuid', uuid)
+      .first();
+  }
+
+  updateCustomPlanification(id) {
+    return this.connection('user')
+      .where('id', id)
+      .update('is_custom_planification', 1);
+  }
 }
 
 module.exports = UserRepository;

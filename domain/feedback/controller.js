@@ -90,7 +90,11 @@ const finishAllSurveys = async (req, res) => {
     throw new exceptions.SurveyWithInsufficientCompletionError(message);
   }
 
+  const teacher = await repositories.user.findByFeedbackCourseUUID(uuid);
+
   await repositories.feedback.finishSurveyCompletely(uuid);
+  await repositories.user.updateCustomPlanification(teacher.id);
+
   res.json({ ok: true });
 };
 

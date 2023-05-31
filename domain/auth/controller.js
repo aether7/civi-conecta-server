@@ -23,6 +23,7 @@ const signIn = async (req, res) => {
   const loggedUser = dto.mapUser(user);
   const token = services.token.createToken(loggedUser);
   loggedUser.token = token;
+
   res.json({ ok: true, user: loggedUser });
 };
 
