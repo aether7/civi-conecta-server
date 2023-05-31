@@ -77,6 +77,37 @@ class ReportRepository {
       ])
       .limit(3);
   }
+
+  async getUnitOrder(teacherUUID) {
+    const [teacherResults, studentResults] = await Promise.all([
+      this._findUnitResults(teacherUUID, 0),
+      this._findUnitResults(teacherUUID, 1)
+    ]);
+
+    return { teacherResults, studentResults };
+  }
+
+  _findUnitResults(teacherUUID, isForStudent) {
+    return this.connection
+      .column({
+        title: 'topic.title',
+        unit_id: 'unit.id',
+      })
+      .avg({ unit_order: 'alternative.value' })
+      .from('topic')
+      .innerJoin('unit', 'topic.id', 'unit.topic_id')
+      .innerJoin('question', 'question.topic_id', 'topic.id')
+      .innerJoin('alternative', 'alternative.question_id ', 'question.id')
+      .innerJoin('answer', 'answer.alternative_id', 'alternative.id')
+      .innerJoin('feedback', 'answer.feedback_id', 'feedback.id')
+      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .innerJoin('course', 'feedback_course.course_id', 'course.id')
+      .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
+      .where('question.is_for_student', isForStudent)
+      .where('public.user.uuid', teacherUUID)
+      .groupBy('topic.id', 'unit.id')
+      .orderBy('unit.id');
+  }
 }
 
 module.exports = ReportRepository;

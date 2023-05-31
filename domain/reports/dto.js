@@ -1,3 +1,5 @@
+const { PonderationTypes } = require('../../constants/entities');
+
 const studentCompletionReport = (students) => {
   const results = students.map(student => {
     const answers = Number.parseInt(student.answers);
@@ -80,8 +82,27 @@ const getMostCriticalAnswers = (data) => {
   });
 };
 
+const getUnitsOrder = (data) => {
+  const arr = [];
+
+  for (let i = 0; i < data.teacherResults.length; i++) {
+    const teacherPonderation = Number.parseFloat(data.teacherResults[i].unit_order) * PonderationTypes.TEACHER;
+    const studentsPonderation = Number.parseFloat(data.studentResults[i].unit_order) * PonderationTypes.STUDENT;
+
+    arr.push({
+      title: data.teacherResults[i].title,
+      unitId: data.teacherResults[i].unit_id,
+      ponderation: teacherPonderation + studentsPonderation
+    });
+  }
+
+  arr.sort((a, b) => a.ponderation >= b.ponderation ? -1 : 1);
+  return arr;
+};
+
 module.exports = {
   studentCompletionReport,
   getStudentAnswers,
-  getMostCriticalAnswers
+  getMostCriticalAnswers,
+  getUnitsOrder
 };

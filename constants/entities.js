@@ -18,4 +18,15 @@ const FeedbackStatus = {
   NOT_FINISHED: 0
 };
 
-module.exports = { EventTypes, SurveyTypes, RoleTypes, FeedbackStatus };
+const PonderationTypes = {
+  TEACHER: 0.3,
+  STUDENT: 0.7
+};
+
+module.exports = {
+  EventTypes,
+  SurveyTypes,
+  RoleTypes,
+  FeedbackStatus,
+  PonderationTypes
+};

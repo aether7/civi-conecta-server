@@ -32,9 +32,16 @@ const checkMostCriticalAnswers = async (req, res) => {
   res.json({ok: true, results: dto.getMostCriticalAnswers(results)});
 };
 
+const getUnitsOrder = async (req, res) => {
+  const teacherUUID = req.params.teacherUUID;
+  const results = await repositories.report.getUnitOrder(teacherUUID);
+  res.json({ok: true, results: dto.getUnitsOrder(results)});
+};
+
 module.exports = wrapRequests({
   checkStudentCompletion,
   checkStudentAnswers,
   checkStudentAnswersByQuestion,
-  checkMostCriticalAnswers
+  checkMostCriticalAnswers,
+  getUnitsOrder
 });
