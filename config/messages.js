@@ -21,7 +21,8 @@ const messages = {
   },
   topic: {
     topicAlreadyExists: 'El Tema "{}" ya existe',
-    canNotDeleteTopic: 'El tema no se puede borrar porque tiene {} preguntas asociadas'
+    canNotDeleteTopic: 'El tema no se puede borrar porque tiene {} preguntas asociadas',
+    gradeExceedingQuota: 'El curso ya tiene la cantidad maxima de temas creados'
   },
   question: {
     canNotDeleteQuestion: 'La pregunta ya tiene respuestas asociadas en una encuesta'

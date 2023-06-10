@@ -46,11 +46,20 @@ class SurveyWithInsufficientCompletionError extends Error {
   }
 }
 
+class GradeExceedingUnitsError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'GradeExceedingUnitsError';
+    this.isCustomException = true;
+  }
+}
+
 module.exports = {
   EntityNotFoundError,
   EntityAlreadyExistsError,
   EntityWithDependenciesError,
   TeacherAlreadyAssignedError,
   TopicWithAssociatedQuestionsError,
-  SurveyWithInsufficientCompletionError
+  SurveyWithInsufficientCompletionError,
+  GradeExceedingUnitsError
 };

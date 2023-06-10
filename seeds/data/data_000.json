@@ -2,51 +2,63 @@
   "grades": [
     {
       "level": "1º Básico",
-      "alias": "1ro-basico"
+      "alias": "1ro-basico",
+      "units_quantity": 4
     },
     {
       "level": "2º Básico",
-      "alias": "2do-basico"
+      "alias": "2do-basico",
+      "units_quantity": 4
     },
     {
       "level": "3º Básico",
-      "alias": "3ro-basico"
+      "alias": "3ro-basico",
+      "units_quantity": 4
     },
     {
       "level": "4º Básico",
-      "alias": "4to-basico"
+      "alias": "4to-basico",
+      "units_quantity": 4
     },
     {
       "level": "5º Básico",
-      "alias": "5to-basico"
+      "alias": "5to-basico",
+      "units_quantity": 4
     },
     {
       "level": "6º Básico",
-      "alias": "6to-basico"
+      "alias": "6to-basico",
+      "units_quantity": 4
     },
     {
       "level": "7º Básico",
-      "alias": "7mo-basico"
+      "alias": "7mo-basico",
+      "units_quantity": 5
     },
     {
       "level": "8º Básico",
-      "alias": "8vo-basico"
+      "alias": "8vo-basico",
+      "units_quantity": 5
     },
     {
       "level": "1º Medio",
-      "alias": "1ro-medio"
+      "alias": "1ro-medio",
+      "units_quantity": 5
     },
     {
       "level": "2º Medio",
-      "alias": "2do-medio"
+      "alias": "2do-medio",
+      "units_quantity": 5
     },
     {
       "level": "3º Medio",
-      "alias": "3ro-medio"
+      "alias": "3ro-medio",
+      "units_quantity": 5
     },
     {
       "level": "4º Medio",
-      "alias": "4to-medio"
+      "alias": "4to-medio",
+      "units_quantity": 5
     }
   ],
   "letters": [

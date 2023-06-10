@@ -92,7 +92,8 @@ const getUnitsOrder = (data) => {
     arr.push({
       title: data.teacherResults[i].title,
       unitId: data.teacherResults[i].unit_id,
-      ponderation: teacherPonderation + studentsPonderation
+      ponderation: teacherPonderation + studentsPonderation,
+      description: data.teacherResults[i].description
     });
   }
 

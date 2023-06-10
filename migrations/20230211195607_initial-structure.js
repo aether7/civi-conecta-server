@@ -12,6 +12,7 @@ exports.up = async function (knex) {
     t.integer('encrypted_password');
     t.integer('active').defaultTo(1);
     t.string('role');
+    t.integer('is_custom_planification').defaultTo(0);
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
   });
@@ -74,10 +75,11 @@ exports.up = async function (knex) {
     t.foreign('student_id').references('student.id');
   });
 
-  await knex.schema.createTable('topic', (t) => {
+  await knex.schema.createTable('unit', (t) => {
     t.increments('id', { primaryKey: true });
+    t.integer('number');
     t.string('title');
-    t.integer('number').unsigned();
+    t.string('description');
     t.integer('grade_id').unsigned();
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
@@ -87,11 +89,11 @@ exports.up = async function (knex) {
   await knex.schema.createTable('question', (t) => {
     t.increments('id', { primaryKey: true });
     t.string('description');
-    t.integer('topic_id').unsigned();
+    t.integer('unit_id').unsigned();
     t.integer('is_for_student').defaultTo(0);
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
-    t.foreign('topic_id').references('topic.id');
+    t.foreign('unit_id').references('unit.id');
   });
 
   await knex.schema.createTable('alternative', (t) => {
@@ -135,19 +137,6 @@ exports.up = async function (knex) {
     t.integer('alternative_id').unsigned();
     t.foreign('feedback_id').references('feedback.id');
     t.foreign('alternative_id').references('alternative.id');
-  });
-
-  await knex.schema.createTable('unit', (t) => {
-    t.increments('id', { primaryKey: true });
-    t.integer('number');
-    t.string('title');
-    t.string('description');
-    t.integer('grade_id').unsigned();
-    t.integer('topic_id').unsigned();
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
-    t.foreign('grade_id').references('grade.id');
-    t.foreign('topic_id').references('topic.id');
   });
 
   await knex.schema.createTable('event_type', (t) => {
@@ -214,8 +203,8 @@ exports.up = async function (knex) {
       knex
         .column({ type: knex.raw(questionType) })
         .count({ quantity: 'question.id' })
-        .from('topic')
-        .innerJoin('question', 'topic.id', 'question.topic_id')
+        .from('unit')
+        .innerJoin('question', 'unit.id', 'question.unit_id')
         .groupBy('type')
     );
   });

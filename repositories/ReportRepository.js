@@ -92,6 +92,7 @@ class ReportRepository {
       .column({
         title: 'topic.title',
         unit_id: 'unit.id',
+        description: 'unit.description'
       })
       .avg({ unit_order: 'alternative.value' })
       .from('topic')

@@ -9,24 +9,32 @@ class TopicRepository {
 
   findAll() {
     return this.connection
-      .select('topic.*')
-      .from('topic')
-      .orderBy('topic.id');
+      .select('unit.*')
+      .from('unit')
+      .orderBy('unit.id');
   }
 
-  findById(topicId) {
+  findById(unitId) {
     return this.connection
       .select()
-      .from('topic')
-      .where('id', topicId)
+      .from('unit')
+      .where('id', unitId)
       .first();
   }
 
-  findByIdWithData(topicId, isForStudent) {
+  findByGradeId(gradeId) {
+    return this.connection
+      .select()
+      .from('unit')
+      .where('grade_id', gradeId)
+      .orderBy('id');
+  }
+
+  findByIdWithData(unitId, isForStudent) {
     return this.connection
       .column({
-        topic_id: 'topic.id',
-        topic_title: 'topic.title',
+        unit_id: 'unit.id',
+        unit_title: 'unit.title',
         question_id: 'question.id',
         alternative_id: 'alternative.id',
         question_description: 'question.description',
@@ -34,32 +42,11 @@ class TopicRepository {
         alternative_description: 'alternative.description',
         alternative_value: 'alternative.value'
       })
-      .from('topic')
-      .leftJoin('question', 'question.topic_id', 'topic.id')
+      .from('unit')
+      .leftJoin('question', 'question.unit_id', 'unit.id')
       .leftJoin('alternative', 'alternative.question_id', 'question.id')
-      .where('topic.id', topicId)
+      .where('unit.id', unitId)
       .where('question.is_for_student', isForStudent);
-  }
-
-  async create(title, number) {
-    let result = await this.connection
-      .select()
-      .from('topic')
-      .where('title', title)
-      .first();
-
-    if (result) {
-      const message = messages.topic.topicAlreadyExists.replace('{}', title);
-      throw new exceptions.EntityAlreadyExistsError(message);
-    }
-
-    const fields = { title, number };
-
-    [result] = await this.connection
-      .insert(fields, ['*'])
-      .into('topic');
-
-    return result;
   }
 
   async countAssociatedQuestionsByTopicId(topicId) {

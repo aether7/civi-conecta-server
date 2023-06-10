@@ -13,34 +13,44 @@ emitter.on('updatedAt', (topicId) => {
   })();
 });
 
-const getTopics = async (_, res) => {
-  const topics = await repositories.topic.findAll();
-  res.json({ ok: true, topics: topics.map(dto.mapTopic) });
+const getTopics = async (req, res) => {
+  const gradeId = Number.parseInt(req.params.gradeId);
+  const topics = await repositories.topic.findByGradeId(gradeId);
+  res.json({ ok: true, topics: topics.map(dto.mapUnit) });
 };
 
 const getTopicById = async (req, res) => {
-  const topicId = req.params.topicId;
+  const unitId = req.params.unitId;
   const isForStudent = req.params.questionType === 'teacher' ? 0 : 1;
-  const result = await repositories.topic.findByIdWithData(topicId, isForStudent);
+  const result = await repositories.topic.findByIdWithData(unitId, isForStudent);
 
   if (!result.length) {
-    const topic = await repositories.topic.findById(topicId);
-    return res.json({ ok: true, topic: dto.mapTopic(topic) });
+    const topic = await repositories.topic.findById(unitId);
+    return res.json({ ok: true, topic: dto.mapUnit(topic) });
   }
 
   res.json({ ok: true, topic: dto.mapTopicWithData(result) });
 };
 
-const createTopic = async (req, res) => {
+const createUnit = async (req, res) => {
   const title = req.body.title;
+  const description = req.body.description;
+  const gradeId = Number.parseInt(req.body.gradeId);
   let number = Number.parseInt(req.body.number);
 
   if (Number.isNaN(number)) {
     number = 1;
   }
 
-  const topic = await repositories.topic.create(title, number);
-  res.json({ ok: true, topic: dto.mapTopic(topic) });
+  const grade = await repositories.grade.findById(gradeId);
+  const previousUnits = await repositories.unit.findByGradeId(gradeId);
+
+  if (previousUnits.length >= Number.parseInt(grade.units_quantity)) {
+    throw new exceptions.GradeExceedingUnitsError(messages.topic.gradeExceedingQuota);
+  }
+
+  const unit = await repositories.unit.create({ title, number, description, gradeId });
+  res.json({ ok: true, topic: dto.mapUnit(unit) });
 };
 
 const deleteTopic = async (req, res) => {
@@ -98,7 +108,7 @@ const deleteQuestion = async (req, res) => {
 
 module.exports = wrapRequests({
   getTopics,
-  createTopic,
+  createUnit,
   getTopicById,
   deleteTopic,
   updateTopic,

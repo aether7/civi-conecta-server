@@ -1,10 +1,12 @@
 const DEFAULT_ALTERNATIVES = 4;
 
 
-const mapTopic = (topic) => {
+const mapUnit = (unit) => {
   return {
-    id: topic.id,
-    title: topic.title
+    id: unit.id,
+    title: unit.title,
+    description: unit.description,
+    gradeId: Number.parseInt(unit.grade_id)
   };
 };
 
@@ -52,7 +54,7 @@ const mapTopicWithData = (topic) => {
   };
 
   return {
-    id: topic[0].topic_id,
+    id: topic[0].unit_id,
     surveyId: topic[0].survey_id,
     title: topic[0].topic_title,
     questions: toArray(result),
@@ -67,4 +69,4 @@ const mapQuestion = (data) => {
   };
 };
 
-module.exports = { mapTopic, mapTopicWithData, mapQuestion };
+module.exports = { mapUnit, mapTopicWithData, mapQuestion };
