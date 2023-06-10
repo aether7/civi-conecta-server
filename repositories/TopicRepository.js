@@ -53,7 +53,7 @@ class TopicRepository {
     const results = await this.connection
       .count({ quantity: 'question.id' })
       .from('question')
-      .where('topic_id', topicId)
+      .where('unit_id', topicId)
       .first();
 
     return Number.parseInt(results.quantity);

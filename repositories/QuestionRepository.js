@@ -7,10 +7,10 @@ class QuestionRepository {
     this.connection = connection;
   }
 
-  async create({ description, topicId, isForStudent }) {
+  async create({ description, unitId, isForStudent }) {
     const fields = {
       description,
-      topic_id: topicId,
+      unit_id: unitId,
       is_for_student: isForStudent
     };
 

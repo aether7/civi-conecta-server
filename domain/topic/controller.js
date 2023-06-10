@@ -1,17 +1,8 @@
-const { EventEmitter } = require('events');
 const repositories = require('../../repositories');
 const { wrapRequests } = require('../../helpers/controller');
 const exceptions = require('../../repositories/exceptions');
 const messages = require('../../config/messages');
 const dto = require('./dto');
-
-const emitter = new EventEmitter();
-
-emitter.on('updatedAt', (topicId) => {
-  (async function triggerUpdateAt() {
-    await repositories.topic.triggerUpdateAt(topicId);
-  })();
-});
 
 const getTopics = async (req, res) => {
   const gradeId = Number.parseInt(req.params.gradeId);
@@ -56,7 +47,7 @@ const createUnit = async (req, res) => {
 const deleteTopic = async (req, res) => {
   const topicId = req.params.topicId;
   const quantity = await repositories.topic.countAssociatedQuestionsByTopicId(topicId);
-  req.logger.info('trying to delete topic %s', topicId);
+  req.logger.info('trying to delete unit %s', topicId);
 
   if (quantity) {
     const message = messages.topic.canNotDeleteTopic.replace('{}', quantity);
@@ -78,7 +69,7 @@ const updateTopic = async (req, res) => {
 
   const question = await repositories.question.create({
     description: title,
-    topicId: topic.id,
+    unitId: topic.id,
     isForStudent
   });
 
@@ -91,18 +82,16 @@ const updateTopic = async (req, res) => {
     });
   }
 
-  emitter.emit('updatedAt', topicId);
   res.json({ ok: true, question: dto.mapQuestion(question) });
 };
 
 const deleteQuestion = async (req, res) => {
-  const topicId = req.params.topicId;
+  const unitId = req.params.topicId;
   const questionId = req.params.questionId;
 
   req.logger.info('deleting question %s', questionId);
   await repositories.question.deleteById(questionId);
 
-  emitter.emit('updatedAt', topicId);
   res.json({ ok: true });
 };
 
