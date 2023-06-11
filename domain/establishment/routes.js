@@ -10,5 +10,6 @@ router.put('/:number/courses/teacher', middlewares.verifyAdminRole, handlers.upd
 router.put('/:number/courses', middlewares.verifyAdminRole, handlers.updateCoursesEstablishment);
 router.put('/:id/status/:status', middlewares.verifyAdminRole, handlers.updateEstablishmentStatus);
 router.get('/info/:uuid', handlers.getProfile);
+router.get('/:establishmentId/course/:courseId/teachers', handlers.getTeacherInfo);
 
 module.exports = router;

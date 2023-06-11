@@ -75,4 +75,13 @@ const mapProfileInfo = (data) => {
   };
 };
 
-module.exports = { mapEstablishments, mapTeacher, mapProfileInfo };
+const mapTeacherInfo = (data) => {
+  return {
+    establishment: data.establishment_name,
+    name: data.teacher_name,
+    email: data.teacher_email,
+    password: data.passwd
+  };
+};
+
+module.exports = { mapEstablishments, mapTeacher, mapProfileInfo, mapTeacherInfo };

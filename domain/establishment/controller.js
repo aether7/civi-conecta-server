@@ -72,6 +72,13 @@ const getEstablishmentGrades = async (req, res) => {
   res.json({ ok: true, courses: results });
 };
 
+const getTeacherInfo = async (req, res) => {
+  const establishmentId = req.params.establishmentId;
+  const courseId = req.params.courseId;
+  const result = await repositories.establishment.findTeachersByEstablishmentAndCourse(establishmentId, courseId);
+  res.json({ok: true, teacher: dto.mapTeacherInfo(result) });
+};
+
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
@@ -79,5 +86,6 @@ module.exports = wrapRequests({
   updateTeacherToCourse,
   getProfile,
   updateEstablishmentStatus,
-  getEstablishmentGrades
+  getEstablishmentGrades,
+  getTeacherInfo
 });
