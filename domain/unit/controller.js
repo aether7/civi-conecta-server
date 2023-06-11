@@ -5,8 +5,8 @@ const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
 const getUnitsByGrade = async (req, res) => {
-  const gradeToSearch = req.query.gradeId;
-  const units = await repositories.unit.findByGradeId(gradeToSearch);
+  const gradeId = Number.parseInt(req.params.gradeId);
+  const units = await repositories.unit.findByGradeId(gradeId);
 
   res.json({ ok: true, units });
 };
@@ -25,7 +25,6 @@ const createUnit = async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
   const gradeId = req.body.grade;
-  const topicId = req.body.topicId;
   const previousUnit = await repositories.unit.findOneByNumberAndGradeId(number, gradeId);
 
   if (previousUnit) {
@@ -36,7 +35,6 @@ const createUnit = async (req, res) => {
     number,
     title,
     description,
-    gradeId,
     topicId
   };
 
