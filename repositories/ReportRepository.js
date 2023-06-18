@@ -25,13 +25,13 @@ class ReportRepository {
   getStudentAnswers(teacherUUID, questionId) {
     const builder = this.connection
       .column({
-        topic_name: 'topic.title',
+        topic_name: 'unit.title',
         question_description: 'question.description',
         answer_description: 'alternative.description'
       })
       .count({ quantity: 'answer.id' })
       .from('question')
-      .innerJoin('topic', 'question.topic_id', 'topic.id')
+      .innerJoin('unit', 'question.unit_id', 'unit.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
       .innerJoin('answer', 'answer.alternative_id', 'alternative.id')
       .innerJoin('feedback', 'answer.feedback_id', 'feedback.id')
@@ -46,8 +46,8 @@ class ReportRepository {
     }
 
     builder
-      .groupBy('topic.id', 'question.id', 'alternative.id')
-      .orderBy(['topic.id', 'question.id', 'alternative.id']);
+      .groupBy('unit.id', 'question.id', 'alternative.id')
+      .orderBy(['unit.id', 'question.id', 'alternative.id']);
 
     return builder;
   }
@@ -55,13 +55,13 @@ class ReportRepository {
   getMostCriticalStudentAnswers(teacherUUID) {
     return this.connection
       .column({
-        topic_name: 'topic.title',
+        topic_name: 'unit.title',
         question_id: 'question.id',
         question_description: 'question.description'
       })
       .avg({ average: 'alternative.value' })
       .from('question')
-      .innerJoin('topic', 'question.topic_id', 'topic.id')
+      .innerJoin('unit', 'question.unit_id', 'unit.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
       .innerJoin('answer', 'answer.alternative_id', 'alternative.id')
       .innerJoin('feedback', 'answer.feedback_id', 'feedback.id')
@@ -70,7 +70,7 @@ class ReportRepository {
       .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
       .where('public.user.uuid', teacherUUID)
       .where('question.is_for_student', 1)
-      .groupBy('topic.title', 'question.id')
+      .groupBy('unit.title', 'question.id')
       .orderBy([
         {column: 'average', order: 'desc'},
         {column: 'question.id'}

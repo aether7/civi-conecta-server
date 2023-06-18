@@ -43,8 +43,8 @@ class SurveyRepository {
 
     return this.connection
       .column({
-        topic_number: 'topic.number',
-        topic_title: 'topic.title',
+        topic_number: 'unit.number',
+        topic_title: 'unit.title',
         question_id: 'question.id',
         question_description: 'question.description',
         alternative_letter: 'alternative.letter',
@@ -52,8 +52,8 @@ class SurveyRepository {
         alternative_value: 'alternative.value',
         alternative_id: 'alternative.id'
       })
-      .from('topic')
-      .innerJoin('question', 'question.topic_id', 'topic.id')
+      .from('unit')
+      .innerJoin('question', 'question.unit_id', 'unit.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
       .where('question.is_for_student', isForStudent)
       .orderBy(['question.id', 'alternative.id']);
