@@ -79,6 +79,12 @@ const getTeacherInfo = async (req, res) => {
   res.json({ok: true, teacher: dto.mapTeacherInfo(result) });
 };
 
+const getTeachersFromEstablishment = async (req, res) => {
+  const establishmentId = Number.parseInt(req.params.establishmentId);
+  const result = await repositories.establishment.findTeachersByEstablishment(establishmentId);
+  res.json({ok:true, teachers: result.map(dto.mapTeacherInfo)});
+};
+
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
@@ -87,5 +93,6 @@ module.exports = wrapRequests({
   getProfile,
   updateEstablishmentStatus,
   getEstablishmentGrades,
-  getTeacherInfo
+  getTeacherInfo,
+  getTeachersFromEstablishment
 });

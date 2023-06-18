@@ -11,5 +11,6 @@ router.put('/:number/courses', middlewares.verifyAdminRole, handlers.updateCours
 router.put('/:id/status/:status', middlewares.verifyAdminRole, handlers.updateEstablishmentStatus);
 router.get('/info/:uuid', handlers.getProfile);
 router.get('/:establishmentId/course/:courseId/teachers', handlers.getTeacherInfo);
+router.get('/:establishmentId/teachers', handlers.getTeachersFromEstablishment);
 
 module.exports = router;

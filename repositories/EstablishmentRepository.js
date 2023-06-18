@@ -99,6 +99,25 @@ class EstablishmentRepository {
       .update('active', status);
   }
 
+  async findTeachersByEstablishment(establishmentId) {
+    const innerQuery = "CASE public.user.encrypted_password WHEN 0 THEN public.user.password ELSE '*******' END";
+
+    return this.connection
+      .column({
+        establishment_name: 'establishment.name',
+        teacher_name: 'public.user.name',
+        teacher_email: 'public.user.email',
+        passwd: this.connection.raw(innerQuery)
+      })
+      .from('establishment')
+      .innerJoin('course', 'course.establishment_id', 'establishment.id')
+      .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
+      .where('establishment.id', establishmentId)
+      .where('public.user.role', 'User')
+      .where('public.user.active', 1)
+      .orderBy('public.user.name');
+  }
+
   async findTeachersByEstablishmentAndCourse(establishmentId, courseId) {
     const innerQuery = "CASE public.user.encrypted_password WHEN 0 THEN public.user.password ELSE '*******' END";
 
