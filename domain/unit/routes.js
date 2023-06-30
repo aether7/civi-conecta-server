@@ -3,6 +3,7 @@ const handlers = require('./controller');
 const middlewares = require('../../middlewares/authentication');
 const router = Router();
 
+router.get('/:unitId/dashboard', handlers.getUnitDashboardById);
 router.get('/grade/:gradeId', handlers.getUnitsByGrade);
 router.get('/:unitId', handlers.getUnitById);
 router.get('/teacher/:uuid', handlers.getUnitsByTeacherAlias);

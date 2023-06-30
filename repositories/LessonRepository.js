@@ -97,6 +97,14 @@ class LessonRepository {
 
     return Number.parseInt(results.quantity);
   }
+
+  findByUnitId(unitId) {
+    return this.connection
+      .select()
+      .from('lesson')
+      .where('unit_id', unitId)
+      .orderBy('id');
+  }
 }
 
 module.exports = LessonRepository;

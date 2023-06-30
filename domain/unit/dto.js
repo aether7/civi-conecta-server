@@ -52,7 +52,27 @@ const mapUnitWithData = (data, documents) => {
   };
 };
 
+const mapUnitDashboard = (unit, lessons) => {
+  const mappedLessons = lessons.map(lesson => {
+    return {
+      id: lesson.id,
+      number: lesson.number,
+      objective: lesson.objective,
+      description: lesson.description
+    };
+  });
+
+  return {
+    id: unit.id,
+    number: unit.number,
+    title: unit.title,
+    description: unit.description,
+    lessons: mappedLessons
+  };
+};
+
 module.exports = {
   mapUnit,
-  mapUnitWithData
+  mapUnitWithData,
+  mapUnitDashboard
 };

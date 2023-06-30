@@ -64,10 +64,19 @@ const getUnitsByTeacherAlias = async (req, res) => {
   res.json({ ok: true, units: units.map(dto.mapUnit) });
 };
 
+const getUnitDashboardById = async (req, res) => {
+  const unitId = req.params.unitId;
+  const unit = await repositories.unit.findById(unitId);
+  const lessons = await repositories.lesson.findByUnitId(unitId);
+
+  res.json({ ok: true, result: dto.mapUnitDashboard(unit, lessons) });
+};
+
 module.exports = wrapRequests({
   getUnitsByGrade,
   getUnitById,
   createUnit,
   deleteUnit,
-  getUnitsByTeacherAlias
+  getUnitsByTeacherAlias,
+  getUnitDashboardById
 });
