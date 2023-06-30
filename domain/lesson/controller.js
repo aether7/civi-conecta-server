@@ -1,5 +1,6 @@
 const repositories = require('../../repositories');
 const { wrapRequests } = require('../../helpers/controller');
+const exceptions = require('../../repositories/exceptions');
 const dto = require('./dto');
 
 const getLessonById = async (req, res) => {
@@ -8,6 +9,10 @@ const getLessonById = async (req, res) => {
     repositories.lesson.findById(lessonId),
     repositories.document.findByLesson(lessonId)
   ]);
+
+  if (!lesson) {
+    throw new exceptions.EntityNotFoundError('La clase no existe');
+  }
 
   res.json({ ok: true, lesson: dto.mapLesson(lesson, documents) });
 };

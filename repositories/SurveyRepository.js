@@ -121,8 +121,7 @@ class SurveyRepository {
       .leftJoin('answer', 'answer.feedback_id', 'feedback.id')
       .where('feedback_course.course_id', courseId)
       .groupBy('student.run', 'student.name')
-      .orderBy('student.run')
-      .debug();
+      .orderBy('student.run');
   }
 
   createByType(type, alias) {

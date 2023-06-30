@@ -42,7 +42,7 @@ class UnitRepository {
       .select()
       .from('unit')
       .where('grade_id', gradeId)
-      .orderBy('id').debug();
+      .orderBy('id');
   }
 
   findOneByNumberAndGradeId(number, gradeId) {
