@@ -4,13 +4,15 @@ class EstablishmentRepository {
       courseRepository,
       courseStudentRepository,
       studentRepository,
-      userRepository
+      userRepository,
+      courseUnitRepository
     }) {
     this.connection = connection;
     this.courseRepository = courseRepository;
     this.courseStudentRepository = courseStudentRepository;
     this.studentRepository = studentRepository;
     this.userRepository = userRepository;
+    this.courseUnitRepository = courseUnitRepository;
   }
 
   async findAll() {
@@ -61,7 +63,7 @@ class EstablishmentRepository {
           grades.get(courseGrade),
           letters.get(letter.character)
         );
-
+        await this.courseUnitRepository.findOrCreateByCourseId(course.id);
         await this.courseStudentRepository.deleteByCourseId(course.id);
 
         for (const student of letter.students) {

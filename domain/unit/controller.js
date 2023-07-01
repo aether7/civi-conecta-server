@@ -4,6 +4,19 @@ const messages = require('../../config/messages');
 const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
+const makeStatusTransition = (currentStatus) => {
+  currentStatus = Number.parseInt(currentStatus);
+
+  return {
+    get current() {
+      return currentStatus;
+    },
+    get next() {
+      return (currentStatus + 1) % 3;
+    }
+  };
+};
+
 const getUnitsByGrade = async (req, res) => {
   const gradeId = Number.parseInt(req.params.gradeId);
   const units = await repositories.unit.findByGradeId(gradeId);
@@ -72,11 +85,32 @@ const getUnitDashboardById = async (req, res) => {
   res.json({ ok: true, result: dto.mapUnitDashboard(unit, lessons) });
 };
 
+const getUnitStatusByTeacher = async (req, res) => {
+  const unitId = req.params.unitId;
+  const uuid = req.params.teacherUUID;
+  const unitCourse = await repositories.courseUnit.findByUnitAndTeacher(unitId, uuid);
+
+  res.json({ ok: true, result: { unitId, uuid, status: unitCourse.status } });
+};
+
+const updateUnitStatusByTeacher = async (req, res) => {
+  const unitId = req.params.unitId;
+  const uuid = req.params.teacherUUID;
+  const unitCourse = await repositories.courseUnit.findByUnitAndTeacher(unitId, uuid);
+  const status = makeStatusTransition(unitCourse.status);
+  const nextStatus = status.next;
+  await repositories.courseUnit.updateStatusById(unitCourse.id, nextStatus);
+
+  res.json({ ok: true, result: nextStatus });
+};
+
 module.exports = wrapRequests({
   getUnitsByGrade,
   getUnitById,
   createUnit,
   deleteUnit,
   getUnitsByTeacherAlias,
-  getUnitDashboardById
+  getUnitDashboardById,
+  getUnitStatusByTeacher,
+  updateUnitStatusByTeacher
 });
