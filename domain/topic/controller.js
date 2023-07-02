@@ -27,6 +27,7 @@ const createUnit = async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
   const gradeId = Number.parseInt(req.body.gradeId);
+  const objective = req.body.objective;
   let number = Number.parseInt(req.body.number);
 
   if (Number.isNaN(number)) {
@@ -40,7 +41,7 @@ const createUnit = async (req, res) => {
     throw new exceptions.GradeExceedingUnitsError(messages.topic.gradeExceedingQuota);
   }
 
-  const unit = await repositories.unit.create({ title, number, description, gradeId });
+  const unit = await repositories.unit.create({ title, number, description, gradeId, objective });
   res.json({ ok: true, topic: dto.mapUnit(unit) });
 };
 

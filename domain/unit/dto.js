@@ -3,7 +3,8 @@ const mapUnit = (unit) => {
     id: unit.id,
     number: unit.number,
     description: unit.description,
-    title: unit.title
+    title: unit.title,
+    objective: unit.objective
   };
 };
 
@@ -48,6 +49,7 @@ const mapUnitWithData = (data, documents) => {
     number: data[0].number,
     title: data[0].title,
     description: data[0].description,
+    objective: data[0].objective,
     lessons
   };
 };

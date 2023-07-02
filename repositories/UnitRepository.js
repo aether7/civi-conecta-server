@@ -18,6 +18,7 @@ class UnitRepository {
         number: 'unit.number',
         title: 'unit.title',
         description: 'unit.description',
+        objective: 'unit.objective',
         lesson_id: 'lesson.id',
         lesson_number: 'lesson.number',
         lesson_objective: 'lesson.objective',
@@ -64,12 +65,13 @@ class UnitRepository {
       .where('user.uuid', uuid);
   }
 
-  async create({ number, title, description, gradeId }) {
+  async create({ number, title, description, gradeId, objective }) {
     const fields = {
       number,
       title,
       description,
-      grade_id: gradeId
+      grade_id: gradeId,
+      objective
     };
 
     const [result] = await this.connection

@@ -6,7 +6,8 @@ const mapUnit = (unit) => {
     id: unit.id,
     title: unit.title,
     description: unit.description,
-    gradeId: Number.parseInt(unit.grade_id)
+    gradeId: Number.parseInt(unit.grade_id),
+    objective: unit.objective
   };
 };
 
