@@ -69,6 +69,7 @@ const mapUnitDashboard = (unit, lessons) => {
     number: unit.number,
     title: unit.title,
     description: unit.description,
+    objective: unit.objective,
     lessons: mappedLessons
   };
 };
