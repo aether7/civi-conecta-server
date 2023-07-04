@@ -59,10 +59,9 @@ class TopicRepository {
     return Number.parseInt(results.quantity);
   }
 
-  deleteById(topicId) {
-    return this.connection('topic')
-      .where('id', topicId)
-      .del();
+  async deleteById(unitId) {
+    await this.connection('course_unit').where('unit_id', unitId).del();
+    return this.connection('unit').where('id', unitId).del();
   }
 
   findByQuestionId(questionId) {
