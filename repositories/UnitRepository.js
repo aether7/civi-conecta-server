@@ -78,7 +78,49 @@ class UnitRepository {
       .insert(fields, ['*'])
       .into('unit');
 
+    await this._createUnitCourse(result.id);
+
     return result;
+  }
+
+  async _createUnitCourse(unitId) {
+    const units = await this.connection
+      .select()
+      .from('unit')
+      .where('id', unitId)
+      .orderBy('id');
+
+    for (const unit of units) {
+      const courses = await this.connection
+        .select()
+        .from('course')
+        .where('grade_id', unit.grade_id)
+        .orderBy('id');
+
+      for (const course of courses) {
+        await this._findOrCreate(course.id, unit.id);
+      }
+    }
+  }
+
+  async _findOrCreate(courseId, unitId) {
+    const result = await this.connection
+      .select()
+      .from('course_unit')
+      .where('course_id', courseId)
+      .where('unit_id', unitId)
+      .first();
+
+    if (result) {
+      return;
+    }
+
+    return this.connection
+      .insert({
+        unit_id: unitId,
+        course_id: courseId
+      })
+      .into('course_unit');
   }
 
   async update(number, gradeId, fieldsToUpdate) {
