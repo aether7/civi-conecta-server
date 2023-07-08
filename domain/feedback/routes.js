@@ -4,7 +4,7 @@ const router = Router();
 
 router.get('/status/:uuid/detailed', handlers.checkDetailedStatus);
 router.get('/status/:uuid', handlers.checkFeedbackStatus);
-router.get('/student/:aliasId/status', handlers.checkSurveyStatus);
+router.get('/student/:rut/status', handlers.checkSurveyStatus);
 router.get('/:surveyType/:aliasId', handlers.getFeedback);
 router.put('/:surveyType/:aliasId', handlers.finishSurvey);
 router.post('/:surveyId/:type/:aliasId', handlers.saveAnswer);

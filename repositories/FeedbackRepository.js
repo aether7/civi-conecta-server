@@ -187,12 +187,12 @@ class FeedbackRepository {
     return result.id;
   }
 
-  async checkStudentStatusByAliasId(uuid) {
+  async checkStudentStatusByRut(rut) {
     return this.connection
       .select('feedback.*')
       .from('student')
       .innerJoin('feedback', 'feedback.student_id', 'student.id')
-      .where('student.uuid', uuid)
+      .where('student.run', rut)
       .orderBy('feedback.id', 'desc')
       .first();
   }
