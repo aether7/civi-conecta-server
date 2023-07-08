@@ -1,8 +1,6 @@
 const knex = require('knex');
 const knexConfig = require('../knexfile');
 const config = require('../config');
-const connection = knex(knexConfig[config.env.nodeEnv]);
-
 const AnswerRepository = require('./AnswerRepository');
 const EstablishmentRepository = require('./EstablishmentRepository');
 const UserRepository = require('./UserRepository');
@@ -24,6 +22,7 @@ const ReportRepository = require('./ReportRepository');
 const ProfileRepository = require('./ProfileRepository');
 const CourseUnitRepository = require('./CourseUnitRepository');
 
+const connection = knex(knexConfig[config.env.nodeEnv]);
 const answerRepository = new AnswerRepository(connection);
 const eventRepository = new EventRepository(connection);
 const courseRepository = new CourseRepository(connection);

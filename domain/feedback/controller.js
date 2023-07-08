@@ -98,11 +98,19 @@ const finishAllSurveys = async (req, res) => {
   res.json({ ok: true });
 };
 
+const checkSurveyStatus = async (req, res) => {
+  const aliasUUID = req.params.aliasId;
+  const survey = await repositories.feedback.checkStudentStatusByAliasId(aliasUUID);
+  const isSurveyFinished = Number.parseInt(survey.is_finished);
+  res.json({ok: true, isSurveyFinished });
+};
+
 module.exports = wrapRequests({
   checkFeedbackStatus,
   getFeedback,
   saveAnswer,
   checkDetailedStatus,
   finishSurvey,
-  finishAllSurveys
+  finishAllSurveys,
+  checkSurveyStatus
 });

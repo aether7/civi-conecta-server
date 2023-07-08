@@ -186,6 +186,16 @@ class FeedbackRepository {
 
     return result.id;
   }
+
+  async checkStudentStatusByAliasId(uuid) {
+    return this.connection
+      .select('feedback.*')
+      .from('student')
+      .innerJoin('feedback', 'feedback.student_id', 'student.id')
+      .where('student.uuid', uuid)
+      .orderBy('feedback.id', 'desc')
+      .first();
+  }
 }
 
 module.exports = FeedbackRepository;
