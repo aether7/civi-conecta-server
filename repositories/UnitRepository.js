@@ -33,7 +33,7 @@ class UnitRepository {
         planning_student_material: 'planning.student_material'
       })
       .from('unit')
-      .leftJoin('lesson', 'lesson.unit_id', 'lesson.id')
+      .leftJoin('lesson', 'lesson.unit_id', 'unit.id')
       .leftJoin('planning', 'planning.lesson_id', 'lesson.id')
       .where('unit.id', id);
   }
