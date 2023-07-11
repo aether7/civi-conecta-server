@@ -23,3 +23,4 @@ DROP TABLE IF EXISTS public.feedback_course CASCADE;
 
 DROP TABLE IF EXISTS public.knex_migrations CASCADE;
 DROP TABLE IF EXISTS public.knex_migrations_lock CASCADE;
+DROP TABLE IF EXISTS public.course_unit CASCADE;
