@@ -5,7 +5,7 @@ class CourseUnitRepository {
 
   findByUnitAndTeacher(unitId, uuid) {
     return this.connection
-      .select()
+      .select('course_unit.*')
       .from('course_unit')
       .innerJoin('course', 'course_unit.course_id', 'course.id')
       .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
