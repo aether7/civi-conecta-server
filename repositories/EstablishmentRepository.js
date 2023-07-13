@@ -137,8 +137,7 @@ class EstablishmentRepository {
       .where('public.user.role', 'User')
       .where('course.id', courseId)
       .where('public.user.active', 1)
-      .orderBy('public.user.name')
-      .first();
+      .orderBy('public.user.name');
   }
 }
 

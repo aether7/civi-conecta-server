@@ -76,7 +76,12 @@ const getTeacherInfo = async (req, res) => {
   const establishmentId = req.params.establishmentId;
   const courseId = req.params.courseId;
   const result = await repositories.establishment.findTeachersByEstablishmentAndCourse(establishmentId, courseId);
-  res.json({ok: true, teacher: dto.mapTeacherInfo(result) });
+
+  if (!result.length) {
+    throw new exceptions.EntityNotFoundError('No hay profesor asociado a este curso aun');
+  }
+
+  res.json({ok: true, teacher: dto.mapTeacherInfo(result[0]) });
 };
 
 const getTeachersFromEstablishment = async (req, res) => {
