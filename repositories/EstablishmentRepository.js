@@ -19,6 +19,7 @@ class EstablishmentRepository {
     return this.connection
       .column({
         id: 'establishment.id',
+        courseId: 'course.id',
         name: 'establishment.name',
         active: 'establishment.active',
         level: 'grade.level',

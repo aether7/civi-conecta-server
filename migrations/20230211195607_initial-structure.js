@@ -175,8 +175,8 @@ exports.up = async function (knex) {
     t.text('start_activity');
     t.text('main_activity');
     t.text('end_activity');
-    t.string('teacher_material');
-    t.string('student_material');
+    t.string('teacher_material', 1024);
+    t.string('student_material', 1024);
     t.integer('lesson_id').unsigned();
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());

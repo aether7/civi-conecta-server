@@ -6,7 +6,7 @@ function addGrade(obj, row) {
   let course = obj.courses.find(c => c.level === row.level);
 
   if (!course) {
-    course = { level: row.level, letters: [] };
+    course = { id: row.courseId, level: row.level, letters: [] };
     obj.courses.push(course);
   }
 
