@@ -123,16 +123,11 @@ class UnitRepository {
       .into('course_unit');
   }
 
-  async update(number, gradeId, fieldsToUpdate) {
-    const fields = {
-      title: fieldsToUpdate.title,
-      description: fieldsToUpdate.description,
-      topic_id: fieldsToUpdate.topicId
-    };
+  async update(title, description, unitId) {
+    const fields = { title, description };
 
     const [entity] = await this.connection('unit')
-      .where('grade_id', gradeId)
-      .where('number', number)
+      .where('id', unitId)
       .update(fields, ['*']);
 
     return entity;

@@ -11,5 +11,6 @@ router.get('/grade/:gradeId', handlers.getUnitsByGrade);
 router.get('/teacher/:uuid', handlers.getUnitsByTeacherAlias);
 router.post('/', middlewares.verifyAdminRole, handlers.createUnit);
 router.delete('/:unitId', middlewares.verifyAdminRole, handlers.deleteUnit);
+router.put('/:unitId', middlewares.verifyAdminRole, handlers.editUnit);
 
 module.exports = router;

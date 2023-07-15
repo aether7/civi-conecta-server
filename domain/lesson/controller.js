@@ -30,8 +30,17 @@ const deleteLesson = async (req, res) => {
   res.json({ ok: true });
 };
 
+const updateLesson = async (req, res) => {
+  const eventId = req.params.eventId;
+  const lesson = await repositories.lesson.findByEventId(eventId);
+  const payload = dto.getPlanningToUpdate(req.body);
+  await repositories.lesson.updatePlanning(payload, lesson.id);
+  res.json({ ok: true });
+};
+
 module.exports = wrapRequests({
   getLessonById,
   createLesson,
-  deleteLesson
+  deleteLesson,
+  updateLesson
 });

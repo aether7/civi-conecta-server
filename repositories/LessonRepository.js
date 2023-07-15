@@ -105,6 +105,32 @@ class LessonRepository {
       .where('unit_id', unitId)
       .orderBy('id');
   }
+
+  findByEventId(eventId) {
+    return this.connection
+      .select()
+      .from('lesson')
+      .where('event_id', eventId)
+      .first();
+  }
+
+  async updatePlanning(data, lessonId) {
+    const fields = {
+      topic: data.topic,
+      keywords: data.keywords.join(','),
+      student_material: data.studentMaterials.join(','),
+      teacher_material: data.teacherMaterials.join(','),
+      start_activity: data.startActivity,
+      main_activity: data.mainActivity,
+      end_activity: data.endActivity
+    };
+
+    const [result] = await this.connection('planning')
+      .where('lesson_id', lessonId)
+      .update(fields, ['*']);
+
+    return result;
+  }
 }
 
 module.exports = LessonRepository;

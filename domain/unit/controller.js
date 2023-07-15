@@ -106,6 +106,14 @@ const updateUnitStatusByTeacher = async (req, res) => {
   res.json({ ok: true, result: nextStatus });
 };
 
+const editUnit = async (req, res) => {
+  const unitId = req.params.unitId;
+  const title = req.body.title;
+  const description = req.body.description;
+  const updatedUnit = await repositories.unit.update(title, description, unitId);
+  res.json({ok: true, result: updatedUnit});
+};
+
 module.exports = wrapRequests({
   getUnitsByGrade,
   getUnitById,
@@ -114,5 +122,6 @@ module.exports = wrapRequests({
   getUnitsByTeacherAlias,
   getUnitDashboardById,
   getUnitStatusByTeacher,
-  updateUnitStatusByTeacher
+  updateUnitStatusByTeacher,
+  editUnit
 });

@@ -52,8 +52,33 @@ const getPlanning = (data) => {
   };
 };
 
+const getPlanningToUpdate = (data) => {
+  const toArray = (x) => {
+    if (Array.isArray(x)) {
+      return x;
+    }
+
+    if (typeof x === 'string') {
+      return x.split(',');
+    }
+
+    return [];
+  };
+
+  return {
+    topic: data.topic,
+    keywords: toArray(data.keywords),
+    studentMaterials: toArray(data.studentMaterials),
+    teacherMaterials: toArray(data.teacherMaterials),
+    startActivity: data.startActivity,
+    mainActivity: data.mainActivity,
+    endActivity: data.endActivity
+  };
+};
+
 module.exports = {
   mapLesson,
   getLesson,
-  getPlanning
+  getPlanning,
+  getPlanningToUpdate
 };
