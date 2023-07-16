@@ -82,7 +82,11 @@ class LessonRepository {
       .first();
   }
 
-  deleteById(lessonId) {
+  async deleteById(lessonId) {
+    await this.connection('document')
+      .where('lesson_id', lessonId)
+      .del();
+
     return this.connection('lesson')
       .where('id', lessonId)
       .del();

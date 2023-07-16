@@ -27,6 +27,9 @@ const createLesson = async (req, res) => {
 };
 
 const deleteLesson = async (req, res) => {
+  const lessonId = req.params.lessonId;
+  await repositories.planning.deleteByLessonId(lessonId);
+  await repositories.lesson.deleteById(lessonId);
   res.json({ ok: true });
 };
 

@@ -41,6 +41,12 @@ class PlanningRepository {
       .where('event.id', eventId)
       .first();
   }
+
+  async deleteByLessonId(lessonId) {
+    return this.connection('planning')
+      .where('lesson_id', lessonId)
+      .del();
+  }
 }
 
 module.exports = PlanningRepository;
