@@ -13,11 +13,13 @@ class ReportRepository {
     return this.connection
       .select('student.run', 'student.name', subquery)
       .count({ answers: 'answer.id' })
-      .from('student')
+      .from('course')
+      .innerJoin('course_student', 'course.id', 'course_student.course_id')
+      .innerJoin('student', 'course_student.student_id', 'student.id')
       .innerJoin('feedback', 'feedback.student_id', 'student.id')
       .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
       .leftJoin('answer', 'answer.feedback_id', 'feedback.id')
-      .where('feedback_course.course_id', courseId)
+      .where('course.id', courseId)
       .groupBy('student.run', 'student.name')
       .orderBy('student.run');
   }
