@@ -25,8 +25,13 @@ const getFeedback = async (req, res) => {
   req.logger.info('alias from user: %s', alias);
   req.logger.info('survey type got: %s', surveyType);
 
+  const course = await (feedback.student_id ?
+    repositories.course.findByStudent(feedback.student_id) :
+    repositories.course.findByTeacher(feedback.teacher_id)
+  );
+
   const [survey, answers] = await Promise.all([
-    repositories.survey.findWithDataByType(surveyType),
+    repositories.survey.findWithDataByTypeAndCourse(surveyType, course.id),
     repositories.answer.findByAlias(alias)
   ]);
 

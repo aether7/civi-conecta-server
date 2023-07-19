@@ -38,7 +38,7 @@ class SurveyRepository {
       .first();
   }
 
-  async findWithDataByType(type) {
+  async findWithDataByTypeAndCourse(type, courseId) {
     const isForStudent = type === 'teacher' ? 0 : 1;
 
     return this.connection
@@ -52,9 +52,12 @@ class SurveyRepository {
         alternative_value: 'alternative.value',
         alternative_id: 'alternative.id'
       })
-      .from('unit')
+      .from('course')
+      .innerJoin('course_unit', 'course_unit.course_id', 'course.id')
+      .innerJoin('unit', 'course_unit.unit_id', 'unit.id')
       .innerJoin('question', 'question.unit_id', 'unit.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
+      .where('course.id', courseId)
       .where('question.is_for_student', isForStudent)
       .orderBy(['question.id', 'alternative.id']);
   }

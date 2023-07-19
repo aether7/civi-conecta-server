@@ -34,7 +34,9 @@ const checkMostCriticalAnswers = async (req, res) => {
 
 const getUnitsOrder = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
-  const results = await repositories.report.getUnitOrder(teacherUUID);
+  const teacher = await repositories.user.findByAlias(teacherUUID);
+  const course = await repositories.course.findByTeacher(teacher.id);
+  const results = await repositories.report.getUnitOrder(course.id);
   res.json({ok: true, results: dto.getUnitsOrder(results)});
 };
 

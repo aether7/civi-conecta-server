@@ -80,6 +80,15 @@ class CourseRepository {
       .where('teacher_id', teacherId)
       .first();
   }
+
+  findByStudent(studentId) {
+    return this.connection
+      .select('course.*')
+      .from('course')
+      .innerJoin('course_student', 'course_student.course_id', 'course.id')
+      .where('course_student.student_id', studentId)
+      .first();
+  }
 }
 
 module.exports = CourseRepository;

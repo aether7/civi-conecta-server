@@ -80,35 +80,32 @@ class ReportRepository {
       .limit(3);
   }
 
-  async getUnitOrder(teacherUUID) {
+  async getUnitOrder(courseId) {
     const [teacherResults, studentResults] = await Promise.all([
-      this._findUnitResults(teacherUUID, 0),
-      this._findUnitResults(teacherUUID, 1)
+      this._findUnitResults(courseId, 0),
+      this._findUnitResults(courseId, 1)
     ]);
 
     return { teacherResults, studentResults };
   }
 
-  _findUnitResults(teacherUUID, isForStudent) {
+  _findUnitResults(courseId, isForStudent) {
     return this.connection
       .column({
-        title: 'topic.title',
+        title: 'unit.title',
         unit_id: 'unit.id',
         description: 'unit.description'
       })
       .avg({ unit_order: 'alternative.value' })
-      .from('topic')
-      .innerJoin('unit', 'topic.id', 'unit.topic_id')
-      .innerJoin('question', 'question.topic_id', 'topic.id')
-      .innerJoin('alternative', 'alternative.question_id ', 'question.id')
+      .from('course')
+      .innerJoin('course_unit', 'course_unit.course_id', 'course.id')
+      .innerJoin('unit', 'course_unit.course_id', 'unit.id')
+      .innerJoin('question', 'question.unit_id', 'unit.id')
+      .innerJoin('alternative', 'alternative.question_id', 'question.id')
       .innerJoin('answer', 'answer.alternative_id', 'alternative.id')
-      .innerJoin('feedback', 'answer.feedback_id', 'feedback.id')
-      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
-      .innerJoin('course', 'feedback_course.course_id', 'course.id')
-      .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
+      .where('course.id', courseId)
       .where('question.is_for_student', isForStudent)
-      .where('public.user.uuid', teacherUUID)
-      .groupBy('topic.id', 'unit.id')
+      .groupBy('unit.id')
       .orderBy('unit.id');
   }
 }
