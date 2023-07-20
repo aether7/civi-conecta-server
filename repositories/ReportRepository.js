@@ -92,21 +92,23 @@ class ReportRepository {
   _findUnitResults(courseId, isForStudent) {
     return this.connection
       .column({
-        title: 'unit.title',
-        unit_id: 'unit.id',
-        description: 'unit.description'
+        unit_title: 'unit.title',
+        unit_id: 'unit.id'
       })
       .avg({ unit_order: 'alternative.value' })
       .from('course')
-      .innerJoin('course_unit', 'course_unit.course_id', 'course.id')
-      .innerJoin('unit', 'course_unit.course_id', 'unit.id')
+      .innerJoin('course_unit', 'course.id', 'course_unit.course_id')
+      .innerJoin('unit', 'course_unit.unit_id', 'unit.id')
       .innerJoin('question', 'question.unit_id', 'unit.id')
       .innerJoin('alternative', 'alternative.question_id', 'question.id')
       .innerJoin('answer', 'answer.alternative_id', 'alternative.id')
       .where('course.id', courseId)
       .where('question.is_for_student', isForStudent)
       .groupBy('unit.id')
-      .orderBy('unit.id');
+      .orderBy([
+        { column: 'unit_order', order: 'desc' },
+        { column: 'unit.id', order: 'asc' }
+      ]);
   }
 }
 
