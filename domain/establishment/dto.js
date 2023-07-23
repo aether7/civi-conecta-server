@@ -3,29 +3,20 @@ function addGrade(obj, row) {
     return obj;
   }
 
-  let course = obj.courses.find(c => c.level === row.level);
+  let course = obj.courses.find(c => c.id === row.courseId);
 
   if (!course) {
-    course = { id: row.courseId, level: row.level, letters: [] };
+    course = {
+      id: row.courseId,
+      level: row.level,
+      character: row.character,
+      students: []
+    };
+
     obj.courses.push(course);
   }
 
-  return addLetter(course, row);
-}
-
-function addLetter(obj, row) {
-  if (!row.character) {
-    return obj;
-  }
-
-  let letter = obj.letters.find(l => l.character === row.character);
-
-  if (!letter) {
-    letter = { character: row.character, students: [] };
-    obj.letters.push(letter);
-  }
-
-  return addStudent(letter, row);
+  return addStudent(course, row);
 }
 
 function addStudent(obj, row) {
