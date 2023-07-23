@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS public.user CASCADE;
 DROP TABLE IF EXISTS public.grade CASCADE;
 DROP TABLE IF EXISTS public.letter CASCADE;
@@ -20,7 +19,7 @@ DROP TABLE IF EXISTS public.lesson CASCADE;
 DROP TABLE IF EXISTS public.document CASCADE;
 DROP TABLE IF EXISTS public.feedback CASCADE;
 DROP TABLE IF EXISTS public.feedback_course CASCADE;
+DROP TABLE IF EXISTS public.course_unit CASCADE;
 
 DROP TABLE IF EXISTS public.knex_migrations CASCADE;
 DROP TABLE IF EXISTS public.knex_migrations_lock CASCADE;
-DROP TABLE IF EXISTS public.course_unit CASCADE;

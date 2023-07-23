@@ -86,13 +86,20 @@ const getUnitsOrder = (data) => {
   const arr = [];
 
   for (let i = 0; i < data.teacherResults.length; i++) {
-    const teacherPonderation = Number.parseFloat(data.teacherResults[i].unit_order) * PonderationTypes.TEACHER;
-    const studentsPonderation = Number.parseFloat(data.studentResults[i].unit_order) * PonderationTypes.STUDENT;
+    let ponderation = 0;
+
+    if (data.teacherResults[i] && data.studentResults[i]) {
+      const teacherPonderation = Number.parseFloat(data.teacherResults[i].unit_order) * PonderationTypes.TEACHER;
+      const studentsPonderation = Number.parseFloat(data.studentResults[i].unit_order) * PonderationTypes.STUDENT;
+      ponderation = teacherPonderation + studentsPonderation;
+    } else {
+      ponderation = Number.parseFloat(data.teacherResults[i].unit_order);
+    }
 
     arr.push({
       title: data.teacherResults[i].title,
       unitId: data.teacherResults[i].unit_id,
-      ponderation: teacherPonderation + studentsPonderation,
+      ponderation,
       description: data.teacherResults[i].description
     });
   }
