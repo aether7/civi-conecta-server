@@ -107,7 +107,7 @@ const checkSurveyStatus = async (req, res) => {
   const rut = req.params.rut;
   const survey = await repositories.feedback.checkStudentStatusByRut(rut);
   const isSurveyFinished = Number.parseInt(survey.is_finished);
-  res.json({ok: true, isSurveyFinished });
+  res.json({ ok: true, isSurveyFinished });
 };
 
 module.exports = wrapRequests({
