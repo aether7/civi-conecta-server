@@ -12,6 +12,17 @@ class DocumentRepository {
       .where('unit.id', unitId);
   }
 
+  findByEvent(eventId) {
+    return this.connection
+      .select('document.*')
+      .column({ eventId: 'event.id' })
+      .from('document')
+      .innerJoin('lesson', 'document.lesson_id', 'lesson.id')
+      .innerJoin('event', 'lesson.event_id', 'event.id')
+      .where('event.id', eventId)
+      .orderBy('document.id');
+  }
+
   findByLesson(lessonId) {
     return this.connection
       .select()

@@ -7,7 +7,8 @@ const mapEvent = (data) => {
     lessonId: data.lesson_id,
     title: data.title,
     description: data.description,
-    date: data.date
+    date: data.date,
+    files: data.files
   };
 };
 

@@ -20,6 +20,27 @@ DROP TABLE IF EXISTS public.document CASCADE;
 DROP TABLE IF EXISTS public.feedback CASCADE;
 DROP TABLE IF EXISTS public.feedback_course CASCADE;
 DROP TABLE IF EXISTS public.course_unit CASCADE;
-
 DROP TABLE IF EXISTS public.knex_migrations CASCADE;
 DROP TABLE IF EXISTS public.knex_migrations_lock CASCADE;
+
+ALTER SEQUENCE public.grade_id_seq RESTART;
+ALTER SEQUENCE public.letter_id_seq RESTART;
+ALTER SEQUENCE public.establishment_id_seq RESTART;
+ALTER SEQUENCE public.student_id_seq RESTART;
+ALTER SEQUENCE public.topic_id_seq RESTART;
+ALTER SEQUENCE public.course_id_seq RESTART;
+ALTER SEQUENCE public.course_student_id_seq RESTART;
+ALTER SEQUENCE public.unit_id_seq RESTART;
+ALTER SEQUENCE public.planning_id_seq RESTART;
+ALTER SEQUENCE public.survey_id_seq RESTART;
+ALTER SEQUENCE public.question_id_seq RESTART;
+ALTER SEQUENCE public.choice_id_seq RESTART;
+ALTER SEQUENCE public.event_type_id_seq RESTART;
+ALTER SEQUENCE public.event_id_seq RESTART;
+ALTER SEQUENCE public.alternative_id_seq RESTART;
+ALTER SEQUENCE public.answer_id_seq RESTART;
+ALTER SEQUENCE public.lesson_id_seq RESTART;
+ALTER SEQUENCE public.document_id_seq RESTART;
+ALTER SEQUENCE public.feedback_id_seq RESTART;
+ALTER SEQUENCE public.feedback_course_id_seq RESTART;
+ALTER SEQUENCE public.course_unit_id_seq RESTART;

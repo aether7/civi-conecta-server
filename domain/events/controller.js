@@ -5,7 +5,13 @@ const dto = require('./dto');
 const getEventsByType = async (req, res) => {
   const eventType = req.params.eventType;
   const gradeId = req.query.grade;
-  const results = await repositories.event.findByEventTypeId(eventType, gradeId);
+  const events = await repositories.event.findByEventTypeId(eventType, gradeId);
+  const results = [];
+
+  for (const event of events) {
+    const files = await repositories.document.findByEvent(event.id);
+    results.push({ ...event, files });
+  }
 
   res.json({ ok: true, events: results.map(dto.mapEvent) });
 };
