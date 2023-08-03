@@ -187,7 +187,7 @@ class FeedbackRepository {
     return result.id;
   }
 
-  async checkStudentStatusByRut(rut) {
+  checkStudentStatusByRut(rut) {
     return this.connection
       .select('feedback.*')
       .from('student')
