@@ -4,13 +4,18 @@ const repositories = require('../../repositories');
 const services = require('../../services');
 const LessonPathCreator = require('../../helpers/LessonPathCreator');
 const dto = require('./dto');
+const sse = require('../../helpers/sse');
 
 
 const getFile = async (req, res) => {
+  sse.publish({ message: 'Solicitando el archivo al FTP', type: 'notification' });
   const aliasId = req.params.aliasId;
   const file = await repositories.document.findByAlias(aliasId);
   const tempFile = services.tempfile.createFileStream();
-  await services.ftp.serveFile(tempFile.writer, file.filepath);
+
+  await services.ftp.serveFile(tempFile.writer, file.filepath, file.filesize);
+
+  sse.publish({ message: 'Preparando el archivo', type: 'notification' });
 
   res.set('Content-Type', file.mimetype);
   tempFile.reader.pipe(res);
@@ -18,12 +23,24 @@ const getFile = async (req, res) => {
 };
 
 const uploadLessonFile = async (req, res) => {
+  sse.publish({
+    message: 'enviando el archivo hacia el servidor FTP',
+    type: 'notification'
+  });
+
   const lessonId = req.params.lessonId;
   const fileName = req.body.originalFilename;
   const filePath = req.file.path;
+  const fileSize = req.file.size;
   const folderResult = await repositories.lesson.findFTPDataById(lessonId);
   const folderPath = new LessonPathCreator(folderResult).getLessonPath();
-  const filepath = await services.ftp.sendFile(folderPath, fileName, filePath);
+
+  const filepath = await services.ftp.sendFile({
+    folderPath,
+    fileName,
+    filePath,
+    fileSize
+  });
 
   const payload = {
     alias: uuid.v4(),

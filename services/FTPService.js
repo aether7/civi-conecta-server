@@ -5,6 +5,8 @@ const { createReadStream } = require('fs');
 const ftp = require('basic-ftp');
 const AdmZip = require('adm-zip');
 const TaskQueue = require('../helpers/TaskQueue');
+const sse = require('../helpers/sse');
+const config = require('../config');
 
 const emitter = new EventEmitter();
 
@@ -18,6 +20,17 @@ emitter.on('FOLDER::REMOVE', (folderName) => {
   execute();
 });
 
+const onProgress = (fileSize, type) => (info) => {
+  const percentage = Number((info.bytes / fileSize) * 100).toFixed(2);
+
+  const payload = {
+    type,
+    message: Number.parseFloat(percentage)
+  };
+
+  sse.publish(payload);
+};
+
 class FTPService {
   constructor(rootFolder, { host, port, user, password, secure }) {
     this.rootFolder = rootFolder;
@@ -26,16 +39,17 @@ class FTPService {
     this.user = user;
     this.password = password;
     this.secure = secure;
-    this.client = new ftp.Client();
+    this.client = null;
     this.taskQueue = new TaskQueue();
-    // this.client.ftp.verbose = true
   }
 
-  sendFile(folderPath, fileName, filePath) {
+  sendFile({ folderPath, fileName, filePath, fileSize }) {
     return this.taskQueue.add((done) => {
       const execute = async () => {
         const remotePath = `/${this.rootFolder}/${folderPath}`;
         await this._getAccess();
+        this.client.trackProgress(onProgress(fileSize, 'progressBar'));
+
         await this.client.ensureDir(remotePath);
         await this.client.cd(remotePath);
         await this.client.uploadFrom(createReadStream(filePath), fileName);
@@ -54,8 +68,9 @@ class FTPService {
     return this._close();
   }
 
-  async serveFile(stream, filepath) {
+  async serveFile(stream, filepath, fileSize) {
     await this._getAccess();
+    this.client.trackProgress(onProgress(fileSize, 'progressBar'));
     await this.client.downloadTo(stream, filepath);
     await this._close();
     return stream;
@@ -95,6 +110,9 @@ class FTPService {
   }
 
   _getAccess() {
+    this.client = new ftp.Client();
+    this.client.ftp.verbose = config.ftp.debug;
+
     return this.client.access({
       host: this.host,
       port: this.port,

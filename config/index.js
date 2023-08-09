@@ -31,7 +31,11 @@ const config = {
     port: getEnv('FTP_PORT', 21),
     user: getEnv('FTP_USER', 'anonymous'),
     password: getEnv('FTP_PASSWORD', 'guest'),
-    secure: getEnv('FTP_SECURE', false)
+    secure: getEnv('FTP_SECURE', false),
+    get debug() {
+      const val = getEnv('FTP_DEBUG', 'no');
+      return val === 'yes';
+    }
   },
   token: {
     expiration: {
