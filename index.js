@@ -7,7 +7,12 @@ const cors = require('cors');
 const express = require('express');
 const errorHandlers = require('./middlewares/handleErrors');
 const app = express();
-const logger = pino({ level: config.env.logLevel });
+const multistream = pino.multistream;
+const streams = [
+  { level: config.env.logLevel, stream: process.stdout },
+  { level: 'error', stream: process.stderr }
+];
+const logger = pino({ level: config.env.logLevel }, multistream(streams));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
