@@ -198,7 +198,7 @@ class SurveyRepository {
       .select()
       .from('feedback')
       .where('student_id', studentId)
-      .where('is_finished', FeedbackStatus.NOT_FINISHED)
+      .where('feedback_course_id', feedbackCourseId)
       .first();
 
     if (feedback) {

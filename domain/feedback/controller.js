@@ -9,6 +9,7 @@ const MINIMUM_PERCENTAGE_TO_CLOSE_SURVEY = 51;
 
 const checkFeedbackStatus = async (req, res) => {
   const uuid = req.params.uuid;
+
   const [teacherStatus, studentStatus] = await Promise.all([
     repositories.feedback.checkStatusByTeacherAlias(uuid),
     repositories.feedback.checkStudentStatusByTeacherAlias(uuid)
