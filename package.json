@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "PINO_LOG_LEVEL=debug nodemon index.js | pino-pretty",
-    "debug": "PINO_LOG_LEVEL=debug nodemon --inspect --trace-warnings index.js | pino-pretty",
+    "dev": "LOG_LEVEL=debug nodemon index.js",
+    "debug": "LOG_LEVEL=debug nodemon --inspect --trace-warnings index.js",
     "test": "tap",
     "migrate": "./node_modules/.bin/knex migrate:latest",
     "lint": "eslint ."
@@ -25,14 +25,13 @@
     "nanoid": "^4.0.1",
     "node-mailer": "^0.1.1",
     "pg": "^8.9.0",
-    "pino": "^8.9.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "eslint": "^8.35.0",
     "express-list-endpoints": "^6.0.0",
     "nodemon": "^2.0.20",
-    "pino-pretty": "^9.1.1",
     "sqlite3": "^5.1.6",
     "tap": "^16.3.4"
   }

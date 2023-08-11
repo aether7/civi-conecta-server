@@ -26,5 +26,5 @@ if (config.env.mustShowRoutes) {
 }
 
 app.listen(config.env.port, config.env.host, () => {
-  logger.info(`server running at http://${config.env.host}:${config.env.port}`);
+  logger.info('server running at http://%s:%s', config.env.host, config.env.port);
 });
