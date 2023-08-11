@@ -1,3 +1,13 @@
+const toArray = x => {
+  if (Array.isArray(x)) {
+    return x;
+  } else if (!x) {
+    return [];
+  }
+
+  return x.split(/,|-/).map(item => item.trim());
+};
+
 const mapDocument = (data) => {
   return {
     uuid: data.alias,
@@ -6,8 +16,6 @@ const mapDocument = (data) => {
 };
 
 const mapLesson = (data, documents=[]) => {
-  const toArray = x => x ? x.split(',') : [];
-
   return {
     id: data.id,
     number: data.number,
@@ -53,18 +61,6 @@ const getPlanning = (data) => {
 };
 
 const getPlanningToUpdate = (data) => {
-  const toArray = (x) => {
-    if (Array.isArray(x)) {
-      return x;
-    }
-
-    if (typeof x === 'string') {
-      return x.split(',');
-    }
-
-    return [];
-  };
-
   return {
     topic: data.topic,
     keywords: toArray(data.keywords),

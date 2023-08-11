@@ -34,8 +34,8 @@ const deleteLesson = async (req, res) => {
 };
 
 const updateLesson = async (req, res) => {
-  const eventId = req.params.eventId;
-  const lesson = await repositories.lesson.findByEventId(eventId);
+  const lessonId = req.params.lessonId;
+  const lesson = await repositories.lesson.findById(lessonId);
   const payload = dto.getPlanningToUpdate(req.body);
   await repositories.lesson.updatePlanning(payload, lesson.id);
   res.json({ ok: true });

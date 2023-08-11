@@ -1,4 +1,3 @@
-const uuid = require('uuid');
 const { SurveyTypes, FeedbackStatus } = require('../constants/entities');
 
 class FeedbackRepository {
@@ -62,41 +61,32 @@ class FeedbackRepository {
   }
 
   async checkStudentStatusByTeacherAlias(aliasId) {
-    const query = `
-      SELECT
-        COUNT(feedback.id) as quantity,
-        'no' as completed
-      FROM feedback
-      INNER JOIN feedback_course ON feedback.feedback_course_id = feedback_course.id
-      INNER JOIN course ON feedback_course.course_id = course.id
-      INNER JOIN public.user ON course.teacher_id = public.user.id
-      WHERE
-        public.user.uuid = ? AND
-        feedback.student_id IS NOT NULL AND
-        feedback.is_finished = ?
-      UNION
-      SELECT
-        COUNT(feedback.id) as quantity,
-        'yes' as completed
-      FROM feedback
-      INNER JOIN feedback_course ON feedback.feedback_course_id = feedback_course.id
-      INNER JOIN course ON feedback_course.course_id = course.id
-      INNER JOIN public.user ON course.teacher_id = public.user.id
-      WHERE
-        public.user.uuid = ? AND
-        feedback.student_id IS NOT NULL AND
-        feedback.is_finished = ?
-    `;
+    const _this = this;
 
-    const results = await this.connection.raw(query, [
-      aliasId,
-      FeedbackStatus.NOT_FINISHED,
-      aliasId,
-      FeedbackStatus.FINISHED
-    ]);
+    const results = await this.connection
+      .count({ quantity: 'feedback.id' })
+      .column({ completed: this.connection.raw("'no'") })
+      .from('feedback')
+      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .innerJoin('course', 'feedback_course.course_id', 'course.id')
+      .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
+      .where('public.user.uuid', aliasId)
+      .whereNotNull('feedback.student_id')
+      .where('feedback.is_finished', FeedbackStatus.NOT_FINISHED)
+      .union(function() {
+        this
+          .count({ quantity: 'feedback.id' })
+          .column({ completed: _this.connection.raw("'yes'") })
+          .from('feedback')
+          .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+          .innerJoin('course', 'feedback_course.course_id', 'course.id')
+          .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
+          .where('public.user.uuid', aliasId)
+          .whereNotNull('feedback.student_id')
+          .where('feedback.is_finished', FeedbackStatus.FINISHED);
+      });
 
-    const rows = results.rows;
-    return rows;
+    return results;
   }
 
   findByTypeAndAlias(type, alias) {
