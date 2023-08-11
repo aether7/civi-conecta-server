@@ -1,12 +1,13 @@
 require('dotenv').config();
 
 const config = require('./config');
-const pino = require('pino');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
+const pino = require('pino');
 const errorHandlers = require('./middlewares/handleErrors');
 const app = express();
+
 const multistream = pino.multistream;
 const streams = [
   { level: config.env.logLevel, stream: process.stdout },
@@ -32,5 +33,6 @@ if (config.env.mustShowRoutes) {
 }
 
 app.listen(config.env.port, config.env.host, () => {
+  process.stdout.write(`server running at http://${config.env.host}:${config.env.port}\n`);
   logger.info(`server running at http://${config.env.host}:${config.env.port}`);
 });
