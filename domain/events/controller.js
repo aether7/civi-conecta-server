@@ -4,7 +4,7 @@ const dto = require('./dto');
 
 const getEventsByType = async (req, res) => {
   const eventType = req.params.eventType;
-  const gradeId = req.query.grade;
+  const gradeId = req.params.gradeId;
   const events = await repositories.event.findByEventTypeId(eventType, gradeId);
   const results = [];
 
