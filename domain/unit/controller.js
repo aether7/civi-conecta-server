@@ -49,8 +49,7 @@ const createUnit = async (req, res) => {
   const body = {
     number,
     title,
-    description,
-    topicId
+    description
   };
 
   const unit = await repositories.unit.create(body);

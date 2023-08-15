@@ -103,6 +103,7 @@ class EstablishmentRepository {
   }
 
   async findTeachersByEstablishment(establishmentId) {
+    // eslint-disable-next-line quotes
     const innerQuery = "CASE public.user.encrypted_password WHEN 0 THEN public.user.password ELSE '*******' END";
 
     return this.connection
@@ -122,6 +123,7 @@ class EstablishmentRepository {
   }
 
   async findTeachersByEstablishmentAndCourse(establishmentId, courseId) {
+    // eslint-disable-next-line quotes
     const innerQuery = "CASE public.user.encrypted_password WHEN 0 THEN public.user.password ELSE '*******' END";
 
     return this.connection

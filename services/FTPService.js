@@ -84,7 +84,7 @@ class FTPService {
   }
 
   _createPromiseDownload(folderPath) {
-    const temporaryPath = path.join('/tmp/', folderPath);;
+    const temporaryPath = path.join('/tmp/', folderPath);
 
     return new Promise(resolve => {
       const execute = async () => {

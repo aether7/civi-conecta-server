@@ -197,6 +197,7 @@ exports.up = async function (knex) {
   });
 
   await knex.schema.createView('questions_quantity', (view) => {
+    // eslint-disable-next-line quotes
     const questionType = "CASE question.is_for_student WHEN 1 THEN 'student' ELSE 'teacher' END";
 
     view.as(

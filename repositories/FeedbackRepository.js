@@ -62,10 +62,12 @@ class FeedbackRepository {
 
   async checkStudentStatusByTeacherAlias(aliasId) {
     const _this = this;
+    const no = "'no'"; // eslint-disable-line quotes
+    const yes = "'yes'"; // eslint-disable-line quotes
 
     const results = await this.connection
       .count({ quantity: 'feedback.id' })
-      .column({ completed: this.connection.raw("'no'") })
+      .column({ completed: this.connection.raw(no) })
       .from('feedback')
       .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
       .innerJoin('course', 'feedback_course.course_id', 'course.id')
@@ -76,7 +78,7 @@ class FeedbackRepository {
       .union(function() {
         this
           .count({ quantity: 'feedback.id' })
-          .column({ completed: _this.connection.raw("'yes'") })
+          .column({ completed: _this.connection.raw(yes) })
           .from('feedback')
           .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
           .innerJoin('course', 'feedback_course.course_id', 'course.id')
@@ -135,10 +137,13 @@ class FeedbackRepository {
   }
 
   async checkCurrentSurveyCompletion(uuid) {
+    // eslint-disable-next-line quotes
+    const raw = "CASE feedback.is_finished WHEN 1 THEN 'yes' ELSE 'no' END";
+
     return this.connection
       .column({
         quantity: this.connection.raw('COUNT(feedback.id)'),
-        is_finished: this.connection.raw("CASE feedback.is_finished WHEN 1 THEN 'yes' ELSE 'no' END")
+        is_finished: this.connection.raw(raw)
       })
       .from('feedback_course')
       .leftJoin('feedback', 'feedback_course.id', 'feedback.feedback_course_id')

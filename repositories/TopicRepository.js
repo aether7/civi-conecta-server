@@ -1,7 +1,3 @@
-const exceptions = require('./exceptions');
-const messages = require('../config/messages');
-const knex = require('knex');
-
 class TopicRepository {
   constructor(connection) {
     this.connection = connection;

@@ -87,7 +87,6 @@ const updateTopic = async (req, res) => {
 };
 
 const deleteQuestion = async (req, res) => {
-  const unitId = req.params.topicId;
   const questionId = req.params.questionId;
 
   req.logger.info('deleting question %s', questionId);
