@@ -80,7 +80,8 @@ const mapTeacherInfo = (data) => {
     establishment: data.establishment_name,
     name: data.teacher_name,
     email: data.teacher_email,
-    password: data.passwd
+    password: data.passwd,
+    course: `${data.grade} ${data.letter}`
   };
 };
 

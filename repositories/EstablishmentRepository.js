@@ -111,11 +111,15 @@ class EstablishmentRepository {
         establishment_name: 'establishment.name',
         teacher_name: 'public.user.name',
         teacher_email: 'public.user.email',
-        passwd: this.connection.raw(innerQuery)
+        passwd: this.connection.raw(innerQuery),
+        grade: 'grade.level',
+        letter: 'letter.character'
       })
       .from('establishment')
       .innerJoin('course', 'course.establishment_id', 'establishment.id')
       .innerJoin('public.user', 'course.teacher_id', 'public.user.id')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('letter', 'course.letter_id', 'letter.id')
       .where('establishment.id', establishmentId)
       .where('public.user.role', 'User')
       .where('public.user.active', 1)
