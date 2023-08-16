@@ -63,12 +63,14 @@ const getPlanning = (data) => {
 const getPlanningToUpdate = (data) => {
   return {
     topic: data.topic,
-    keywords: toArray(data.keywords),
-    studentMaterials: toArray(data.studentMaterials),
-    teacherMaterials: toArray(data.teacherMaterials),
+    keywords: data.keywords,
+    studentMaterials: data.studentMaterials,
+    teacherMaterials: data.teacherMaterials,
     startActivity: data.startActivity,
     mainActivity: data.mainActivity,
-    endActivity: data.endActivity
+    endActivity: data.endActivity,
+    objective: data.objective,
+    description: data.description
   };
 };
 

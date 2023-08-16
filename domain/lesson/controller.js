@@ -17,6 +17,18 @@ const getLessonById = async (req, res) => {
   res.json({ ok: true, lesson: dto.mapLesson(lesson, documents) });
 };
 
+const getLessonByEventId = async (req, res) => {
+  const eventId = req.params.eventId;
+  const lesson = await repositories.lesson.findByEventId(eventId);
+  const documents = await repositories.document.findByLesson(lesson.id);
+
+  if (!lesson) {
+    throw new exceptions.EntityNotFoundError('La clase no existe');
+  }
+
+  res.json({ ok: true, lesson: dto.mapLesson(lesson, documents) });
+};
+
 const createLesson = async (req, res) => {
   const lessonPayload = dto.getLesson(req.body, req.query);
   const planningPayload = dto.getPlanning(req.body);
@@ -45,5 +57,6 @@ module.exports = wrapRequests({
   getLessonById,
   createLesson,
   deleteLesson,
-  updateLesson
+  updateLesson,
+  getLessonByEventId
 });

@@ -119,7 +119,7 @@ class LessonRepository {
   }
 
   async updatePlanning(data, lessonId) {
-    const fields = {
+    const planningFields = {
       topic: data.topic,
       keywords: data.keywords.join(','),
       student_material: data.studentMaterials.join(','),
@@ -129,11 +129,23 @@ class LessonRepository {
       end_activity: data.endActivity
     };
 
-    const [result] = await this.connection('planning')
-      .where('lesson_id', lessonId)
-      .update(fields, ['*']);
+    const lessonFields = {
+      description: data.description,
+      objective: data.objective
+    };
 
-    return result;
+    const updatePlanning = this.connection('planning')
+      .where('lesson_id', lessonId)
+      .update(planningFields);
+
+    const updateLesson = this.connection('lesson')
+      .where('id', lessonId)
+      .update(lessonFields);
+
+    return Promise.all([
+      updatePlanning,
+      updateLesson
+    ]);
   }
 }
 

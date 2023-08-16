@@ -3,6 +3,7 @@ const handlers = require('./controller');
 const router = Router();
 
 router.get('/:lessonId', handlers.getLessonById);
+router.get('/event/:eventId', handlers.getLessonByEventId);
 router.post('/', handlers.createLesson);
 router.delete('/:lessonId', handlers.deleteLesson);
 router.put('/:lessonId', handlers.updateLesson);
