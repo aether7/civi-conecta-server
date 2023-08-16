@@ -16,10 +16,9 @@ const mapDocument = (data) => {
 };
 
 const mapLesson = (data, documents=[]) => {
-  return {
+  const obj = {
     id: data.id,
     number: data.number,
-    description: data.description,
     objective: data.objective,
     files: documents.map(mapDocument),
     planning: {
@@ -32,8 +31,23 @@ const mapLesson = (data, documents=[]) => {
       startActivity: data.start_activity,
       mainActivity: data.main_activity,
       endActivity: data.end_activity
-    }
+    },
   };
+
+  if (data.title) {
+    obj.unit = {
+      title: data.title,
+      number: data.unit_number
+    };
+  }
+
+  if (data.date) {
+    obj.ephemeris = {
+      date: data.date
+    };
+  }
+
+  return obj;
 };
 
 const getLesson = (data) => {
@@ -70,7 +84,7 @@ const getPlanningToUpdate = (data) => {
     mainActivity: data.mainActivity,
     endActivity: data.endActivity,
     objective: data.objective,
-    description: data.description
+    date: data.date
   };
 };
 

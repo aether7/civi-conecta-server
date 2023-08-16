@@ -8,7 +8,9 @@ class LessonRepository {
       .column({
         id: 'lesson.id',
         number: 'lesson.number',
-        description: 'lesson.description',
+        unit_number: 'unit.number',
+        title: 'unit.title',
+        date: 'event.date',
         grade: 'grade.level',
         objective: 'lesson.objective',
         topic: 'planning.topic',
@@ -23,6 +25,7 @@ class LessonRepository {
       .innerJoin('planning', 'planning.lesson_id', 'lesson.id')
       .leftJoin('unit', 'lesson.unit_id', 'unit.id')
       .leftJoin('grade', 'unit.grade_id', 'grade.id')
+      .leftJoin('event', 'lesson.event_id', 'event.id')
       .where('lesson.id', lessonId)
       .first();
   }
@@ -112,8 +115,10 @@ class LessonRepository {
 
   findByEventId(eventId) {
     return this.connection
-      .select()
+      .select('lesson.*')
+      .column({ date: 'event.date' })
       .from('lesson')
+      .innerJoin('event', 'lesson.event_id', 'event.id')
       .where('event_id', eventId)
       .first();
   }
@@ -142,10 +147,20 @@ class LessonRepository {
       .where('id', lessonId)
       .update(lessonFields);
 
-    return Promise.all([
-      updatePlanning,
-      updateLesson
-    ]);
+    await Promise.all([updatePlanning,updateLesson]);
+
+    if (data.date) {
+      const event = await this.connection
+        .select('event.id')
+        .from('lesson')
+        .innerJoin('event', 'lesson.event_id', 'event.id')
+        .where('lesson.id', lessonId)
+        .first();
+
+      await this.connection('event')
+        .where('id', event.id)
+        .update('date', data.date);
+    }
   }
 }
 
