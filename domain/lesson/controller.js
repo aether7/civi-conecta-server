@@ -53,10 +53,36 @@ const updateLesson = async (req, res) => {
   res.json({ ok: true });
 };
 
+const createDocument = async (req, res) => {
+  const lessonId = req.params.lessonId;
+  const { filename, filepath } = req.body;
+  const documentId = await repositories.document.createLink(lessonId, { filename, filepath });
+
+  res.json({ ok: true, documentId });
+};
+
+const editDocument = async (req, res) => {
+  const id = req.params.id;
+  const { filename, filepath } = req.body;
+  await repositories.document.editLink(id, { filename, filepath });
+
+  res.json({ ok: true });
+};
+
+const removeDocument = async (req, res) => {
+  const id = req.params.id;
+  await repositories.document.removeLink(id);
+
+  res.json({ ok: true });
+};
+
 module.exports = wrapRequests({
   getLessonById,
   createLesson,
   deleteLesson,
   updateLesson,
-  getLessonByEventId
+  getLessonByEventId,
+  createDocument,
+  editDocument,
+  removeDocument
 });

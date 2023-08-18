@@ -10,8 +10,9 @@ const toArray = x => {
 
 const mapDocument = (data) => {
   return {
-    uuid: data.alias,
-    filename: data.filename
+    id: data.id,
+    filename: data.filename,
+    filepath: data.filepath
   };
 };
 

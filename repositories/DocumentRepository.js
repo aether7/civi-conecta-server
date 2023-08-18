@@ -3,6 +3,35 @@ class DocumentRepository {
     this.connection = connection;
   }
 
+  async createLink(lessonId, { filepath, filename }) {
+    const fields = {
+      filepath,
+      filename,
+      lesson_id: lessonId
+    };
+
+    const [row] = this.connection.insert(fields, ['id']).into('document');
+    return row.id;
+  }
+
+  editLink(id, { filepath, filename }) {
+    const fields = {
+      filepath,
+      filename,
+      updated_at: new Date()
+    };
+
+    return this.connection('document')
+      .where('id', id)
+      .update(fields);
+  }
+
+  removeLink(id) {
+    return this.connection('document')
+      .where('id', id)
+      .del();
+  }
+
   findByUnitId(unitId) {
     return this.connection
       .select('document.*')
