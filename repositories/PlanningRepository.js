@@ -11,9 +11,12 @@ class PlanningRepository {
       end_activity: payload.endActivity,
       teacher_material: payload.materials.teacher.join(','),
       student_material: payload.materials.student.join(','),
-      keywords: payload.keywords.join(','),
       lesson_id: lessonId
     };
+
+    if (payload.keywords) {
+      fields.keywords = payload.keywords.join(',');
+    }
 
     const [entity] = await this.connection
       .insert(fields, ['*'])

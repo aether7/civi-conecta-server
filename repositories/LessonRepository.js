@@ -126,13 +126,16 @@ class LessonRepository {
   async updatePlanning(data, lessonId) {
     const planningFields = {
       topic: data.topic,
-      keywords: data.keywords.join(','),
       student_material: data.studentMaterials.join(','),
       teacher_material: data.teacherMaterials.join(','),
       start_activity: data.startActivity,
       main_activity: data.mainActivity,
       end_activity: data.endActivity
     };
+
+    if (data.keywords) {
+      planningFields.keywords = data.keywords.join(',');
+    }
 
     const lessonFields = {
       description: data.description,
