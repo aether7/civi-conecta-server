@@ -10,7 +10,7 @@ class DocumentRepository {
       lesson_id: lessonId
     };
 
-    const [row] = this.connection.insert(fields, ['id']).into('document');
+    const [row] = await this.connection.insert(fields, ['id']).into('document');
     return row.id;
   }
 
