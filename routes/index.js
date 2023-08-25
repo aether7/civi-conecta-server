@@ -31,7 +31,6 @@ routesWithAuthToken.use('/units', require('../domain/unit/routes'));
 routesWithAuthToken.use('/lessons', require('../domain/lesson/routes'));
 routesWithAuthToken.use('/establishments', require('../domain/establishment/routes'));
 routesWithAuthToken.use('/surveys', require('../domain/survey/routes'));
-routesWithAuthToken.use('/files', require('../domain/files/routes'));
 routesWithAuthToken.use('/events', require('../domain/events/routes'));
 routesWithAuthToken.use('/reports', require('../domain/reports/routes'));
 routesWithAuthToken.use('/profile', require('../domain/profile/routes'));

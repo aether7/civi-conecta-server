@@ -20,11 +20,6 @@ app.use(require('./routes'));
 app.use(errorHandlers.handleNotFound);
 app.use(errorHandlers.handleServerError);
 
-if (config.env.mustShowRoutes) {
-  const listEndpoints = require('express-list-endpoints');
-  console.info(listEndpoints(app));
-}
-
 app.listen(config.env.port, config.env.host, () => {
   logger.info('server running at http://%s:%s', config.env.host, config.env.port);
 });
