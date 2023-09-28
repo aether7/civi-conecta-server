@@ -8,7 +8,8 @@ const mapEvent = (data) => {
     title: data.title,
     description: data.description,
     date: data.date,
-    files: data.files
+    files: data.files,
+    keywords: data.keywords.split(',')
   };
 };
 
