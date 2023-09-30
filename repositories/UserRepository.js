@@ -38,8 +38,7 @@ class UserRepository {
       .leftJoin('establishment', 'course.establishment_id', 'establishment.id')
       .where('public.user.email', email)
       .where('public.user.active', 1)
-      .first()
-      .debug();
+      .first();
 
     if (!entity) {
       throw new EntityNotFoundError(`No existe el usuario activo con el correo ${email}`);

@@ -15,7 +15,17 @@ const mapStudent = (data) => {
   };
 };
 
+const mapTeacher = (user) => {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    active: user.active
+  };
+};
+
 module.exports = {
   mapCourse,
-  mapStudent
+  mapStudent,
+  mapTeacher
 };

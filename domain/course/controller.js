@@ -1,4 +1,7 @@
 const repositories = require('../../repositories');
+const { wrapRequests } = require('../../helpers/controller');
+const { TeacherAlreadyAssignedError } = require('../../repositories/exceptions');
+const messages = require('../../config/messages');
 const dto = require('./dto');
 
 const findCourse = async (req, res) => {
@@ -23,9 +26,29 @@ const addStudent = async (req, res) => {
   res.json({ ok: true, student: dto.mapStudent(newStudent) });
 };
 
+const assignTeacher = async (req, res) => {
+  const courseId = req.params.courseId;
 
-module.exports = {
+  const user = await repositories.user.findOrCreateUser({
+    name: req.body.name,
+    email: req.body.email
+  });
+
+  const coursesTakenByTeacher = await repositories.course.findByTeacher(user.id);
+
+  if (coursesTakenByTeacher) {
+    throw new TeacherAlreadyAssignedError(messages.establishment.teacherAlreadyAssigned);
+  }
+
+  const course = await repositories.course.findById(courseId);
+  await repositories.course.updateTeacher(user.id, course.id);
+
+  res.json({ ok : true, user: dto.mapTeacher(user) });
+};
+
+module.exports = wrapRequests({
   findCourse,
   findStudents,
-  addStudent
-};
+  addStudent,
+  assignTeacher
+});
