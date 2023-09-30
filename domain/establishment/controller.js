@@ -6,7 +6,11 @@ const dto = require('./dto.js');
 
 const getEstablishments = async (_, res) => {
   const establishments = await repositories.establishment.findAll();
-  res.json({ ok: true, establishments: dto.mapEstablishments(establishments) });
+
+  res.json({
+    ok: true,
+    establishments: establishments.map(dto.mapEstablishment)
+  });
 };
 
 const createEstablishment = async (req, res) => {
@@ -14,6 +18,17 @@ const createEstablishment = async (req, res) => {
   const establishment = await repositories.establishment.create({ number, name });
   res.json({ ok: true, establishment });
 };
+
+
+const getCoursesFromEstablishment = async (req, res) => {
+  const establishmentId = Number.parseInt(req.params.establishmentId);
+  const courses = await repositories.course.findByEstablishmentId(establishmentId);
+  res.json({ ok: true, courses: courses.map(dto.mapCourse) });
+};
+
+
+
+
 
 const updateCoursesEstablishment = async (req, res) => {
   const number = req.params.number;
@@ -90,14 +105,25 @@ const getTeachersFromEstablishment = async (req, res) => {
   res.json({ok:true, teachers: result.map(dto.mapTeacherInfo)});
 };
 
+const getGradesFromEstablishment = async (req, res) => {
+  console.log('nidsnfasldkfjaslkdjfklasdf');
+  const establishmentId = Number.parseInt(req.params.establishmentId);
+  res.json({ ok: true, grades: [] });
+};
+
+
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
+  getCoursesFromEstablishment,
+
+
   updateCoursesEstablishment,
   updateTeacherToCourse,
   getProfile,
   updateEstablishmentStatus,
   getEstablishmentGrades,
   getTeacherInfo,
-  getTeachersFromEstablishment
+  getTeachersFromEstablishment,
+  getGradesFromEstablishment
 });

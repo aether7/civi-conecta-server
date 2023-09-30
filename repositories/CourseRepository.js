@@ -3,6 +3,15 @@ class CourseRepository {
     this.connection = connection;
   }
 
+  async findByEstablishmentId(establishmentId) {
+    return this.connection
+      .select('course.*', 'grade.level', 'letter.character')
+      .from('course')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('letter', 'course.letter_id', 'letter.id')
+      .where('course.establishment_id', establishmentId);
+  }
+
   async findOrCreate(establishmentId, gradeId, letterId) {
     const result = await this.findOneByEstablishmentAndGradeAndLetter(
       establishmentId,

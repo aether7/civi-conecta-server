@@ -15,25 +15,11 @@ class EstablishmentRepository {
     this.courseUnitRepository = courseUnitRepository;
   }
 
-  async findAll() {
+  findAll() {
     return this.connection
-      .column({
-        id: 'establishment.id',
-        courseId: 'course.id',
-        name: 'establishment.name',
-        active: 'establishment.active',
-        level: 'grade.level',
-        character: 'letter.character',
-        studentName: 'student.name',
-        studentRun: 'student.run'
-      })
+      .select()
       .from('establishment')
-      .leftJoin('course', 'course.establishment_id', 'establishment.id')
-      .leftJoin('grade', 'course.grade_id', 'grade.id')
-      .leftJoin('letter', 'course.letter_id', 'letter.id')
-      .leftJoin('course_student', 'course_student.course_id', 'course.id')
-      .leftJoin('student', 'course_student.student_id', 'student.id')
-      .where('establishment.active', 1);
+      .orderBy('id');
   }
 
   async create({ name }) {

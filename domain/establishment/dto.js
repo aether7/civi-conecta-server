@@ -36,26 +36,23 @@ function addStudent(obj, row) {
   obj.students.push({ name: row.studentName, run: row.studentRun });
 }
 
-const mapEstablishments = (establishments) => {
-  const results = {};
-
-  establishments.forEach(establishment => {
-    if (!results[establishment.id]) {
-      results[establishment.id] = {
-        id: establishment.id,
-        name: establishment.name,
-        active: establishment.active,
-        courses: []
-      };
-    }
-
-    addGrade(results[establishment.id], establishment);
-  });
-
-  return Object.keys(results).reduce((arr, key) => {
-    return arr.concat(results[key]);
-  }, []);
+const mapEstablishment = (establishment) => {
+  return {
+    id: establishment.id,
+    name: establishment.name,
+    active: establishment.active
+  };
 };
+
+
+const mapCourse = (course) => {
+  return {
+    id: course.id,
+    level: course.level,
+    character: course.character
+  };
+};
+
 
 const mapTeacher = (user) => {
   return {
@@ -85,4 +82,4 @@ const mapTeacherInfo = (data) => {
   };
 };
 
-module.exports = { mapEstablishments, mapTeacher, mapProfileInfo, mapTeacherInfo };
+module.exports = { mapEstablishment, mapTeacher, mapProfileInfo, mapTeacherInfo, mapCourse };
