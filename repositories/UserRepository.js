@@ -20,11 +20,26 @@ class UserRepository {
   }
 
   async findOneByEmail(email) {
-    const entity = await this.connection.select()
-      .from('user')
-      .where('email', email)
-      .where('active', 1)
-      .first();
+    const entity = await this.connection
+      .column({
+        id: 'public.user.id',
+        name: 'public.user.name',
+        email: 'public.user.email',
+        role: 'public.user.role',
+        password: 'public.user.password',
+        user_active: 'public.user.active',
+        user_uuid: 'public.user.uuid',
+        encrypted_password: 'public.user.encrypted_password',
+        is_custom_planification: 'public.user.is_custom_planification',
+        is_establishment_active: 'establishment.active'
+      })
+      .from('public.user')
+      .leftJoin('course', 'course.teacher_id', 'public.user.id')
+      .leftJoin('establishment', 'course.establishment_id', 'establishment.id')
+      .where('public.user.email', email)
+      .where('public.user.active', 1)
+      .first()
+      .debug();
 
     if (!entity) {
       throw new EntityNotFoundError(`No existe el usuario activo con el correo ${email}`);

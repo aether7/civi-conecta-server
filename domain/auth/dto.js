@@ -3,9 +3,9 @@ const mapUser = (user) => {
     email: user.email,
     name: user.name,
     role: user.role,
-    active: !!user.active,
+    active: !!user.user_active,
     password: user.password,
-    uuid: user.uuid,
+    uuid: user.user_uuid,
     isCustomPlanification: !!user.is_custom_planification
   };
 };

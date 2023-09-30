@@ -8,15 +8,48 @@ const { wrapRequests } = require('../../helpers/controller');
 const dto = require('./dto');
 
 
+class UserWithLogin {
+  constructor(data) {
+    this.data = data;
+    this.errorMessage = null;
+  }
+
+  get canLogin() {
+    const role = this.data.role;
+    const isAdministrator = role === 'Administrator';
+    const hasNoCurrentEstablishmentActive = !!this.data.is_establishment_active;
+
+    if (isAdministrator) {
+      return true;
+    }
+
+    if (!isAdministrator && !hasNoCurrentEstablishmentActive) {
+      this.errorMessage = 'El establecimiento esta inactivo, no se puede ingresar';
+      return false;
+    }
+
+    return true;
+  }
+}
+
+
 const signIn = async (req, res) => {
   const { email, password } = req.body;
   const user = await repositories.user.findOneByEmail(email);
   const isValidUser = user && passwordHelper.isValidPassword(user, password);
+  const userWithLogin = new UserWithLogin(user);
 
   if (!isValidUser) {
     return res.status(400).json({
       ok: false,
       error: messages.auth.notValid
+    });
+  }
+
+  if (!userWithLogin.canLogin) {
+    return res.status(400).json({
+      ok: false,
+      error: userWithLogin.errorMessage
     });
   }
 
