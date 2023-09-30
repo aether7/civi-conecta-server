@@ -27,7 +27,15 @@ const getCoursesFromEstablishment = async (req, res) => {
 };
 
 
+const createCourse = async (req, res) => {
+  const establishmentId = Number.parseInt(req.params.establishmentId);
+  const gradeId = Number.parseInt(req.body.gradeId);
+  const letterId = Number.parseInt(req.body.letterId);
+  const courseRecord  = await repositories.course.create(establishmentId, gradeId, letterId);
+  const course = await repositories.course.findById(courseRecord.id);
 
+  res.json({ ok: true, course: dto.mapCourse(course) });
+};
 
 
 const updateCoursesEstablishment = async (req, res) => {
@@ -116,6 +124,7 @@ module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
   getCoursesFromEstablishment,
+  createCourse,
 
 
   updateCoursesEstablishment,

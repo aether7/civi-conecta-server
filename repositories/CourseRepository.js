@@ -5,11 +5,29 @@ class CourseRepository {
 
   async findByEstablishmentId(establishmentId) {
     return this.connection
-      .select('course.*', 'grade.level', 'letter.character')
+      .select(
+        'course.*',
+        'grade.level',
+        'letter.character'
+      )
       .from('course')
       .innerJoin('grade', 'course.grade_id', 'grade.id')
       .innerJoin('letter', 'course.letter_id', 'letter.id')
       .where('course.establishment_id', establishmentId);
+  }
+
+  async findById(pk) {
+    return this.connection
+      .select(
+        'course.*',
+        'grade.level',
+        'letter.character'
+      )
+      .from('course')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('letter', 'course.letter_id', 'letter.id')
+      .where('course.id', pk)
+      .first();
   }
 
   async findOrCreate(establishmentId, gradeId, letterId) {

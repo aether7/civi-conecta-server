@@ -49,7 +49,9 @@ const mapCourse = (course) => {
   return {
     id: course.id,
     level: course.level,
-    character: course.character
+    character: course.character,
+    gradeId: course.grade_id,
+    letterId: course.letter_id
   };
 };
 
