@@ -13,8 +13,19 @@ const findStudents = async (req, res) => {
   res.json({ok: true, students: students.map(dto.mapStudent)});
 };
 
+const addStudent = async (req, res) => {
+  const courseId = Number.parseInt(req.params.courseId);
+  const { name, run } = req.body;
+  const newStudent = await repositories.student.create({ name, run });
+
+  await repositories.courseStudent.create({ courseId, studentId: newStudent.id });
+
+  res.json({ ok: true, student: dto.mapStudent(newStudent) });
+};
+
 
 module.exports = {
   findCourse,
-  findStudents
+  findStudents,
+  addStudent
 };

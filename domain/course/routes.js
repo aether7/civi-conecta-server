@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/:courseId', handlers.findCourse);
 router.get('/:courseId/students', handlers.findStudents);
+router.post('/:courseId/students', handlers.addStudent);
 
 
 module.exports = router;
