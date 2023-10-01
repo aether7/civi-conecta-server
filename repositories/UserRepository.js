@@ -112,6 +112,15 @@ class UserRepository {
       .where('id', id)
       .update('is_custom_planification', 1);
   }
+
+  findByCourse(courseId) {
+    return this.connection
+      .select()
+      .from('user')
+      .innerJoin('course', 'course.teacher_id', 'user.id')
+      .where('course.id', courseId)
+      .first();
+  }
 }
 
 module.exports = UserRepository;

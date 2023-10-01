@@ -26,6 +26,17 @@ const addStudent = async (req, res) => {
   res.json({ ok: true, student: dto.mapStudent(newStudent) });
 };
 
+const findAssignedTeacher = async (req, res) => {
+  const courseId = req.params.courseId;
+  const teacher = await repositories.user.findByCourse(courseId);
+
+  if (teacher) {
+    res.json({ ok: true, teacher: dto.mapTeacher(teacher) });
+  } else {
+    res.status(404).json({ ok: false });
+  }
+};
+
 const assignTeacher = async (req, res) => {
   const courseId = req.params.courseId;
 
@@ -50,5 +61,6 @@ module.exports = wrapRequests({
   findCourse,
   findStudents,
   addStudent,
+  findAssignedTeacher,
   assignTeacher
 });
