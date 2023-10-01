@@ -3,14 +3,12 @@ const handlers = require('./controller');
 const middlewares = require('../../middlewares/authentication');
 const router = express.Router();
 
-router.get('/', handlers.getEstablishments);
+router.get('/', middlewares.verifyAdminRole, handlers.getEstablishments);
 router.post('/', middlewares.verifyAdminRole, handlers.createEstablishment);
-
-router.get('/:establishmentId/courses', handlers.getCoursesFromEstablishment);
-router.post('/:establishmentId/courses', handlers.createCourse);
-
-router.get('/:establishmentId/grades', handlers.getGradesFromEstablishment);
-router.get('/:establishmentId/teachers', handlers.getTeachersFromEstablishment);
+router.get('/:establishmentId/courses', middlewares.verifyAdminRole, handlers.getCoursesFromEstablishment);
+router.post('/:establishmentId/courses', middlewares.verifyAdminRole, handlers.createCourse);
+router.get('/:establishmentId/grades', middlewares.verifyAdminRole, handlers.getGradesFromEstablishment);
+router.get('/:establishmentId/teachers', middlewares.verifyAdminRole, handlers.getTeachersFromEstablishment);
 
 
 router.get('/:establishmentId/grades/:gradeId', handlers.getEstablishmentGrades);
