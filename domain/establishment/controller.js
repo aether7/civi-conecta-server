@@ -113,26 +113,17 @@ const getTeachersFromEstablishment = async (req, res) => {
   res.json({ok:true, teachers: result.map(dto.mapTeacherInfo)});
 };
 
-const getGradesFromEstablishment = async (req, res) => {
-  console.log('nidsnfasldkfjaslkdjfklasdf');
-  const establishmentId = Number.parseInt(req.params.establishmentId);
-  res.json({ ok: true, grades: [] });
-};
-
 
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
   getCoursesFromEstablishment,
   createCourse,
-
-
   updateCoursesEstablishment,
   updateTeacherToCourse,
   getProfile,
   updateEstablishmentStatus,
   getEstablishmentGrades,
   getTeacherInfo,
-  getTeachersFromEstablishment,
-  getGradesFromEstablishment
+  getTeachersFromEstablishment
 });

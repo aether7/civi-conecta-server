@@ -13,7 +13,8 @@ class CourseRepository {
       .from('course')
       .innerJoin('grade', 'course.grade_id', 'grade.id')
       .innerJoin('letter', 'course.letter_id', 'letter.id')
-      .where('course.establishment_id', establishmentId);
+      .where('course.establishment_id', establishmentId)
+      .orderBy(['grade.id', 'letter.id']);
   }
 
   async findById(pk) {
@@ -77,7 +78,8 @@ class CourseRepository {
       .innerJoin('grade', 'course.grade_id', 'grade.id')
       .innerJoin('letter', 'course.letter_id', 'letter.id')
       .where('course.establishment_id', establishmentId)
-      .where('course.grade_id', gradeId);
+      .where('course.grade_id', gradeId)
+      .orderBy(['grade.id', 'letter.id']);
   }
 
   async create(establishmentId, gradeId, letterId) {

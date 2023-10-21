@@ -7,7 +7,6 @@ router.get('/', middlewares.verifyAdminRole, handlers.getEstablishments);
 router.post('/', middlewares.verifyAdminRole, handlers.createEstablishment);
 router.get('/:establishmentId/courses', middlewares.verifyAdminRole, handlers.getCoursesFromEstablishment);
 router.post('/:establishmentId/courses', middlewares.verifyAdminRole, handlers.createCourse);
-router.get('/:establishmentId/grades', middlewares.verifyAdminRole, handlers.getGradesFromEstablishment);
 router.get('/:establishmentId/teachers', middlewares.verifyAdminRole, handlers.getTeachersFromEstablishment);
 
 
