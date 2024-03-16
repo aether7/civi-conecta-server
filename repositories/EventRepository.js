@@ -56,18 +56,28 @@ class EventRepository {
 
   findByEventTypeId(eventTypeId, gradeId=null) {
     const builder = this.connection
-      .select('event.*', 'planning.keywords')
-      .column({ lesson_id: 'lesson.id' })
+      .column({
+        id: 'event.id',
+        title: 'event.title',
+        description: 'event.description',
+        date: 'event.date',
+        event_type_id: 'event.event_type_id',
+        grade_id: 'event.grade_id',
+        created_at: 'event.created_at',
+        updated_at: 'event.updated_at',
+        lesson_id: 'lesson.id',
+        keywords: 'planning.keywords'
+      })
       .from('event')
       .innerJoin('lesson', 'lesson.event_id', 'event.id')
       .innerJoin('planning', 'planning.lesson_id', 'lesson.id')
       .where('event_type_id', eventTypeId);
 
     if (gradeId) {
-      builder.where('grade_id', gradeId);
+      builder.where('event.grade_id', gradeId);
     }
 
-    return builder.orderBy('date', 'desc');
+    return builder.orderBy('event.date', 'desc').debug();
   }
 
   deleteById(eventId) {
