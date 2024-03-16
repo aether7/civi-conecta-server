@@ -19,7 +19,7 @@ module.exports = {
       port: 5432,
       user: 'root',
       password: 'root',
-      database: 'test'
+      database: 'civiconecta'
     },
     pool: {
       min: 2,

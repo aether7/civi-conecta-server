@@ -22,7 +22,7 @@ const config = {
       port: getEnv('DB_PORT', 5432),
       user: getEnv('DB_USER', 'root'),
       password: getEnv('DB_PASSWORD', 'root'),
-      database: getEnv('DB_DATABASE', 'civiconectadb')
+      database: getEnv('DB_DATABASE', 'civiconecta')
     }
   },
   ftp: {

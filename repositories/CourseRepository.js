@@ -93,7 +93,40 @@ class CourseRepository {
       .insert(fields, ['*'])
       .into('course');
 
+    await this._createCourseUnits(result.id, gradeId);
+
     return result;
+  }
+
+  async _createCourseUnits(courseId, gradeId) {
+    const units = await this.connection
+      .select()
+      .from('unit')
+      .where('grade_id', gradeId);
+
+    for (const unit of units) {
+      await this._linkCourseWithUnit(unit.id, courseId);
+    }
+  }
+
+  async _linkCourseWithUnit(unitId, courseId) {
+    const record = await this.connection
+      .select()
+      .from('course_unit')
+      .where('course_id', courseId)
+      .where('unit_id', unitId)
+      .first();
+
+    if (record) {
+      return;
+    }
+
+    const fields = {
+      course_id: courseId,
+      unit_id: unitId
+    };
+
+    return this.connection.insert(fields).into('course_unit');
   }
 
   updateTeacher(teacherId, courseId) {
