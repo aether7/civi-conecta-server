@@ -4,23 +4,30 @@ class ReportRepository {
   }
 
   getStudentCompletionReport(courseId) {
-    const subquery = this.connection
-      .count('question.id')
-      .from('question')
-      .where('is_for_student', 1)
-      .as('question_count');
-
     return this.connection
-      .select('student.run', 'student.name', subquery)
+      .with('question_quantities', (qb) => {
+        qb
+          .column({
+            grade_id: 'grade.id',
+            question_count: this.connection.raw('COUNT(grade.id)')
+          })
+          .from('question')
+          .innerJoin('unit', 'question.unit_id', 'unit.id')
+          .innerJoin('grade', 'unit.grade_id', 'grade.id')
+          .where('question.is_for_student', 1)
+          .groupBy('grade.id')
+      })
+      .select('student.run', 'student.name', 'question_quantities.question_count')
       .count({ answers: 'answer.id' })
       .from('course')
       .innerJoin('course_student', 'course.id', 'course_student.course_id')
       .innerJoin('student', 'course_student.student_id', 'student.id')
       .innerJoin('feedback', 'feedback.student_id', 'student.id')
       .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .innerJoin('question_quantities', 'question_quantities.grade_id', 'course.grade_id')
       .leftJoin('answer', 'answer.feedback_id', 'feedback.id')
       .where('course.id', courseId)
-      .groupBy('student.run', 'student.name')
+      .groupBy('student.run', 'student.name', 'question_quantities.question_count')
       .orderBy('student.run');
   }
 
