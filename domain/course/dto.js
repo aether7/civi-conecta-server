@@ -3,7 +3,7 @@ const mapCourse = (data) => {
     id: data.id,
     level: data.level,
     character: data.character
-  }
+  };
 };
 
 const mapStudent = (data) => {

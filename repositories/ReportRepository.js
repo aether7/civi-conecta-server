@@ -15,7 +15,7 @@ class ReportRepository {
           .innerJoin('unit', 'question.unit_id', 'unit.id')
           .innerJoin('grade', 'unit.grade_id', 'grade.id')
           .where('question.is_for_student', 1)
-          .groupBy('grade.id')
+          .groupBy('grade.id');
       })
       .select('student.run', 'student.name', 'question_quantities.question_count')
       .count({ answers: 'answer.id' })
@@ -28,7 +28,7 @@ class ReportRepository {
       .leftJoin('answer', 'answer.feedback_id', 'feedback.id')
       .where('course.id', courseId)
       .groupBy('student.run', 'student.name', 'question_quantities.question_count')
-      .orderBy('student.run');
+      .orderBy('student.name');
   }
 
   getStudentAnswers(teacherUUID, questionId) {

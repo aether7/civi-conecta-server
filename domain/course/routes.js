@@ -1,6 +1,5 @@
 const express = require('express');
 const handlers = require('./controller');
-const middlewares = require('../../middlewares/authentication');
 const router = express.Router();
 
 router.get('/:courseId', handlers.findCourse);

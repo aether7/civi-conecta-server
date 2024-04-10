@@ -1,41 +1,3 @@
-function addGrade(obj, row) {
-  if (!row.level) {
-    return obj;
-  }
-
-  let course = obj.courses.find(c => c.level === row.level);
-
-  if (!course) {
-    course = { id: row.courseId, level: row.level, letters: [] };
-    obj.courses.push(course);
-  }
-
-  return addLetter(course, row);
-}
-
-function addLetter(obj, row) {
-  if (!row.character) {
-    return obj;
-  }
-
-  let letter = obj.letters.find(l => l.character === row.character);
-
-  if (!letter) {
-    letter = { character: row.character, students: [] };
-    obj.letters.push(letter);
-  }
-
-  return addStudent(letter, row);
-}
-
-function addStudent(obj, row) {
-  if (!row.studentName) {
-    return obj;
-  }
-
-  obj.students.push({ name: row.studentName, run: row.studentRun });
-}
-
 const mapEstablishment = (establishment) => {
   return {
     id: establishment.id,
@@ -43,7 +5,6 @@ const mapEstablishment = (establishment) => {
     active: establishment.active
   };
 };
-
 
 const mapCourse = (course) => {
   return {
@@ -54,7 +15,6 @@ const mapCourse = (course) => {
     letterId: course.letter_id
   };
 };
-
 
 const mapTeacher = (user) => {
   return {
@@ -84,4 +44,10 @@ const mapTeacherInfo = (data) => {
   };
 };
 
-module.exports = { mapEstablishment, mapTeacher, mapProfileInfo, mapTeacherInfo, mapCourse };
+module.exports = {
+  mapEstablishment,
+  mapTeacher,
+  mapProfileInfo,
+  mapTeacherInfo,
+  mapCourse
+};
