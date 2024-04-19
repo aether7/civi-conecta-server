@@ -70,6 +70,7 @@ const getSurvey = (data) => {
 const mapStudentAnswerReport = (data) => {
   return data.map(student => ({
     name: student.name,
+    lastname: student.lastname,
     run: student.run,
     survey: {
       answered: Number(student.answers),

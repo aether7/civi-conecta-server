@@ -82,6 +82,7 @@ const mapStatistics = (teacherProgress, studentsProgress) => {
         return {
           run: result.run,
           name: result.name,
+          lastname: result.lastname,
           survey: {
             completed: result.quantity,
             total: result.total,

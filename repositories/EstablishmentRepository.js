@@ -132,6 +132,25 @@ class EstablishmentRepository {
       .where('public.user.active', 1)
       .orderBy('public.user.name');
   }
+
+  async removeStudent(studentId) {
+    const feedback = await this.connection
+      .select()
+      .from('feedback')
+      .where('student_id', studentId)
+      .first();
+
+    if (feedback) {
+      await this.connection('answer').where('feedback_id', feedback.id).del();
+      await this.connection('feedback').where('student_id', studentId).del();
+    }
+
+    await this.connection('course_student').where('student_id', studentId).del();
+
+    return this.connection('student')
+      .where('id', studentId)
+      .del();
+  }
 }
 
 module.exports = EstablishmentRepository;

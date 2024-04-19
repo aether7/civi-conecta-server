@@ -116,7 +116,7 @@ class SurveyRepository {
       .as('question_count');
 
     return this.connection
-      .select('student.run', 'student.name', subquery)
+      .select('student.run', 'student.name', 'student.lastname', subquery)
       .count({ answers: 'answer.id' })
       .from('student')
       .innerJoin('feedback', 'feedback.student_id', 'student.id')

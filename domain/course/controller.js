@@ -18,8 +18,8 @@ const findStudents = async (req, res) => {
 
 const addStudent = async (req, res) => {
   const courseId = Number.parseInt(req.params.courseId);
-  const { name, run } = req.body;
-  const newStudent = await repositories.student.create({ name, run });
+  const { name, lastname, run } = req.body;
+  const newStudent = await repositories.student.create({ name, lastname, run });
 
   await repositories.courseStudent.create({ courseId, studentId: newStudent.id });
 

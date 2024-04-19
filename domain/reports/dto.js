@@ -8,6 +8,7 @@ const studentCompletionReport = (students) => {
     return {
       run: student.run,
       name: student.name,
+      lastname: student.lastname,
       questions,
       answers,
       percentage: Number(((answers / questions) * 100).toFixed(2))

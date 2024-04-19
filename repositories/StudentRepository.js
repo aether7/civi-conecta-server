@@ -26,6 +26,7 @@ class StudentRepository {
   async create(student) {
     const fields = {
       name: student.name,
+      lastname: student.lastname,
       run: student.run,
       uuid: uuid.v4()
     };

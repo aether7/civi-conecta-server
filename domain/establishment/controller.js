@@ -110,9 +110,15 @@ const getTeacherInfo = async (req, res) => {
 const getTeachersFromEstablishment = async (req, res) => {
   const establishmentId = Number.parseInt(req.params.establishmentId);
   const result = await repositories.establishment.findTeachersByEstablishment(establishmentId);
-  res.json({ok:true, teachers: result.map(dto.mapTeacherInfo)});
+  res.json({ok: true, teachers: result.map(dto.mapTeacherInfo)});
 };
 
+const removeStudent = async (req, res) => {
+  const studentId = Number.parseInt(req.params.studentId);
+  req.logger.info('Removing student %s', studentId);
+  await repositories.establishment.removeStudent(studentId);
+  res.json({ok: true});
+};
 
 module.exports = wrapRequests({
   getEstablishments,
@@ -125,5 +131,6 @@ module.exports = wrapRequests({
   updateEstablishmentStatus,
   getEstablishmentGrades,
   getTeacherInfo,
-  getTeachersFromEstablishment
+  getTeachersFromEstablishment,
+  removeStudent
 });

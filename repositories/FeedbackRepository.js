@@ -30,6 +30,7 @@ class FeedbackRepository {
     return this.connection
       .select(
         'student.name',
+        'student.lastname',
         'student.run'
       )
       .count({ quantity: 'answers_by_person.id' })

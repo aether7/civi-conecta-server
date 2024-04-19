@@ -108,6 +108,7 @@ const verifyStudent = async (req, res) => {
   const token = await services.token.createToken({
     uuid: student.uuid,
     name: student.name,
+    lastname: student.lastname,
     role: 'student',
     active: 1
   });

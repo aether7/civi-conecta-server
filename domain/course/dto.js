@@ -10,6 +10,7 @@ const mapStudent = (data) => {
   return {
     id: data.id,
     name: data.name,
+    lastname: data.lastname,
     run: data.run,
     uuid: data.uuid
   };
