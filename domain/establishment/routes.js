@@ -9,6 +9,7 @@ router.get('/:establishmentId/courses', middlewares.verifyAdminRole, handlers.ge
 router.post('/:establishmentId/courses', middlewares.verifyAdminRole, handlers.createCourse);
 router.get('/:establishmentId/teachers', middlewares.verifyAdminRole, handlers.getTeachersFromEstablishment);
 router.delete('/student/:studentId', middlewares.verifyAdminRole, handlers.removeStudent);
+router.put('/student/:studentId', middlewares.verifyAdminRole, handlers.updateStudent);
 
 router.get('/:establishmentId/grades/:gradeId', handlers.getEstablishmentGrades);
 router.put('/:number/courses/teacher', middlewares.verifyAdminRole, handlers.updateTeacherToCourse);

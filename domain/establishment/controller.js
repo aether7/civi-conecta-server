@@ -120,6 +120,15 @@ const removeStudent = async (req, res) => {
   res.json({ok: true});
 };
 
+const updateStudent = async (req, res) => {
+  const studentId = Number.parseInt(req.params.studentId);
+  const firstName = req.body.name;
+  const lastName = req.body.lastname;
+  const run = req.body.run;
+  await repositories.establishment.updateStudent(firstName, lastName, run, studentId);
+  res.json({ok: true});
+};
+
 module.exports = wrapRequests({
   getEstablishments,
   createEstablishment,
@@ -132,5 +141,6 @@ module.exports = wrapRequests({
   getEstablishmentGrades,
   getTeacherInfo,
   getTeachersFromEstablishment,
-  removeStudent
+  removeStudent,
+  updateStudent
 });

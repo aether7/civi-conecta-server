@@ -151,6 +151,18 @@ class EstablishmentRepository {
       .where('id', studentId)
       .del();
   }
+
+  async updateStudent(firstName, lastName, run, studentId) {
+    const fields = {
+      name: firstName,
+      lastname: lastName,
+      run
+    };
+
+    return this.connection('student')
+      .where('id', studentId)
+      .update(fields);
+  }
 }
 
 module.exports = EstablishmentRepository;
