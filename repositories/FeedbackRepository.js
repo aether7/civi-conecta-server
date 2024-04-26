@@ -131,6 +131,29 @@ class FeedbackRepository {
   async finishSurvey(surveyType, uuid) {
     const personId = await this._getPersonId(surveyType, uuid);
     const lookupField = surveyType === SurveyTypes.TEACHER ? 'teacher_id' : 'student_id';
+    const isForStudent = surveyType === SurveyTypes.STUDENT ? 1 : 0;
+
+    const questionCount = await this.connection
+      .count({ 'qty': 'question.id' })
+      .from('feedback')
+      .innerJoin('feedback_course', 'feedback.feedback_course_id', 'feedback_course.id')
+      .innerJoin('course', 'feedback_course.course_id', 'course.id')
+      .innerJoin('unit', 'unit.grade_id', 'course.grade_id')
+      .innerJoin('question', 'question.unit_id', 'unit.id')
+      .where(`feedback.${lookupField}`, personId)
+      .where('question.is_for_student', isForStudent)
+      .first();
+
+    const answerCount = await this.connection
+      .count({ 'qty': 'answer.id' })
+      .from('feedback')
+      .innerJoin('answer', 'answer.feedback_id', 'feedback.id')
+      .where(`feedback.${lookupField}`, personId)
+      .first();
+
+    if (questionCount.qty !== answerCount.qty) {
+      return;
+    }
 
     return this.connection('feedback')
       .where(lookupField, personId)
