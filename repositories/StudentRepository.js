@@ -46,6 +46,18 @@ class StudentRepository {
       .innerJoin('course', 'course_student.course_id', 'course.id')
       .where('course.id', courseId);
   }
+
+  async findGradeByRun(run) {
+    const result = await this.connection
+      .select('course.grade_id')
+      .from('student')
+      .innerJoin('course_student', 'course_student.student_id', 'student.id')
+      .innerJoin('course', 'course_student.course_id', 'course.id')
+      .where('student.run', run)
+      .first();
+
+    return result?.grade_id;
+  }
 }
 
 module.exports = StudentRepository;

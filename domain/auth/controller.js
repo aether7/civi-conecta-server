@@ -105,6 +105,8 @@ const verifyStudent = async (req, res) => {
     return res.status(404).json({ ok: false, error: messages.auth.noStudent });
   }
 
+  const grade = await repositories.student.findGradeByRun(run);
+
   const token = await services.token.createToken({
     uuid: student.uuid,
     name: student.name,
@@ -112,7 +114,14 @@ const verifyStudent = async (req, res) => {
     role: 'student',
     active: 1
   });
-  res.json({ ok: true, student: {...student, token} });
+  res.json({
+    ok: true,
+    student: {
+      ...student,
+      grade,
+      token
+    }
+  });
 };
 
 module.exports = wrapRequests({
