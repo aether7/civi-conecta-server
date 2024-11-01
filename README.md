@@ -1,6 +1,7 @@
 # Notes
-
+developed by: https://github.com/aether7
 ## Requirements
+
 
 1. NodeJS v16+
 2. PostgreSQL
