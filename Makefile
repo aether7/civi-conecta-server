@@ -12,6 +12,9 @@ seed:
 migrate:
 	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:latest
 
+create_migration:
+	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:make $(name)
+
 restore:
 	-rm dev.sqlite3
 	./node_modules/.bin/knex migrate:latest
