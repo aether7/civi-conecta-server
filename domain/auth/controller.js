@@ -55,7 +55,6 @@ const signIn = async (req, res) => {
   const loggedUser = dto.mapUser(user);
   const token = services.token.createToken(loggedUser);
   loggedUser.token = token;
-
   res.json({ ok: true, user: loggedUser });
 };
 
@@ -97,12 +96,10 @@ const sendPasswordRecoveryLink = async (req, res) => {
     res.json({ ok: true, message: messages.auth.recoverPassword });
   } catch (err) {
     console.error("Error in sendPasswordRecoveryLink:", err);
-    res
-      .status(500)
-      .json({
-        ok: false,
-        message: "Error al enviar el enlace de recuperación",
-      });
+    res.status(500).json({
+      ok: false,
+      message: "Error al enviar el enlace de recuperación",
+    });
   }
 };
 

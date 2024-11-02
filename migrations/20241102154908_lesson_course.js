@@ -8,7 +8,7 @@ exports.up = async function (knex) {
       CREATE OR REPLACE FUNCTION update_lesson_course_timestamp()
       RETURNS TRIGGER AS $$
       BEGIN
-        OLD.updated_at = NOW();
+        NEW.updated_at = NOW();
         return NEW;
       END;
       $$ LANGUAGE plpgsql;
@@ -18,7 +18,7 @@ exports.up = async function (knex) {
   function createTrigger() {
     return knex.raw(`
       CREATE TRIGGER update_lesson_course_updated_at
-      AFTER UPDATE ON lesson_course
+      BEFORE UPDATE ON lesson_course
       FOR EACH ROW
       EXECUTE FUNCTION update_lesson_course_timestamp();
     `);

@@ -1,26 +1,27 @@
-const knex = require('knex');
-const knexConfig = require('../knexfile');
-const config = require('../config');
-const AnswerRepository = require('./AnswerRepository');
-const EstablishmentRepository = require('./EstablishmentRepository');
-const UserRepository = require('./UserRepository');
-const GradeRepository = require('./GradeRepository');
-const UnitRepository = require('./UnitRepository');
-const TopicRepository = require('./TopicRepository');
-const StudentRepository = require('./StudentRepository');
-const CourseRepository = require('./CourseRepository');
-const CourseStudentRepository = require('./CourseStudentRepository');
-const EventRepository = require('./EventRepository');
-const PlanningRepository = require('./PlanningRepository');
-const SurveyRepository = require('./SurveyRepository');
-const QuestionRepository = require('./QuestionRepository');
-const AlternativeRepository = require('./AlternativeRepository');
-const DocumentRepository = require('./DocumentRepository');
-const LessonRepository = require('./LessonRepository');
-const FeedbackRepository = require('./FeedbackRepository');
-const ReportRepository = require('./ReportRepository');
-const ProfileRepository = require('./ProfileRepository');
-const CourseUnitRepository = require('./CourseUnitRepository');
+const knex = require("knex");
+const knexConfig = require("../knexfile");
+const config = require("../config");
+const AnswerRepository = require("./AnswerRepository");
+const EstablishmentRepository = require("./EstablishmentRepository");
+const UserRepository = require("./UserRepository");
+const GradeRepository = require("./GradeRepository");
+const UnitRepository = require("./UnitRepository");
+const TopicRepository = require("./TopicRepository");
+const StudentRepository = require("./StudentRepository");
+const CourseRepository = require("./CourseRepository");
+const CourseStudentRepository = require("./CourseStudentRepository");
+const EventRepository = require("./EventRepository");
+const PlanningRepository = require("./PlanningRepository");
+const SurveyRepository = require("./SurveyRepository");
+const QuestionRepository = require("./QuestionRepository");
+const AlternativeRepository = require("./AlternativeRepository");
+const DocumentRepository = require("./DocumentRepository");
+const LessonRepository = require("./LessonRepository");
+const FeedbackRepository = require("./FeedbackRepository");
+const ReportRepository = require("./ReportRepository");
+const ProfileRepository = require("./ProfileRepository");
+const CourseUnitRepository = require("./CourseUnitRepository");
+const LessonCourseRepository = require("./LessonCourseRepository");
 
 const connection = knex(knexConfig[config.env.nodeEnv]);
 const answerRepository = new AnswerRepository(connection);
@@ -47,10 +48,16 @@ const establishmentRepository = new EstablishmentRepository(connection, {
   studentRepository,
   courseStudentRepository,
   userRepository,
-  courseUnitRepository
+  courseUnitRepository,
 });
+const lessonCourseRepository = new LessonCourseRepository(connection);
+
+const unitOfWork = {
+  startTransaction(fn) {},
+};
 
 module.exports = {
+  uow: unitOfWork,
   user: userRepository,
   grade: gradeRepository,
   unit: unitRepository,
@@ -70,5 +77,6 @@ module.exports = {
   answer: answerRepository,
   report: reportRepository,
   profile: profileRepository,
-  courseUnit: courseUnitRepository
+  courseUnit: courseUnitRepository,
+  lessonCourse: lessonCourseRepository,
 };
