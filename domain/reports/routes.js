@@ -7,5 +7,6 @@ router.get('/student-answers/:teacherUUID/critical-answers', handlers.checkMostC
 router.get('/student-answers/:teacherUUID/:questionId', handlers.checkStudentAnswersByQuestion);
 router.get('/student-answers/:teacherUUID', handlers.checkStudentAnswers);
 router.get('/units-order/:teacherUUID', handlers.getUnitsOrder);
+router.get('/teachers-planning/:establishmentId/is-custom', handlers.getIsCustomPlanification);
 
 module.exports = router;

@@ -109,9 +109,18 @@ const getUnitsOrder = (data) => {
   return arr;
 };
 
+const getPlanificationsType = (data) => {
+  return data.map(({ name, is_custom_planification }) => ({
+    name,
+    planificationType: is_custom_planification == 1 ? "Personalizada" : "Estandarizada"
+  }));
+};
+
+
 module.exports = {
   studentCompletionReport,
   getStudentAnswers,
   getMostCriticalAnswers,
-  getUnitsOrder
+  getUnitsOrder,
+  getPlanificationsType
 };

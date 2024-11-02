@@ -122,6 +122,17 @@ class ReportRepository {
         { column: 'unit.id', order: 'asc' }
       ]);
   }
+
+  async getIsCustomPlanification(establishmentId) {
+    return this.connection
+      .column({
+        name: 'us.name',
+        is_custom_planification: 'us.is_custom_planification'
+      })
+      .from('public.user as us')
+      .innerJoin('course', 'course.teacher_id', 'us.id')
+      .where('course.establishment_id', establishmentId);
+  }
 }
 
 module.exports = ReportRepository;

@@ -40,10 +40,17 @@ const getUnitsOrder = async (req, res) => {
   res.json({ok: true, results: dto.getUnitsOrder(results)});
 };
 
+const getIsCustomPlanification = async (req, res) => {
+  const establishmentId = req.params.establishmentId;
+  const results = await repositories.report.getIsCustomPlanification(establishmentId);
+  res.json({ ok: true, results: dto.getPlanificationsType(results) })
+};
+
 module.exports = wrapRequests({
   checkStudentCompletion,
   checkStudentAnswers,
   checkStudentAnswersByQuestion,
   checkMostCriticalAnswers,
-  getUnitsOrder
+  getUnitsOrder,
+  getIsCustomPlanification
 });
