@@ -78,6 +78,13 @@ const createTeacherSurvey = async (req, res) => {
   res.json({ ok: true });
 };
 
+const updateGeneratedLink = async(req, res) => {
+  const teacherUUID = req.params.uuid;
+  const feedbackCourseUUUID = await repositories.feedback.findUUIDByTeacher(teacherUUID)
+  await repositories.feedback.updateGeneratedLink(feedbackCourseUUUID.uuid);
+  res.json({ ok: true })
+};
+
 module.exports = wrapRequests({
   getAll,
   saveSurvey,
@@ -85,5 +92,6 @@ module.exports = wrapRequests({
   findByStudentType,
   getReport,
   createStudentsSurvey,
-  createTeacherSurvey
+  createTeacherSurvey,
+  updateGeneratedLink
 });
