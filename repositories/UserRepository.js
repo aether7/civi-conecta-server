@@ -1,4 +1,4 @@
-const uuid = require("uuid");
+const { randomUUID } = require("node:crypto");
 const { EntityNotFoundError } = require("./exceptions");
 const passwordHelper = require("../helpers/password");
 const { RoleTypes } = require("../constants/entities");
@@ -74,7 +74,7 @@ class UserRepository {
 
   async createAdmin({ email, name, password }) {
     const fields = {
-      uuid: uuid.v4(),
+      uuid: randomUUID(),
       email,
       name,
       password: passwordHelper.encrypt(password),
@@ -89,7 +89,7 @@ class UserRepository {
 
   async createUser({ email, name, password }) {
     const fields = {
-      uuid: uuid.v4(),
+      uuid: randomUUID(),
       email,
       name,
       password,
