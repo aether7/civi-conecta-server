@@ -235,6 +235,14 @@ class FeedbackRepository {
       })
       .where('uuid', feedbackCourseUUID);
   }
+
+  async updateDownloadedReport(feedbackCourseUUID){
+    return this.connection('feedback_course')
+    .update({
+      is_report_downloaded: 1
+    })
+    .where('uuid', feedbackCourseUUID);
+  }
 }
 
 module.exports = FeedbackRepository;
