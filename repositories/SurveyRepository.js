@@ -188,7 +188,7 @@ class SurveyRepository {
       uuid: randomUUID(),
       is_finished: FeedbackStatus.NOT_FINISHED,
       course_id: courseId,
-      is_link_generated: false,
+      is_link_generated: 0,
     };
 
     [courseFeedback] = await this.connection

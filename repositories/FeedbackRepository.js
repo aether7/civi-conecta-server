@@ -231,7 +231,7 @@ class FeedbackRepository {
   async updateGeneratedLink(feedbackCourseUUID) {
     return this.connection('feedback_course')
       .update({
-        is_link_generated: true
+        is_link_generated: 1
       })
       .where('uuid', feedbackCourseUUID);
   }
