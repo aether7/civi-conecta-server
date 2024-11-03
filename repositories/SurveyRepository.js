@@ -183,7 +183,8 @@ class SurveyRepository {
     const fields = {
       uuid: uuid.v4(),
       is_finished: FeedbackStatus.NOT_FINISHED,
-      course_id: courseId
+      course_id: courseId,
+      is_link_generated: false
     };
 
     [courseFeedback] = await this.connection
