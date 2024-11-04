@@ -8,20 +8,22 @@ class UserRepository {
     this.connection = connection;
   }
 
-  async findOrCreateUser({ name, email }) {
+  async findOrCreateUser({ name, email, type = RoleTypes.USER }) {
     try {
       const entity = await this.findOneByEmail(email);
       return entity;
     } catch (err) {
       const password = await passwordHelper.createRandomPassword();
-      const entity = await this.createUser({ name, email, password });
-      return entity;
+      const handlers = {
+        [RoleTypes.USER]: this.createTeacher.bind(this),
+        [RoleTypes.MANAGER]: this.createManager.bind(this),
+        [RoleTypes.ADMIN]: this.createAdmin.bind(this),
+      };
+      return handlers[type]({ name, email, password });
     }
   }
 
   async findUserByEmail(email) {
-    console.log("findUserByEmail email: ", email);
-
     const sanitizedEmail = email.trim().toLowerCase();
 
     const entity = await this.connection
@@ -34,8 +36,6 @@ class UserRepository {
       .whereRaw("LOWER(public.user.email) = LOWER(?)", [sanitizedEmail])
       .where("public.user.active", 1)
       .first();
-
-    console.log("findUserByEmail entity: ", entity);
 
     return entity;
   }
@@ -72,40 +72,57 @@ class UserRepository {
     return entity;
   }
 
-  async createAdmin({ email, name, password }) {
-    const fields = {
-      uuid: randomUUID(),
+  createAdmin({ email, name, password }) {
+    return this._createUser({
       email,
       name,
       password: passwordHelper.encrypt(password),
-      encrypted_password: 1,
-      active: 1,
       role: RoleTypes.ADMIN,
-    };
-
-    const [user] = await this.connection.insert(fields, ["*"]).into("user");
-    return user;
+      encription: 1,
+    });
   }
 
-  async createUser({ email, name, password }) {
+  createManager({ email, name, password }) {
+    return this._createUser({
+      email,
+      name,
+      password,
+      role: RoleTypes.MANAGER,
+      encription: 0,
+    });
+  }
+
+  createTeacher({ email, name, password }) {
+    return this._createUser({
+      email,
+      name,
+      password,
+      role: RoleTypes.USER,
+      encription: 0,
+    });
+  }
+
+  async _createUser({ email, name, password, role, encription }) {
     const fields = {
       uuid: randomUUID(),
       email,
       name,
       password,
-      encrypted_password: 0,
+      encrypted_password: encription,
       active: 1,
-      role: RoleTypes.USER,
+      role,
     };
 
-    const [user] = await this.connection.insert(fields, ["*"]).into("user");
+    const [user] = await this.connection
+      .insert(fields, ["*"])
+      .into("public.user");
     return user;
   }
 
   async updatePassword(userId, password) {
     const user = await this.connection
       .select("role", "recovery_token")
-      .from("user")
+      .from("public.user")
       .where("id", userId)
       .first();
 
@@ -125,11 +142,15 @@ class UserRepository {
       recovery_token_expiration: null,
     };
 
-    return this.connection("user").where("id", userId).update(fields);
+    return this.connection("public.user").where("id", userId).update(fields);
   }
 
   findByAlias(uuid) {
-    return this.connection.select().from("user").where("uuid", uuid).first();
+    return this.connection
+      .select()
+      .from("public.user")
+      .where("uuid", uuid)
+      .first();
   }
 
   async storeRecoveryToken(userId, recoveryToken, tokenExpiration) {
@@ -138,7 +159,7 @@ class UserRepository {
       recovery_token_expiration: tokenExpiration,
     };
 
-    return this.connection("user").where("id", userId).update(fields);
+    return this.connection("public.user").where("id", userId).update(fields);
   }
 
   findOneByRecoveryToken = async (token) => {
@@ -158,8 +179,8 @@ class UserRepository {
 
   findByFeedbackCourseUUID(uuid) {
     return this.connection
-      .select("user.*")
-      .from("user")
+      .select("public.user.*")
+      .from("public.user")
       .innerJoin("course", "user.id", "course.teacher_id")
       .innerJoin("feedback_course", "feedback_course.course_id", "course.id")
       .where("feedback_course.uuid", uuid)
@@ -167,7 +188,7 @@ class UserRepository {
   }
 
   updateCustomPlanification(id) {
-    return this.connection("user")
+    return this.connection("public.user")
       .where("id", id)
       .update("is_custom_planification", 1);
   }
@@ -175,7 +196,7 @@ class UserRepository {
   findByCourse(courseId) {
     return this.connection
       .select()
-      .from("user")
+      .from("public.user")
       .innerJoin("course", "course.teacher_id", "user.id")
       .where("course.id", courseId)
       .first();
