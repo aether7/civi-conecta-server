@@ -83,7 +83,7 @@ const removeDocument = async (req, res) => {
   res.json({ ok: true });
 };
 
-const notifyDownloadContent = async (req, res) => {
+const notifyLessonAction = async (req, res) => {
   const uuid = req.headers.uuid;
   const lessonId = req.params.lessonId;
   const action = req.params.action;
@@ -112,5 +112,5 @@ module.exports = wrapRequests({
   createDocument,
   editDocument,
   removeDocument,
-  notifyDownloadContent,
+  notifyLessonAction,
 });
