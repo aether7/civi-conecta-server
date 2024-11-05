@@ -182,7 +182,7 @@ const createManager = async (req, res) => {
     establishmentId,
   );
 
-  await repositories.establishment.updateManager(establishmentId, user.id);
+  await repositories.establishment.addManager(establishmentId, user.id);
 
   res.json({
     ok: true,
@@ -197,23 +197,23 @@ const createManager = async (req, res) => {
 
 const getManagerFromEstablishment = async (req, res) => {
   const establishmentId = req.params.establishmentId;
-  const manager = await repositories.establishment.findManager(establishmentId);
+  const managers =
+    await repositories.establishment.findManagers(establishmentId);
 
-  if (!manager) {
+  if (!managers) {
     throw new exceptions.EntityNotFoundError(
-      "El establecimiento no tiene un manager asociado",
+      "El establecimiento no tiene managers asociados",
     );
   }
 
-  res.json({
-    ok: true,
-    manager: {
-      id: manager.id,
-      name: manager.name,
-      email: manager.email,
-      uuid: manager.uuid,
-    },
-  });
+  const mappedManagers = managers.map((manager) => ({
+    id: manager.id,
+    name: manager.name,
+    email: manager.email,
+    uuid: manager.uuid,
+  }));
+
+  res.json({ ok: true, managers: mappedManagers });
 };
 
 module.exports = wrapRequests({

@@ -165,24 +165,27 @@ class EstablishmentRepository {
     return this.connection("student").where("id", studentId).update(fields);
   }
 
-  updateManager(establishmentId, managerId) {
+  addManager(establishmentId, managerId) {
     const fields = {
       manager_id: managerId,
+      establishment_id: establishmentId,
     };
 
-    return this.connection("establishment")
-      .where("id", establishmentId)
-      .update(fields);
+    return this.connection.insert(fields).into("establishment_manager");
   }
 
-  findManager(establishmentId) {
+  findManagers(establishmentId) {
     return this.connection
       .select()
       .from("establishment")
-      .innerJoin("public.user", "establishment.manager_id", "public.user.id")
+      .innerJoin(
+        "establishment_manager",
+        "establishment_manager.establishment_id",
+        "establishment.id",
+      )
+      .innerJoin("user", "establishment_manager.manager_id", "user.id")
       .where("establishment.id", establishmentId)
-      .where("public.user.role", RoleTypes.MANAGER)
-      .first();
+      .where("user.role", RoleTypes.MANAGER);
   }
 }
 
