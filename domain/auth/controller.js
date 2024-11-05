@@ -15,7 +15,7 @@ class UserWithLogin {
 
   get canLogin() {
     const role = this.data.role;
-    const isAdministrator = role === "Administrator";
+    const isAdministrator = role === "Administrator" || role === "Manager";
     const hasNoCurrentEstablishmentActive = !!this.data.is_establishment_active;
 
     if (isAdministrator) {
