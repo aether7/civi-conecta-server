@@ -42,6 +42,7 @@ class UserRepository {
 
   async findOneByEmail(email) {
     const sanitizedEmail = email.trim().toLowerCase();
+    const ref = this.connection.ref.bind(this.connection);
 
     const entity = await this.connection
       .column({
@@ -54,12 +55,28 @@ class UserRepository {
         user_uuid: "public.user.uuid",
         encrypted_password: "public.user.encrypted_password",
         is_custom_planification: "public.user.is_custom_planification",
-        is_establishment_active: "establishment.active",
+        is_establishment_active: this.connection.raw(
+          "COALESCE(establishment_course.active, establishment_manager_est.active)",
+        ),
       })
       .from("public.user")
       .leftJoin("course", "course.teacher_id", "public.user.id")
-      .leftJoin("establishment", "course.establishment_id", "establishment.id")
-      .whereRaw("LOWER(public.user.email) = LOWER(?)", [sanitizedEmail])
+      .leftJoin(
+        ref("establishment").as("establishment_course"),
+        "course.establishment_id",
+        "establishment_course.id",
+      )
+      .leftJoin(
+        "establishment_manager",
+        "establishment_manager.manager_id",
+        "public.user.id",
+      )
+      .leftJoin(
+        ref("establishment").as("establishment_manager_est"),
+        "establishment_manager.establishment_id",
+        "establishment_manager_est.id",
+      )
+      .whereRaw("LOWER(public.user.email) = LOWER(?)", [email])
       .where("public.user.active", 1)
       .first();
 
