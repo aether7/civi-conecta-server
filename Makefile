@@ -15,6 +15,10 @@ migrate:
 create_migration:
 	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:make $(name)
 
+migrate_develop:
+	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:rollback $(name)
+	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:latest
+
 restore:
 	-rm dev.sqlite3
 	./node_modules/.bin/knex migrate:latest
