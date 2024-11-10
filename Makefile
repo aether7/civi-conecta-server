@@ -1,3 +1,5 @@
+.PHONY: seed migrate migrate-create migrate-develop restore demo survey
+
 include .env
 export
 
@@ -12,10 +14,10 @@ seed:
 migrate:
 	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:latest
 
-create_migration:
+migrate-create:
 	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:make $(name)
 
-migrate_develop:
+migrate-develop:
 	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:rollback $(name)
 	NODE_ENV=$(environment) ./node_modules/.bin/knex migrate:latest
 
