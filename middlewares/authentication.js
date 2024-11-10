@@ -1,5 +1,6 @@
 const config = require("../config");
 const jwt = require("jsonwebtoken");
+const { RoleTypes } = require("../constants/entities");
 
 const _verifyToken = (isByCookiesOrHeaders) => (seed) => (req, res, next) => {
   const loginToken = req.headers.token;
@@ -23,11 +24,6 @@ const verifyRecoveryPasswordToken = verifyByQuery(config.seed.recoverPassword);
 const verifySurveyStudentsToken = verifyByQuery(config.seed.surveyStudents);
 const verifyAutoLoginToken = verifyByQuery(config.seed.userLogin);
 
-const RoleTypes = {
-  ADMINISTRATOR: "Administrator",
-  USER: "User",
-};
-
 const verifyActiveState = (req, res, next) => {
   if (!req.user.active) {
     return res
@@ -38,8 +34,8 @@ const verifyActiveState = (req, res, next) => {
   next();
 };
 
-const verifyRole = (roleType, message) => (req, res, next) => {
-  if (req.user.role !== roleType) {
+const verifyRole = (roleTypes, message) => (req, res, next) => {
+  if (!roleTypes.includes(req.user.role)) {
     return res.status(400).json({ ok: false, error: message });
   }
 
@@ -47,11 +43,17 @@ const verifyRole = (roleType, message) => (req, res, next) => {
 };
 
 const verifyAdminRole = verifyRole(
-  RoleTypes.ADMINISTRATOR,
-  `This user is not ${RoleTypes.ADMINISTRATOR}`,
+  [RoleTypes.ADMIN],
+  `This user is not ${RoleTypes.ADMIN}`,
 );
+
+const verifyManagerRole = verifyRole(
+  [RoleTypes.ADMIN, RoleTypes.MANAGER],
+  `This user is not ${RoleTypes.ADMIN}`,
+);
+
 const verifyUserRole = verifyRole(
-  RoleTypes.USER,
+  [RoleTypes.USER],
   `This user is not ${RoleTypes.USER}`,
 );
 
@@ -64,4 +66,5 @@ module.exports = {
   verifyActiveState,
   verifyAdminRole,
   verifyUserRole,
+  verifyManagerRole
 };

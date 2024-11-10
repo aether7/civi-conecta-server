@@ -66,6 +66,19 @@ class EstablishmentRepository {
     }
   }
 
+  async findByManager(uuid) {
+    return this.connection
+      .column({
+        establishment_name: "establishment.name",
+        establishment_id: "establishment.id"
+      })
+      .from("establishment_manager")
+      .innerJoin("public.user", "establishment_manager.manager_id", "public.user.id")
+      .innerJoin("establishment", "establishment_manager.establishment_id", "establishment.id")
+      .where("public.user.uuid", uuid)
+      .first();
+  }
+
   getInfoByTeacher(uuid) {
     return this.connection
       .column({

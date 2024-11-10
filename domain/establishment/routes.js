@@ -7,8 +7,13 @@ router.get("/", middlewares.verifyAdminRole, handlers.getEstablishments);
 router.post("/", middlewares.verifyAdminRole, handlers.createEstablishment);
 router.get(
   "/:establishmentId/courses",
-  middlewares.verifyAdminRole,
+  middlewares.verifyManagerRole,
   handlers.getCoursesFromEstablishment,
+);
+router.get(
+  "/manager/:managerId/courses",
+  middlewares.verifyManagerRole,
+  handlers.getCoursesByManager,
 );
 router.post(
   "/:establishmentId/courses",
