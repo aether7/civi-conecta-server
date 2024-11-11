@@ -11,6 +11,7 @@ const studentCompletionReport = (students) => {
       lastname: student.lastname,
       questions,
       answers,
+      updatedAt: student.updated_at,
       percentage: Number(((answers / questions) * 100).toFixed(2)),
     };
   });

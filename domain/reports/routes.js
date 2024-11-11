@@ -21,5 +21,6 @@ router.get(
   "/teachers-surveys/:managerUUID/:gradeId",
   handlers.getUnitPlanningReport,
 );
+router.get("/course/:teacherUUID/completion", handlers.checkCourseCompletion);
 
 module.exports = router;

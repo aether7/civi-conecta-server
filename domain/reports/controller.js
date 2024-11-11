@@ -1,16 +1,14 @@
 const { wrapRequests } = require("../../helpers/controller");
+const ReportService = require("./service");
 const repositories = require("../../repositories");
 const dto = require("./dto");
 
 const checkStudentCompletion = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
-  const teacher = await repositories.user.findByAlias(teacherUUID);
-  const course = await repositories.course.findByTeacher(teacher.id);
-  const students = await repositories.report.getStudentCompletionReport(
-    course.id,
-  );
-
-  res.json({ ok: true, report: dto.studentCompletionReport(students) });
+  const reportService = new ReportService();
+  const report =
+    await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
+  res.json({ ok: true, report });
 };
 
 const checkStudentAnswers = async (req, res) => {
@@ -65,6 +63,14 @@ const getUnitPlanningReport = async (req, res) => {
   res.json({ ok: true, results: surveyResults.map(dto.mapSurvey) });
 };
 
+const checkCourseCompletion = async (req, res) => {
+  const teacherUUID = req.params.teacherUUID;
+  const reportService = new ReportService();
+  const report =
+    await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
+  res.json({ ok: true, report });
+};
+
 module.exports = wrapRequests({
   checkStudentCompletion,
   checkStudentAnswers,
@@ -73,4 +79,5 @@ module.exports = wrapRequests({
   getUnitsOrder,
   getIsCustomPlanification,
   getUnitPlanningReport,
+  checkCourseCompletion,
 });

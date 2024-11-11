@@ -20,6 +20,7 @@ class ReportRepository {
         "student.run",
         "student.name",
         "student.lastname",
+        "feedback.updated_at",
         "question_quantities.question_count",
       )
       .count({ answers: "answer.id" })
@@ -44,6 +45,7 @@ class ReportRepository {
         "student.name",
         "student.lastname",
         "question_quantities.question_count",
+        "feedback.updated_at",
       )
       .orderBy("student.lastname", "student.name");
   }
