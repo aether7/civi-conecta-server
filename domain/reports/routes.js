@@ -19,7 +19,7 @@ router.get(
 );
 router.get(
   "/teachers-surveys/:managerUUID/:gradeId",
-  handlers.getUnitPlanningReport,
+  handlers.getSurveysReports,
 );
 router.get("/course/:teacherUUID/completion", handlers.checkCourseCompletion);
 

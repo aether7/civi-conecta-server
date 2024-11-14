@@ -4,6 +4,19 @@ const studentCompletionReport = (students) => {
   const results = students.map((student) => {
     const answers = Number.parseInt(student.answers);
     const questions = Number.parseInt(student.question_count);
+    const percentage = Number(((answers / questions) * 100).toFixed(2));
+
+    function checkStatus(percentage) {
+      if (percentage == 100) {
+        return "Completa";
+      }
+
+      if (percentage > 0) {
+        return "Incompleta";
+      }
+
+      return "Pendiente";
+    }
 
     return {
       run: student.run,
@@ -12,7 +25,8 @@ const studentCompletionReport = (students) => {
       questions,
       answers,
       updatedAt: student.updated_at,
-      percentage: Number(((answers / questions) * 100).toFixed(2)),
+      percentage: percentage,
+      surveyStatus: checkStatus(percentage),
     };
   });
 
@@ -66,10 +80,10 @@ const getStudentAnswers = (data) => {
                     quantity,
                     percentage: Number(((quantity / total) * 100).toFixed(2)),
                   };
-                },
+                }
               ),
             };
-          },
+          }
         ),
       };
     });
@@ -144,6 +158,7 @@ const mapSurvey = (survey) => {
     course: `${survey.grade} ${survey.letter}`,
     status,
     teacher: survey.teacher_name,
+    teacher_uuid: survey.teacher_uuid,
     survey_teacher: Boolean(survey.is_teacher_survey_finished),
     students_link: Boolean(survey.is_link_generated),
     resume_downloaded: Boolean(survey.is_report_downloaded),

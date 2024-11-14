@@ -28,6 +28,21 @@ class CourseRepository {
       .groupBy('grade.level', 'grade.id');
   }
 
+  async findCourseGradeByTeacher(teacherUUID) {
+    return this.connection
+      .select(
+        'grade.level',
+        'letter.character',
+        'public.user.name'
+      )
+      .from('course')
+      .innerJoin('grade', 'course.grade_id', 'grade.id')
+      .innerJoin('letter', 'course.letter_id', 'letter.id')
+      .leftJoin('public.user', 'course.teacher_id', 'public.user.id')
+      .where('public.user.uuid', teacherUUID)
+      .first();
+  }
+
   async findById(pk) {
     return this.connection
       .select(

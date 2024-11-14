@@ -51,7 +51,7 @@ const getIsCustomPlanification = async (req, res) => {
   res.json({ ok: true, results: dto.getPlanificationsType(results) });
 };
 
-const getUnitPlanningReport = async (req, res) => {
+const getSurveysReports = async (req, res) => {
   const uuid = req.params.managerUUID;
   const gradeId = req.params.gradeId;
   const establishment = await repositories.establishment.findByManager(uuid);
@@ -65,10 +65,10 @@ const getUnitPlanningReport = async (req, res) => {
 
 const checkCourseCompletion = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
+  const courseResume = await repositories.course.findCourseGradeByTeacher(teacherUUID);
   const reportService = new ReportService();
-  const report =
-    await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
-  res.json({ ok: true, report });
+  const report = await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
+  res.json({ ok: true, report, courseResume });
 };
 
 module.exports = wrapRequests({
@@ -78,6 +78,6 @@ module.exports = wrapRequests({
   checkMostCriticalAnswers,
   getUnitsOrder,
   getIsCustomPlanification,
-  getUnitPlanningReport,
+  getSurveysReports,
   checkCourseCompletion,
 });
