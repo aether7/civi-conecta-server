@@ -163,6 +163,44 @@ class ReportRepository {
       .where("establishment_id", establishmentId)
       .where("grade_id", gradeId);
   }
+
+  getReportsSituation(managerUUID) {
+    const ref = this.connection.ref.bind(this.connection);
+
+    return this.connection
+      .select("reports_situations.*")
+      .from("reports_situations")
+      .innerJoin(
+        "establishment_manager",
+        "reports_situations.id",
+        "establishment_manager.establishment_id",
+      )
+      .innerJoin(
+        ref("user").as("manager"),
+        "establishment_manager.manager_id",
+        "manager.id",
+      )
+      .where("manager.uuid", managerUUID);
+  }
+
+  getReportsEphemeris(managerUUID) {
+    const ref = this.connection.ref.bind(this.connection);
+
+    return this.connection
+      .select("reports_ephemeris.*")
+      .from("reports_ephemeris")
+      .innerJoin(
+        "establishment_manager",
+        "reports_ephemeris.id",
+        "establishment_manager.establishment_id",
+      )
+      .innerJoin(
+        ref("user").as("manager"),
+        "establishment_manager.manager_id",
+        "manager.id",
+      )
+      .where("manager.uuid", managerUUID);
+  }
 }
 
 module.exports = ReportRepository;

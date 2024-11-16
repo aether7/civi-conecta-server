@@ -26,5 +26,15 @@ router.get(
   "/course/:teacherUUID/unit-completion",
   handlers.checkUnitsCompletion,
 );
+router.get(
+  "/course/:teacherUUID/unit-completion/:unitId",
+  handlers.checkLessonsCompletion,
+);
+
+router.get(
+  "/course/:eventType/event-completion",
+  handlers.checkEventsCompletion,
+);
+// router.get('/course/:teacherUUID/:eventType/completion/lessons');
 
 module.exports = router;

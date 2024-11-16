@@ -175,7 +175,7 @@ const mapUnitCompletion = (results) => {
     if (finished === total) {
       status = "Completada";
     } else if (finished > 0) {
-      status = "Incompleta";
+      status = "En Desarrollo";
     } else {
       status = "Pendiente";
     }
@@ -191,6 +191,38 @@ const mapUnitCompletion = (results) => {
   });
 };
 
+const mapLessonCompletion = (results) => {
+  return results.map((result) => {
+    return {
+      id: result.id,
+      objective: result.objective,
+      hasFinished: result.has_finished,
+      hasDownloadedContent: result.has_downloaded_content,
+    };
+  });
+};
+
+const mapEvents = (results, type) => {
+  return results.map((r) => {
+    return {
+      establishment: {
+        id: r.id,
+        name: r.establishment_name,
+      },
+      teacher: {
+        name: r.teacher_name,
+        uuid: r.teacher_uuid,
+        isCustom: r.is_custom_planification,
+      },
+      [type]: {
+        working: Number.parseInt(r[`working_${type}`]),
+        lessonsFinished: Number.parseInt(r.lessons_finished),
+        lessonsDownloaded: Number.parseInt(r.lessons_downloaded),
+      },
+    };
+  });
+};
+
 module.exports = {
   studentCompletionReport,
   getStudentAnswers,
@@ -199,4 +231,6 @@ module.exports = {
   getPlanificationsType,
   mapSurvey,
   mapUnitCompletion,
+  mapLessonCompletion,
+  mapEvents,
 };

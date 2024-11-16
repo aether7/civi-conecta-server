@@ -178,6 +178,28 @@ class LessonRepository {
         .update("date", data.date);
     }
   }
+
+  findLessonCompletionByTeacherCourse(teacherUUID, unitId) {
+    const ref = this.connection.ref.bind(this.connection);
+    const raw = this.connection.raw.bind(this.connection);
+
+    return this.connection
+      .column({
+        id: "lesson.id",
+        objective: "lesson.objective",
+        has_finished: raw("COALESCE(lesson_course.has_finished, 0)"),
+        has_downloaded_content: raw(
+          "COALESCE(lesson_course.has_downloaded_content, 0)",
+        ),
+      })
+      .from(ref("user").as("teacher"))
+      .innerJoin("course", "course.teacher_id", "teacher.id")
+      .innerJoin("unit", "unit.grade_id", "course.grade_id")
+      .innerJoin("lesson", "lesson.unit_id", "unit.id")
+      .leftJoin("lesson_course", "lesson_course.lesson_id", "lesson.id")
+      .where("teacher.uuid", teacherUUID)
+      .where("unit.id", unitId);
+  }
 }
 
 module.exports = LessonRepository;
