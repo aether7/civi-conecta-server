@@ -22,5 +22,9 @@ router.get(
   handlers.getSurveysReports,
 );
 router.get("/course/:teacherUUID/completion", handlers.checkCourseCompletion);
+router.get(
+  "/course/:teacherUUID/unit-completion",
+  handlers.checkUnitsCompletion,
+);
 
 module.exports = router;

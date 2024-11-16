@@ -1,4 +1,5 @@
 const { PonderationTypes } = require("../../constants/entities");
+const { decimalToRoman } = require("../../helpers/number");
 
 const studentCompletionReport = (students) => {
   const results = students.map((student) => {
@@ -80,10 +81,10 @@ const getStudentAnswers = (data) => {
                     quantity,
                     percentage: Number(((quantity / total) * 100).toFixed(2)),
                   };
-                }
+                },
               ),
             };
-          }
+          },
         ),
       };
     });
@@ -165,6 +166,31 @@ const mapSurvey = (survey) => {
   };
 };
 
+const mapUnitCompletion = (results) => {
+  return results.map((result) => {
+    const finished = Number.parseInt(result.lessons_finished);
+    const total = Number.parseInt(result.total_lessons);
+    let status;
+
+    if (finished === total) {
+      status = "Completada";
+    } else if (finished > 0) {
+      status = "Incompleta";
+    } else {
+      status = "Pendiente";
+    }
+
+    return {
+      id: result.id,
+      title: result.title,
+      number: decimalToRoman(Number.parseInt(result.number)),
+      lessonsFinished: finished,
+      totalLessons: total,
+      status,
+    };
+  });
+};
+
 module.exports = {
   studentCompletionReport,
   getStudentAnswers,
@@ -172,4 +198,5 @@ module.exports = {
   getUnitsOrder,
   getPlanificationsType,
   mapSurvey,
+  mapUnitCompletion,
 };
