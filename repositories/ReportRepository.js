@@ -210,10 +210,18 @@ class ReportRepository {
     return this.connection
       .select()
       .from("reports_planning_and_units")
-      .innerJoin("establishment_manager", "establishment_manager.establishment_id", "reports_planning_and_units.id")
-      .innerJoin(ref("user").as("manager"), "establishment_manager.manager_id", "manager.id")
+      .innerJoin(
+        "establishment_manager",
+        "establishment_manager.establishment_id",
+        "reports_planning_and_units.id",
+      )
+      .innerJoin(
+        ref("user").as("manager"),
+        "establishment_manager.manager_id",
+        "manager.id",
+      )
       .where("manager.uuid", managerUUID)
-      .where("grade_id", gradeId)
+      .where("grade_id", gradeId);
   }
 }
 
