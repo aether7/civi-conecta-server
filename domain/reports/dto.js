@@ -209,10 +209,15 @@ const mapEvents = (results, type) => {
         id: r.id,
         name: r.establishment_name,
       },
+      course: {
+        gradeId: r.grade_id,
+        gradeLevel: r.grade_level,
+        gradeLetter: r.letter_character
+      },
       teacher: {
         name: r.teacher_name,
         uuid: r.teacher_uuid,
-        isCustom: r.is_custom_planification,
+        isCustom: r.is_custom_planification ? "Personalizada": "Estandarizada",
       },
       [type]: {
         working: Number.parseInt(r[`working_${type}`]),
@@ -222,6 +227,19 @@ const mapEvents = (results, type) => {
     };
   });
 };
+const planningUnitsReport = (results) => {
+  return results.map(data => ({
+    establishment_name: data.establishment_name,
+    grade: data.grade,
+    letter: data.letter,
+    teacher_name: data.teacher_name,
+    teacher_uuid: data.teacher_uuid,
+    planification: data.is_custom_planification ? "Personalizada" : "Estandarizada",
+    working_units: data.working_units,
+    downloaded_lessons: data.downloaded_content_lessons,
+    lessons_finished: data.lesson_which_are_finished
+  }))
+}
 
 module.exports = {
   studentCompletionReport,
@@ -233,4 +251,5 @@ module.exports = {
   mapUnitCompletion,
   mapLessonCompletion,
   mapEvents,
+  planningUnitsReport,
 };

@@ -13,6 +13,11 @@ class ReportService {
       await repositories.report.getStudentCompletionReport(courseId);
     return dto.studentCompletionReport(students);
   }
+
+  async findPlanningAndUnitsReport(managerUUID, gradeId) {
+    const report = await repositories.report.getPlanningAndUnits(managerUUID, gradeId);
+    return dto.planningUnitsReport(report);
+  }
 }
 
 module.exports = ReportService;

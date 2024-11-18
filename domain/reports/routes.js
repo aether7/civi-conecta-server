@@ -14,12 +14,12 @@ router.get(
 router.get("/student-answers/:teacherUUID", handlers.checkStudentAnswers);
 router.get("/units-order/:teacherUUID", handlers.getUnitsOrder);
 router.get(
-  "/teachers-planning/:establishmentId/is-custom",
-  handlers.getIsCustomPlanification,
-);
-router.get(
   "/teachers-surveys/:managerUUID/:gradeId",
   handlers.getSurveysReports,
+);
+router.get(
+  "/teachers-planning-units/:gradeId",
+  handlers.getPlanningUnitsReports,
 );
 router.get("/course/:teacherUUID/completion", handlers.checkCourseCompletion);
 router.get(
@@ -32,7 +32,7 @@ router.get(
 );
 
 router.get(
-  "/course/:eventType/event-completion",
+  "/course/:gradeId/:eventType/event-completion",
   handlers.checkEventsCompletion,
 );
 // router.get('/course/:teacherUUID/:eventType/completion/lessons');

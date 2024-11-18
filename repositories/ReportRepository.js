@@ -164,7 +164,7 @@ class ReportRepository {
       .where("grade_id", gradeId);
   }
 
-  getReportsSituation(managerUUID) {
+  getReportsSituation(managerUUID, gradeId) {
     const ref = this.connection.ref.bind(this.connection);
 
     return this.connection
@@ -180,10 +180,11 @@ class ReportRepository {
         "establishment_manager.manager_id",
         "manager.id",
       )
-      .where("manager.uuid", managerUUID);
+      .where("manager.uuid", managerUUID)
+      .where("reports_situations.grade_id", gradeId);
   }
 
-  getReportsEphemeris(managerUUID) {
+  getReportsEphemeris(managerUUID, gradeId) {
     const ref = this.connection.ref.bind(this.connection);
 
     return this.connection
@@ -199,7 +200,20 @@ class ReportRepository {
         "establishment_manager.manager_id",
         "manager.id",
       )
-      .where("manager.uuid", managerUUID);
+      .where("manager.uuid", managerUUID)
+      .where("reports_ephemeris.grade_id", gradeId);
+  }
+
+  getPlanningAndUnits(managerUUID, gradeId) {
+    const ref = this.connection.ref.bind(this.connection);
+
+    return this.connection
+      .select()
+      .from("reports_planning_and_units")
+      .innerJoin("establishment_manager", "establishment_manager.establishment_id", "reports_planning_and_units.id")
+      .innerJoin(ref("user").as("manager"), "establishment_manager.manager_id", "manager.id")
+      .where("manager.uuid", managerUUID)
+      .where("grade_id", gradeId)
   }
 }
 

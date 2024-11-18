@@ -93,15 +93,25 @@ const checkLessonsCompletion = async (req, res) => {
 const checkEventsCompletion = async (req, res) => {
   const managerUUID = req.headers.uuid;
   const eventType = req.params.eventType;
+  const gradeId = req.params.gradeId;
+
   let results;
 
   if (eventType === "situation") {
-    results = await repositories.report.getReportsSituation(managerUUID);
+    results = await repositories.report.getReportsSituation(managerUUID, gradeId);
   } else if (eventType === "ephemeris") {
-    results = await repositories.report.getReportsEphemeris(managerUUID);
+    results = await repositories.report.getReportsEphemeris(managerUUID, gradeId);
   }
 
   res.json({ ok: true, eventType, results: dto.mapEvents(results, eventType) });
+}
+
+const getPlanningUnitsReports = async (req, res) => {
+  const managerUUID = req.user.uuid;
+  const gradeId = req.params.gradeId;
+  const reportService = new ReportService();
+  const report = await reportService.findPlanningAndUnitsReport(managerUUID, gradeId);
+  res.json({ ok: true, report });
 };
 
 module.exports = wrapRequests({
@@ -116,4 +126,5 @@ module.exports = wrapRequests({
   checkUnitsCompletion,
   checkLessonsCompletion,
   checkEventsCompletion,
+  getPlanningUnitsReports
 });
