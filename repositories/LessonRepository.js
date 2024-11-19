@@ -108,14 +108,14 @@ class LessonRepository {
   }
 
   findByUnitIdAndTeacherUUID(unitId, uuid) {
-    const exp = this.connection.raw(
-      "CASE WHEN course.id IS NULL THEN 0 ELSE 1 END",
-    );
+    const raw = this.connection.raw.bind(this.connection);
 
     return this.connection
       .select("lesson.*")
       .column({
-        has_entered_into_lesson: exp,
+        has_entered_into_lesson: raw(
+          "CASE WHEN course.id IS NULL THEN 0 ELSE 1 END",
+        ),
       })
       .from("unit")
       .innerJoin("lesson", "lesson.unit_id", "unit.id")
@@ -123,7 +123,8 @@ class LessonRepository {
       .leftJoin("course", "lesson_course.course_id", "course.id")
       .leftJoin("public.user", "course.teacher_id", "public.user.id")
       .where("unit.id", unitId)
-      .whereRaw("(public.user.uuid = ? OR public.user.uuid IS NULL)", [uuid]);
+      .whereRaw("(public.user.uuid = ? OR public.user.uuid IS NULL)", [uuid])
+      .orderBy("lesson.id");
   }
 
   findByEventId(eventId) {
