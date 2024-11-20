@@ -201,6 +201,28 @@ class LessonRepository {
       .where("teacher.uuid", teacherUUID)
       .where("unit.id", unitId);
   }
+
+  findEventLessonCompletionByTeacherCourse(teacherUUID, eventTypeId) {
+    const ref = this.connection.ref.bind(this.connection);
+    const raw = this.connection.raw.bind(this.connection);
+
+    return this.connection
+      .column({
+        id: "lesson.id",
+        objective: "lesson.description",
+        has_finished: raw("COALESCE(lesson_course.has_finished, 0)"),
+        has_downloaded_content: raw(
+          "COALESCE(lesson_course.has_downloaded_content, 0)",
+        ),
+      })
+      .from(ref("user").as("teacher"))
+      .innerJoin("course", "course.teacher_id", "teacher.id")
+      .innerJoin("event", "event.grade_id", "course.grade_id")
+      .innerJoin("lesson", "lesson.event_id", "event.id")
+      .leftJoin("lesson_course", "lesson_course.lesson_id", "lesson.id")
+      .where("teacher.uuid", teacherUUID)
+      .where("event.event_type_id", eventTypeId);
+  }
 }
 
 module.exports = LessonRepository;

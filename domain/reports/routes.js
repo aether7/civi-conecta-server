@@ -35,6 +35,9 @@ router.get(
   "/course/:gradeId/:eventType/event-completion",
   handlers.checkEventsCompletion,
 );
-// router.get('/course/:teacherUUID/:eventType/completion/lessons');
+router.get(
+  "/course/:teacherUUID/:eventType/completion/lessons",
+  handlers.checkLessonsEventsCompletion,
+);
 
 module.exports = router;

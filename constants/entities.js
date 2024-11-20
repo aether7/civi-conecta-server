@@ -1,6 +1,8 @@
 const EventTypes = {
   SITUATION: 1,
   EPHEMERIS: 2,
+  SITUATION_TEXT: "situation",
+  EPHEMERIS_TEXT: "ephemeris",
 };
 
 const SurveyTypes = {

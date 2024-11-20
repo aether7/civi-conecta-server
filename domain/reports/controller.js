@@ -1,4 +1,5 @@
 const { wrapRequests } = require("../../helpers/controller");
+const { EventTypes } = require("../../constants/entities");
 const ReportService = require("./service");
 const repositories = require("../../repositories");
 const dto = require("./dto");
@@ -94,24 +95,48 @@ const checkEventsCompletion = async (req, res) => {
   const managerUUID = req.headers.uuid;
   const eventType = req.params.eventType;
   const gradeId = req.params.gradeId;
-
   let results;
 
-  if (eventType === "situation") {
-    results = await repositories.report.getReportsSituation(managerUUID, gradeId);
-  } else if (eventType === "ephemeris") {
-    results = await repositories.report.getReportsEphemeris(managerUUID, gradeId);
+  if (eventType === EventTypes.SITUATION_TEXT) {
+    results = await repositories.report.getReportsSituation(
+      managerUUID,
+      gradeId,
+    );
+  } else if (eventType === EventTypes.EPHEMERIS_TEXT) {
+    results = await repositories.report.getReportsEphemeris(
+      managerUUID,
+      gradeId,
+    );
   }
 
   res.json({ ok: true, eventType, results: dto.mapEvents(results, eventType) });
-}
+};
 
 const getPlanningUnitsReports = async (req, res) => {
   const managerUUID = req.user.uuid;
   const gradeId = req.params.gradeId;
   const reportService = new ReportService();
-  const report = await reportService.findPlanningAndUnitsReport(managerUUID, gradeId);
+  const report = await reportService.findPlanningAndUnitsReport(
+    managerUUID,
+    gradeId,
+  );
   res.json({ ok: true, report });
+};
+
+const checkLessonsEventsCompletion = async (req, res) => {
+  const teacherUUID = req.params.teacherUUID;
+  const eventType = req.params.eventType;
+  const eventTypeId =
+    eventType === EventTypes.SITUATION_TEXT
+      ? EventTypes.SITUATION
+      : EventTypes.EPHEMERIS;
+  const results =
+    await repositories.lesson.findEventLessonCompletionByTeacherCourse(
+      teacherUUID,
+      eventTypeId,
+    );
+
+  res.json({ ok: true, results: dto.mapLessonCompletion(results) });
 };
 
 module.exports = wrapRequests({
@@ -126,5 +151,6 @@ module.exports = wrapRequests({
   checkUnitsCompletion,
   checkLessonsCompletion,
   checkEventsCompletion,
-  getPlanningUnitsReports
+  getPlanningUnitsReports,
+  checkLessonsEventsCompletion,
 });
