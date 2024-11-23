@@ -196,17 +196,23 @@ class EstablishmentRepository {
   }
 
   findManagers(establishmentId) {
+    const ref = this.connection.ref.bind(this.connection);
+
     return this.connection
-      .select()
+      .select("manager.*")
       .from("establishment")
       .innerJoin(
         "establishment_manager",
         "establishment_manager.establishment_id",
         "establishment.id",
       )
-      .innerJoin("user", "establishment_manager.manager_id", "user.id")
+      .innerJoin(
+        ref("user").as("manager"),
+        "establishment_manager.manager_id",
+        "manager.id",
+      )
       .where("establishment.id", establishmentId)
-      .where("user.role", RoleTypes.MANAGER);
+      .where("manager.role", RoleTypes.MANAGER);
   }
 }
 

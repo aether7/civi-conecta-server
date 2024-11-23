@@ -213,7 +213,7 @@ class ReportRepository {
       .innerJoin(
         "establishment_manager",
         "establishment_manager.establishment_id",
-        "reports_planning_and_units.id",
+        "reports_planning_and_units.establishment_id",
       )
       .innerJoin(
         ref("user").as("manager"),

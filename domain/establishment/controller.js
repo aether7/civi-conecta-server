@@ -32,8 +32,11 @@ const getCoursesFromEstablishment = async (req, res) => {
 
 const getCoursesByManager = async (req, res) => {
   const managerId = req.params.managerId;
-  const establishmentId = await repositories.establishment.findByManager(managerId);
-  const courses = await repositories.course.findGradesByEstablishment(establishmentId.establishment_id);
+  const establishmentId =
+    await repositories.establishment.findByManager(managerId);
+  const courses = await repositories.course.findGradesByEstablishment(
+    establishmentId.establishment_id,
+  );
   res.json({ ok: true, courses: courses.map(dto.mapCourse) });
 };
 
@@ -213,12 +216,7 @@ const getManagerFromEstablishment = async (req, res) => {
     );
   }
 
-  const mappedManagers = managers.map((manager) => ({
-    id: manager.id,
-    name: manager.name,
-    email: manager.email,
-    uuid: manager.uuid,
-  }));
+  const mappedManagers = managers.map(dto.mapManager);
 
   res.json({ ok: true, managers: mappedManagers });
 };
@@ -239,5 +237,5 @@ module.exports = wrapRequests({
   updateStudent,
   createManager,
   getManagerFromEstablishment,
-  getCoursesByManager
+  getCoursesByManager,
 });
