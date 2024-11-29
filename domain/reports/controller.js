@@ -66,19 +66,17 @@ const getSurveysReports = async (req, res) => {
 
 const checkCourseCompletion = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
-  const courseResume =
-    await repositories.course.findCourseGradeByTeacher(teacherUUID);
+  const courseResume = await repositories.course.findCourseGradeByTeacher(teacherUUID);
   const reportService = new ReportService();
-  const report =
-    await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
+  const report = await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
   res.json({ ok: true, report, courseResume });
 };
 
 const checkUnitsCompletion = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
-  const results =
-    await repositories.unit.findUnitCompletionByTeacherCourse(teacherUUID);
-  res.json({ ok: true, results: dto.mapUnitCompletion(results) });
+  const results = await repositories.unit.findUnitCompletionByTeacherCourse(teacherUUID);
+  const courseResume = await repositories.course.findCourseGradeByTeacher(teacherUUID);
+  res.json({ ok: true, results: dto.mapUnitCompletion(results), courseResume });
 };
 
 const checkLessonsCompletion = async (req, res) => {
