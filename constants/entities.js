@@ -26,10 +26,23 @@ const PonderationTypes = {
   STUDENT: 0.7,
 };
 
+const PlanificationTypes = {
+  STANDARD: "Estandarizada",
+  CUSTOM: "Personalizada",
+};
+
+const CompletionType = {
+  FINISHED: "Completada",
+  IN_PROGRESS: "En Desarrollo",
+  PENDING: "Pendiente",
+};
+
 module.exports = {
   EventTypes,
   SurveyTypes,
   RoleTypes,
   FeedbackStatus,
   PonderationTypes,
+  PlanificationTypes,
+  CompletionType,
 };

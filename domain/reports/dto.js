@@ -1,4 +1,8 @@
-const { PonderationTypes } = require("../../constants/entities");
+const {
+  PonderationTypes,
+  PlanificationTypes,
+  CompletionType,
+} = require("../../constants/entities");
 const { decimalToRoman } = require("../../helpers/number");
 
 const studentCompletionReport = (students) => {
@@ -9,14 +13,14 @@ const studentCompletionReport = (students) => {
 
     function checkStatus(percentage) {
       if (percentage == 100) {
-        return "Completa";
+        return CompletionType.FINISHED;
       }
 
       if (percentage > 0) {
-        return "Incompleta";
+        return CompletionType.IN_PROGRESS;
       }
 
-      return "Pendiente";
+      return CompletionType.PENDING;
     }
 
     return {
@@ -137,7 +141,9 @@ const getPlanificationsType = (data) => {
   return data.map(({ name, is_custom_planification }) => ({
     name,
     planificationType:
-      is_custom_planification == 1 ? "Personalizada" : "Estandarizada",
+      is_custom_planification == 1
+        ? PlanificationTypes.CUSTOM
+        : PlanificationTypes.STANDARD,
   }));
 };
 
@@ -145,14 +151,14 @@ const mapSurvey = (survey) => {
   let status;
 
   if (survey.is_course_survey_finished && survey.is_teacher_survey_finished) {
-    status = "Completa";
+    status = CompletionType.FINISHED;
   } else if (
     survey.is_course_survey_finished ||
     survey.is_teacher_survey_finished
   ) {
-    status = "Incompleta";
+    status = CompletionType.IN_PROGRESS;
   } else {
-    status = "Pendiente";
+    status = CompletionType.PENDING;
   }
 
   return {
@@ -173,11 +179,11 @@ const mapUnitCompletion = (results) => {
     let status;
 
     if (finished === total) {
-      status = "Completada";
+      status = CompletionType.FINISHED;
     } else if (finished > 0) {
-      status = "En Desarrollo";
+      status = CompletionType.IN_PROGRESS;
     } else {
-      status = "Pendiente";
+      status = CompletionType.PENDING;
     }
 
     return {
@@ -212,12 +218,14 @@ const mapEvents = (results, type) => {
       course: {
         gradeId: r.grade_id,
         gradeLevel: r.grade_level,
-        gradeLetter: r.letter_character
+        gradeLetter: r.letter_character,
       },
       teacher: {
         name: r.teacher_name,
         uuid: r.teacher_uuid,
-        isCustom: r.is_custom_planification ? "Personalizada": "Estandarizada",
+        isCustom: r.is_custom_planification
+          ? PlanificationTypes.CUSTOM
+          : PlanificationTypes.STANDARD,
       },
       [type]: {
         working: Number.parseInt(r[`working_${type}`]),
@@ -228,18 +236,20 @@ const mapEvents = (results, type) => {
   });
 };
 const planningUnitsReport = (results) => {
-  return results.map(data => ({
+  return results.map((data) => ({
     establishment_name: data.establishment_name,
     grade: data.grade,
     letter: data.letter,
     teacher_name: data.teacher_name,
     teacher_uuid: data.teacher_uuid,
-    planification: data.is_custom_planification ? "Personalizada" : "Estandarizada",
+    planification: data.is_custom_planification
+      ? PlanificationTypes.CUSTOM
+      : PlanificationTypes.STANDARD,
     working_units: data.working_units,
-    downloaded_lessons: data.downloaded_content_lessons,
-    lessons_finished: data.lesson_which_are_finished
-  }))
-}
+    downloaded_lessons: Number(data.lessons_downloaded),
+    lessons_finished: Number(data.lessons_finished),
+  }));
+};
 
 module.exports = {
   studentCompletionReport,

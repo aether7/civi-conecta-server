@@ -15,7 +15,10 @@ class ReportService {
   }
 
   async findPlanningAndUnitsReport(managerUUID, gradeId) {
-    const report = await repositories.report.getPlanningAndUnits(managerUUID, gradeId);
+    const report = await repositories.report.getPlanningAndUnits(
+      managerUUID,
+      gradeId,
+    );
     return dto.planningUnitsReport(report);
   }
 }
