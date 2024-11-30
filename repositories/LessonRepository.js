@@ -187,6 +187,7 @@ class LessonRepository {
     return this.connection
       .column({
         id: "lesson.id",
+        number: "lesson.number",
         objective: "lesson.objective",
         has_finished: raw("COALESCE(lesson_course.has_finished, 0)"),
         has_downloaded_content: raw(

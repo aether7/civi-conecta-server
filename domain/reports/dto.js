@@ -201,6 +201,7 @@ const mapLessonCompletion = (results) => {
   return results.map((result) => {
     return {
       id: result.id,
+      number: result.number,
       objective: result.objective,
       hasFinished: result.has_finished,
       hasDownloadedContent: result.has_downloaded_content,
