@@ -210,6 +210,8 @@ class LessonRepository {
     return this.connection
       .column({
         id: "lesson.id",
+        number: "lesson.number",
+        title: "planning.topic",
         objective: "lesson.description",
         has_finished: raw("COALESCE(lesson_course.has_finished, 0)"),
         has_downloaded_content: raw(
@@ -220,6 +222,7 @@ class LessonRepository {
       .innerJoin("course", "course.teacher_id", "teacher.id")
       .innerJoin("event", "event.grade_id", "course.grade_id")
       .innerJoin("lesson", "lesson.event_id", "event.id")
+      .innerJoin("planning", "planning.lesson_id", "lesson.id")
       .leftJoin("lesson_course", "lesson_course.lesson_id", "lesson.id")
       .where("teacher.uuid", teacherUUID)
       .where("event.event_type_id", eventTypeId);

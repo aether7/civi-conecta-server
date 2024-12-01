@@ -203,6 +203,8 @@ const mapLessonCompletion = (results) => {
       id: result.id,
       number: result.number,
       objective: result.objective,
+      title: result.title,
+      number: result.number,
       hasFinished: result.has_finished,
       hasDownloadedContent: result.has_downloaded_content,
     };

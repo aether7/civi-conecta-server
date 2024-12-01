@@ -66,17 +66,25 @@ const getSurveysReports = async (req, res) => {
 
 const checkCourseCompletion = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
-  const courseResume = await repositories.course.findCourseGradeByTeacher(teacherUUID);
+  const courseResume =
+    await repositories.course.findCourseGradeByTeacher(teacherUUID);
   const reportService = new ReportService();
-  const report = await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
+  const report =
+    await reportService.checkStudentCompletionByTeacherUUID(teacherUUID);
   res.json({ ok: true, report, courseResume });
 };
 
 const checkUnitsCompletion = async (req, res) => {
   const teacherUUID = req.params.teacherUUID;
-  const results = await repositories.unit.findUnitCompletionByTeacherCourse(teacherUUID);
-  const courseResume = await repositories.course.findCourseGradeByTeacher(teacherUUID);
-  res.json({ ok: true, results: dto.mapUnitCompletion(results), courseResume });
+  const results =
+    await repositories.unit.findUnitCompletionByTeacherCourse(teacherUUID);
+  const courseResume =
+    await repositories.course.findCourseGradeByTeacher(teacherUUID);
+  res.json({
+    ok: true,
+    results: dto.mapUnitCompletion(results),
+    courseResume,
+  });
 };
 
 const checkLessonsCompletion = async (req, res) => {
@@ -128,13 +136,21 @@ const checkLessonsEventsCompletion = async (req, res) => {
     eventType === EventTypes.SITUATION_TEXT
       ? EventTypes.SITUATION
       : EventTypes.EPHEMERIS;
+
+  const courseSummary =
+    await repositories.course.findCourseGradeByTeacher(teacherUUID);
+
   const results =
     await repositories.lesson.findEventLessonCompletionByTeacherCourse(
       teacherUUID,
       eventTypeId,
     );
 
-  res.json({ ok: true, results: dto.mapLessonCompletion(results) });
+  res.json({
+    ok: true,
+    results: dto.mapLessonCompletion(results),
+    courseSummary,
+  });
 };
 
 module.exports = wrapRequests({
