@@ -203,6 +203,7 @@ const mapLessonCompletion = (results) => {
       id: result.id,
       number: result.number,
       objective: result.objective,
+      eventDate: result.event_date,
       title: result.title,
       number: result.number,
       hasFinished: result.has_finished,

@@ -208,24 +208,32 @@ class LessonRepository {
     const raw = this.connection.raw.bind(this.connection);
 
     return this.connection
-      .column({
-        id: "lesson.id",
-        number: "lesson.number",
-        title: "planning.topic",
-        objective: "lesson.description",
-        has_finished: raw("COALESCE(lesson_course.has_finished, 0)"),
-        has_downloaded_content: raw(
-          "COALESCE(lesson_course.has_downloaded_content, 0)",
-        ),
-      })
-      .from(ref("user").as("teacher"))
-      .innerJoin("course", "course.teacher_id", "teacher.id")
-      .innerJoin("event", "event.grade_id", "course.grade_id")
-      .innerJoin("lesson", "lesson.event_id", "event.id")
-      .innerJoin("planning", "planning.lesson_id", "lesson.id")
-      .leftJoin("lesson_course", "lesson_course.lesson_id", "lesson.id")
-      .where("teacher.uuid", teacherUUID)
-      .where("event.event_type_id", eventTypeId);
+    .with(
+      "t1",
+      this.connection
+        .select({
+          id: "lesson.id",
+          number: "lesson.number",
+          title: "event.title",
+          objective: "lesson.description",
+          event_date: "event.date",
+          has_finished: raw("COALESCE(lesson_course.has_finished, 0)"),
+          has_downloaded_content: raw(
+            "COALESCE(lesson_course.has_downloaded_content, 0)",
+          ),
+        })
+        .from(ref("user").as("teacher"))
+        .innerJoin("course", "course.teacher_id", "teacher.id")
+        .innerJoin("event", "event.grade_id", "course.grade_id")
+        .innerJoin("lesson", "lesson.event_id", "event.id")
+        .innerJoin("planning", "planning.lesson_id", "lesson.id")
+        .leftJoin("lesson_course", "lesson_course.lesson_id", "lesson.id")
+        .where("teacher.uuid", teacherUUID)
+        .where("event.event_type_id", eventTypeId),
+    )
+    .select("*")
+    .from("t1")
+    .orderBy("has_finished", "desc");
   }
 }
 
