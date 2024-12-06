@@ -32,12 +32,16 @@ const getCoursesFromEstablishment = async (req, res) => {
 
 const getCoursesByManager = async (req, res) => {
   const managerId = req.params.managerId;
-  const establishmentId =
+  const establishment =
     await repositories.establishment.findByManager(managerId);
   const courses = await repositories.course.findGradesByEstablishment(
-    establishmentId.establishment_id,
+    establishment.establishment_id,
   );
-  res.json({ ok: true, courses: courses.map(dto.mapCourse) });
+  res.json({
+    ok: true,
+    courses: courses.map(dto.mapCourse),
+    establishment: establishment.establishment_name,
+  });
 };
 
 const createCourse = async (req, res) => {
