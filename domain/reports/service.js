@@ -19,6 +19,7 @@ class ReportService {
       managerUUID,
       gradeId,
     );
+
     return dto.planningUnitsReport(report);
   }
 }

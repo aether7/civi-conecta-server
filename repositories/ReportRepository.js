@@ -145,17 +145,6 @@ class ReportRepository {
       ]);
   }
 
-  async getIsCustomPlanification(establishmentId) {
-    return this.connection
-      .column({
-        name: "us.name",
-        is_custom_planification: "us.is_custom_planification",
-      })
-      .from("public.user as us")
-      .innerJoin("course", "course.teacher_id", "us.id")
-      .where("course.establishment_id", establishmentId);
-  }
-
   getSurveyResults(establishmentId, gradeId) {
     return this.connection
       .select()
@@ -208,7 +197,7 @@ class ReportRepository {
     const ref = this.connection.ref.bind(this.connection);
 
     return this.connection
-      .select()
+      .select("reports_planning_and_units.*")
       .from("reports_planning_and_units")
       .innerJoin(
         "establishment_manager",

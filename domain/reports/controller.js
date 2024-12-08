@@ -45,13 +45,6 @@ const getUnitsOrder = async (req, res) => {
   res.json({ ok: true, results: dto.getUnitsOrder(results) });
 };
 
-const getIsCustomPlanification = async (req, res) => {
-  const establishmentId = req.params.establishmentId;
-  const results =
-    await repositories.report.getIsCustomPlanification(establishmentId);
-  res.json({ ok: true, results: dto.getPlanificationsType(results) });
-};
-
 const getSurveysReports = async (req, res) => {
   const uuid = req.params.managerUUID;
   const gradeId = req.params.gradeId;
@@ -159,7 +152,6 @@ module.exports = wrapRequests({
   checkStudentAnswersByQuestion,
   checkMostCriticalAnswers,
   getUnitsOrder,
-  getIsCustomPlanification,
   getSurveysReports,
   checkCourseCompletion,
   checkUnitsCompletion,
