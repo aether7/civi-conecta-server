@@ -208,6 +208,10 @@ const mapLessonCompletion = (results) => {
       number: result.number,
       hasFinished: result.has_finished,
       hasDownloadedContent: result.has_downloaded_content,
+      planning: {
+        id: result.planning_id,
+        topic: result.topic,
+      },
     };
   });
 };
