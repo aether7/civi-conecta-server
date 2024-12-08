@@ -221,6 +221,8 @@ class LessonRepository {
             title: "event.title",
             objective: "lesson.description",
             event_date: "event.date",
+            planning_id: "planning.id",
+            topic: "planning.topic",
             has_finished: raw("COALESCE(lesson_course.has_finished, 0)"),
             has_downloaded_content: raw(
               "COALESCE(lesson_course.has_downloaded_content, 0)",
