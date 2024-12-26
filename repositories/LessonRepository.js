@@ -227,18 +227,25 @@ class LessonRepository {
               "COALESCE(lesson_course.has_downloaded_content, 0)",
             ),
           })
-          .from(ref("user").as("teacher"))
-          .innerJoin("course", "course.teacher_id", "teacher.id")
-          .innerJoin("event", "event.grade_id", "course.grade_id")
-          .innerJoin("lesson", "lesson.event_id", "event.id")
+          .from("lesson")
           .innerJoin("planning", "planning.lesson_id", "lesson.id")
-          .leftJoin("lesson_course", "lesson_course.lesson_id", "lesson.id")
+          .innerJoin("event", "lesson.event_id", "event.id")
+          .innerJoin("lesson_course", "lesson_course.lesson_id", "lesson.id")
+          .innerJoin("course", "lesson_course.course_id", "course.id")
+          .innerJoin(
+            ref("user").as("teacher"),
+            "course.teacher_id",
+            "teacher.id",
+          )
           .where("teacher.uuid", teacherUUID)
           .where("event.event_type_id", eventTypeId),
       )
       .select("*")
       .from("t1")
-      .orderBy("has_finished", "desc");
+      .orderBy([
+        { column: "has_finished", order: "desc" },
+        { column: "id", order: "asc" },
+      ]);
   }
 
   findByCourse(courseId) {
